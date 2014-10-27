@@ -9,9 +9,9 @@ import subprocess, os
 import urllib2, re
 
 #set the paths for the software
-gnupth = r"D:\GnuWin32\bin\wget.exe"
-osmopt = r"d:\osmosis\bin"
-osmopth = r"d:\osmosis\bin\osmosis"
+gnupth = r"c:\GnuWin32\bin\wget.exe"
+osmopt = r"c:\osmosis\bin"
+osmopth = r"c:\osmosis\bin\osmosis"
 svnzpth = r"C:\program files\7-zip\7z.exe"
 
 
@@ -40,7 +40,7 @@ try:
     links = re.findall('\d\d\d\d.\d\d.\d\d.\d\d.\d\d.osm.pbf"', htmlSource)
     sock.close()
 
-    if getAll == 1:
+    if getAll == "1":
         for l in links:
             url = osmURL + l[:-1]
 

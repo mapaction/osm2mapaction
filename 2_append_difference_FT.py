@@ -40,7 +40,7 @@ env.workspace = inWorkspace
 strtopass2 = osmopth + " --read-xml-change file=" + '"' + changeOSCC + '"' + " --read-pbf " + '"' + masterPBFF + '"' + " --apply-change --write-pbf file=" + '"' + cumulPBFF + '"'
 
 try:
-    bat_filename2 = r"c:\4_apply_diff_FT.bat"
+    bat_filename2 = r"c:\temp\4_apply_diff_FT.bat"
     #resorting to creating a bat file    
     bat_file2 = open(bat_filename2, "w")
     bat_file2.write(strtopass2)
@@ -49,8 +49,8 @@ try:
     str = "running Osmosis using " + bat_filename2 + " ..."
     print str
     arcpy.AddMessage(str)
-    subprocess.call([r"c:\4_apply_diff_FT.bat"])
-    os.remove(r"c:\4_apply_diff_FT.bat")
+    subprocess.call([r"c:\temp\4_apply_diff_FT.bat"])
+    os.remove(r"c:\temp\4_apply_diff_FT.bat")
     str = "...finished!"
     print str
     arcpy.AddMessage(str)    

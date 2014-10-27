@@ -9,7 +9,7 @@ import subprocess, os
 import urllib2, re, os
 
 #set the paths for the software
-gnupth = r"D:\GnuWin32\bin\wget.exe"
+gnupth = r"C:\GnuWin32\bin\wget.exe"
 osmopt = r"c:\osmosis\bin"
 osmopth = r"c:\osmosis\bin\osmosis"
 svnzpth = r"C:\program files\7-zip\7z.exe"
@@ -38,7 +38,7 @@ env.workspace = inWorkspace
 strtopass = osmopth + " --read-pbf file=" + '"' + latestPBFF + '"' + " --read-pbf file=" + '"' + masterPBFF + '"' + " --derive-change --write-xml-change file=" + '"' + changeOSCC + '"'
 
 try:
-    bat_filename = r"c:\1_create_diff_SB.bat"
+    bat_filename = r"c:\temp\1_create_diff_SB.bat"
     #resorting to creating a bat file
     bat_file = open(bat_filename, "w")
     bat_file.write(strtopass)
@@ -46,8 +46,8 @@ try:
     str = "running Osmosis using " + bat_filename + " ..."
     print str
     arcpy.AddMessage(str)
-    subprocess.call([r"c:\1_create_diff_SB.bat"])
-    os.remove(r"c:\1_create_diff_SB.bat")
+    subprocess.call([r"c:\temp\1_create_diff_SB.bat"])
+    os.remove(r"c:\temp\1_create_diff_SB.bat")
     str = "...finished!"
     print str
     arcpy.AddMessage(str)
