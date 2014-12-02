@@ -28,6 +28,11 @@ class RawConfigIterator:
 
     def next(self):
         def parse_cell_values(val):
+            """
+            Convert values to UTF8, handling any oddities
+            """
+            # TODO I'm sure there was a good reason for this hack, but I'm also sure there wasn't a good reason for
+            # failing to document it at the time. It is something to do with string encodings.
             if (type(val) == int) and (val == 42):
                 return None
             elif type(val) == unicode:
@@ -213,6 +218,11 @@ class ConfigXWalk:
             return output_filename
 
         class AttribList:
+            """
+            A Class to create an agregate SQL funciton, which create a comma seperated string of attribute names, for
+            inclusion in a SQL select or insert statement. See:
+            https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+            """
             def __init__(self):
                 self.set_attribs = set()
 
@@ -224,6 +234,11 @@ class ConfigXWalk:
                 return reduce(lambda a, b: a + ", " + b, sorted(self.set_attribs))
 
         class SelectClause:
+            """
+            A Class to create the 'where' clause in a SQL select or insert statement, to select the contents of a
+            shapefile. Certain values (eg '*' and 'user defined') are filtered out. See:
+            https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+            """
             def __init__(self):
                 self.l_dict = dict()
                 self.exclude_keys = set()
