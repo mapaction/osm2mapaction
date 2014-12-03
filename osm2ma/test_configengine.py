@@ -3,7 +3,7 @@
 import unittest
 import configengine
 
-class TestRowsFromSheet(unittest.TestCase):
+class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -19,6 +19,7 @@ class TestRowsFromSheet(unittest.TestCase):
     def testnext(self):
         pass
 
+        
 class TestConfigXWalk(unittest.TestCase):
 
     def setUp(self):
@@ -27,27 +28,27 @@ class TestConfigXWalk(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def test_init_db_tables(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def test_populate_config_table(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def test_populate_scratch_table(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def test_populate_shpfile_table(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def test_init_db_funcs(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def testgetXWalk(self):
         pass
 
@@ -59,7 +60,7 @@ class TestGlobalFunctions(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @unittest.skip("not implenemted")
+    @unittest.skip("not implemented")
     def testxWalkFromRawConfig(self):
         pass
 

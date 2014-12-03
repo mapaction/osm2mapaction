@@ -3,17 +3,6 @@
 import unittest
 import osm2ma.raw_config_loader
 
-class TestExcelLoader(unittest.TestCase):
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def testget_raw_config(self):
-        pass
-
 class TestRawConfig(unittest.TestCase):
     def setUp(self):
         pass
