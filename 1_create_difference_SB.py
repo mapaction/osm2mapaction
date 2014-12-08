@@ -9,7 +9,14 @@ import subprocess
 import os
 import urllib2
 import re
-import os
+import logging
+
+log = logging.getLogger(__name__)
+
+def print_str_to_console_and_arcpy(message):
+    """Prints a string to the console, and also adds it to ArcPy's message stack"""
+    log.debug(message)
+    arcpy.AddMessage(message)
 
 #set the paths for the software
 gnupth = r"C:\GnuWin32\bin\wget.exe"
@@ -30,35 +37,34 @@ javapth = r"C:\Windows\System32\java.exe"
 
 in_workspace = arcpy.GetParameterAsText(0)
 master_PBF = arcpy.GetParameterAsText(1)
-master_PBFF = in_workspace + "\\" + master_PBF
+master_PBFF = os.path.join(in_workspace,master_PBF)
 latest_PBF = arcpy.GetParameterAsText(2)
-latest_PBFF = in_workspace + "\\" + latest_PBF
+latest_PBFF = os.path.join(in_workspace,latest_PBF)
 change_OSC =  arcpy.GetParameterAsText(3)
-change_OSCC = in_workspace + "\\" + change_OSC
+change_OSCC = os.path.join(in_workspace,change_OSC)
 
 env.workspace = in_workspace
 
 #reversed order to be correct! 4th May 2014
-strtopass = osmopth + " --read-pbf file=" + '"' + latest_PBFF + '"' + " --read-pbf file=" + '"' + master_PBFF + '"' + " --derive-change --write-xml-change file=" + '"' + change_OSCC + '"'
+#strtopass = osmopth + " --read-pbf file=" + '"' + latest_PBFF + '"' + " --read-pbf file=" + '"' + master_PBFF + '"' + "
+#--derive-change --write-xml-change file=" + '"' + change_OSCC + '"'
+
+to_pass = '{0} --read-pbf file="{1}" --read-pbf file="{2}" --derive-change --write-xml-change file"{3}"'.format(osmopth,latest_PBFF,master_PBFF,change_OSCC)
+
 
 try:
     bat_filename = r"c:\temp\1_create_diff_SB.bat"
     #resorting to creating a bat file
     bat_file = open(bat_filename, "w")
-    bat_file.write(strtopass)
+    bat_file.write(to_pass)
     bat_file.close()
-    str = "running Osmosis using " + bat_filename + " ..."
-    print str
-    arcpy.AddMessage(str)
+    print_str_to_console_and_arcpy("running Osmosis using " + bat_filename + " ...")
     subprocess.call([r"c:\temp\1_create_diff_SB.bat"])
     os.remove(r"c:\temp\1_create_diff_SB.bat")
-    str = "...finished!"
-    print str
-    arcpy.AddMessage(str)
+    print_str_to_console_and_arcpy("...finished!")
 except:
-    str = "there is a problem!"
-    print str
-    arcpy.AddMessage(str)
+    print_str_to_console_and_arcpy("there is a problem!")
+
 
 
 
