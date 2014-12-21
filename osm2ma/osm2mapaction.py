@@ -3,12 +3,12 @@ osm2mapaction converts OSM and PBF files, to shapefiles according to
 MapAction's data naming convention.
 
 Usage:
-osm2mapaction 
+osm2mapaction
 -p <full path to PBF file>
--c <full path to config file (excel) 
+-c <full path to config file (excel)
 -g <geoextent clause>
 -s <scale clause>
--o <full path to output directory>  
+-o <full path to output directory>
 
 Author:      asmith
 Created:     01/09/2014
@@ -28,21 +28,25 @@ logging.basicConfig(level=logging.DEBUG)
 def main():
     """
     Parse commandline parameters and call convert()
-    
+
     Raise exception if parameter is missing or invalid.
     """
     # TODO Raise exception if parameter is missing or invalid.
     # Nasty hack until I write some proper code to bring in parameters
-    _excel_full_path = (r"D:\work\custom-software-group\code\mapaction-toolbox"
-                        r"\OSMChangeToolbox\osm2ma\testfiles\OSM_to_MA_ascii.xls")
+    _excel_full_path = (
+        r"D:\work\custom-software-group\code\mapaction-toolbox"
+        r"\OSMChangeToolbox\osm2ma\testfiles\OSM_to_MA_ascii.xls"
+    )
 
     # _excel_full_path = r"D:\work\custom-software-group\code
     # r"\mapaction-toolbox\OSMChangeToolbox\osm2ma\testfiles"
     # r"\OSM_to_MA_short.xls"
     _geoextent_clause = u'wrl'
     _scale_clause = u'su'
-    _pbf_file = (r"D:\work\custom-software-group\code\mapaction-toolbox"
-                 r"\OSMChangeToolbox\osm2ma\testfiles\oxfordshire-latest.osm.pbf")
+    _pbf_file = (
+        r"D:\work\custom-software-group\code\mapaction-toolbox"
+        r"\OSMChangeToolbox\osm2ma\testfiles\oxfordshire-latest.osm.pbf"
+    )
 
     _output_dir = (r"D:\work\custom-software-group\code\mapaction-toolbox"
                    r"\OSMChangeToolbox\osm2ma\testfiles\output")
