@@ -60,10 +60,11 @@ if __name__ == '__main__':
         'into the different themes and categories (as per the MapAction data'
         'naming convention).'
     )
-    parser.add_argument('PBF-path')  # positional, rather than option.
+    parser.add_argument('PBF_path')  # positional, rather than option.
     parser.add_argument(
         '-c', '--config-path',
-        default=os.path.join(os.getcwd(), 'OSM_to_MA_ascii.xls')
+        default=os.path.join(
+            os.getcwd(), '..', 'config_files', 'OSM_to_MA_ascii_v6.xlsx')
     )
     parser.add_argument('-g', '--geoextent', choices=('wrl',), default='wrl')
     parser.add_argument('-s', '--scale', choices=('su',), default='su')
