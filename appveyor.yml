@@ -1,4 +1,4 @@
-
+version: 1.9.alpha.{build}
 
 init:
 - ps: (new-object net.webclient).DownloadFile('http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe', 'osgeo4w-setup-x86_64.exe')
@@ -9,3 +9,4 @@ build: off
 test_script:
   - cd osm2ma
   - %systemdrive%\OSGeo4w\OSGeo4W.bat python osm2mapaction.py
+  
