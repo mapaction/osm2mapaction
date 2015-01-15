@@ -47,7 +47,12 @@ env.workspace = in_workspace
 #strtopass = osmopth + " --read-pbf file=" + '"' + latest_PBFF + '"' + " --read-pbf file=" + '"' + master_PBFF + '"' + "
 #--derive-change --write-xml-change file=" + '"' + change_OSCC + '"'
 
-to_pass = '{0} --read-pbf file="{1}" --read-pbf file="{2}" --derive-change --write-xml-change file"{3}"'.format(osmopth,latest_PBFF,master_PBFF,change_OSCC)
+to_pass = (
+    '{} --read-pbf file="{}" --read-pbf file="{}" --derive-change '
+    '--write-xml-change file="{}"'.format(
+        osmopth, latest_PBFF, master_PBFF, change_OSCC
+    )
+)
 
 
 try:
@@ -58,7 +63,7 @@ try:
     bat_file.close()
     print_str_to_console_and_arcpy("running Osmosis using " + bat_filename + " ...")
     subprocess.call([r"c:\temp\1_create_diff_SB.bat"])
-    os.remove(r"c:\temp\1_create_diff_SB.bat")
+#    os.remove(r"c:\temp\1_create_diff_SB.bat")
     print_str_to_console_and_arcpy("...finished!")
 except:
     print_str_to_console_and_arcpy("there is a problem!")
