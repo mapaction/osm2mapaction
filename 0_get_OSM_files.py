@@ -21,10 +21,8 @@ def print_str_to_console_and_arcpy(message):
 
 
 #set the paths for the software
-gnupth = r"c:\GnuWin32\bin\wget.exe"
 osmopt = r"c:\osmosis\bin"
 osmopth = r"c:\osmosis\bin\osmosis"
-svnzpth = r"c:\program files\7-zip\7z.exe"
 
 
 osm_url = arcpy.GetParameterAsText(0)
