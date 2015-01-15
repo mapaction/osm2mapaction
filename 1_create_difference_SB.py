@@ -19,11 +19,9 @@ def print_str_to_console_and_arcpy(message):
     arcpy.AddMessage(message)
 
 #set the paths for the software
-gnupth = r"C:\GnuWin32\bin\wget.exe"
-osmopt = r"c:\osmosis\bin"
-osmopth = r"c:\osmosis\bin\osmosis"
-svnzpth = r"C:\program files\7-zip\7z.exe"
-javapth = r"C:\Windows\System32\java.exe"
+osmopt = r"c:\osmosis\bin"  # osmosis path
+osmopth = r"c:\osmosis\bin\osmosis" # osmosis executable
+
 
 
 ##osmURL = r"http://labs.geofabrik.de/haiyan/" #arcpy.GetParameterAsText(0)
