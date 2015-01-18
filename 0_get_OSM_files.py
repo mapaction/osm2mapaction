@@ -87,7 +87,7 @@ if __name__ == '__main__':
         description='Gets OSM PBF files from Geofabrik.'
     )
     parser.add_argument(
-        '-o', '--output-dir',
+        '-w', '--workspace',
         help='Directory containing existing PBFs/place new files.'
         ' (Defaults to current directory)',
         default=os.getcwd()
@@ -113,4 +113,4 @@ if __name__ == '__main__':
         else:
             logging.basicConfig(level=logging.INFO)
 
-        main(args.osm_url, args.output_dir, args.get_all)
+        main(args.osm_url, args.workspace, args.get_all)
