@@ -17,3 +17,24 @@ This repository contains a series of scripts which:
    script for this is `osm2ma/osm2mapaction.py`. Currently this only runs from
    the CLI and yo ucan give it a `-h` to see what the options/arguments are. An
    Arc Toolbox wrapper will be made for this in due course.
+
+## Environment
+
+### Part 1 and 2 (download PBFs, create changesets & apply)
+
+For parts 1 and 2, you will need either ArcPy *or* just a regular python
+environment and CLI. The scripts will failover to CLI if ArcPy is not present
+and should work in both Windows and \*nix environments.
+
+For parts 1 and 2 you will need java installed and osmosis:
+
+[http://wiki.openstreetmap.org/wiki/Osmosis#Latest_stable_version]
+
+On **Windows** this should be placed at `C:\osmosis`.
+
+On **\*nix** this can be anywhere, and either added to your `PATH` environment
+variable or passed on the CLI with `-o`.
+
+### Part 3 (convert to SHP, rename)
+
+For part 3 you will need OSGeo and/or `gdal`.
