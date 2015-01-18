@@ -1,79 +1,116 @@
-#first created by Chris Ewing, MapAction, 4th May 2014
-#0_get_OSM_files.py - gets the OSM pbf files from a geofabrik URL
-
-import arcpy
-from arcpy import env
-
-import subprocess
+import argparse
+import urlparse
 import os
 import urllib2
 import re
 import logging
 
 log = logging.getLogger(__name__)
+ARC_ENABLED = False
 
 
-def print_str_to_console_and_arcpy(message):
-    """Prints a string to the console, and also adds it to ArcPy's message stack"""
-    log.debug(message)
-    arcpy.AddMessage(message)
-    arcpy.GetMessages()
+def debug(message):
+    log_message(message, level=log.debug)
 
 
-#set the paths for the software
-gnupth = r"c:\GnuWin32\bin\wget.exe"
-osmopt = r"c:\osmosis\bin"
-osmopth = r"c:\osmosis\bin\osmosis"
-svnzpth = r"c:\program files\7-zip\7z.exe"
-
-
-osm_url = arcpy.GetParameterAsText(0)
-in_workspace   = arcpy.GetParameterAsText(1)
-get_all = arcpy.GetParameterAsText(2)
-
-
-#function to get the PBF files from geofabrik
-
-def get_pbfs(url, fn):   
-    sock = urllib2.urlopen(url + fn)
-    local_filename = in_workspace + '\\' + fn
-    data = sock.read()    
-    with open(local_filename, "wb") as local_file:
-        local_file.write(data)
-    local_file.close()
-
-print_str_to_console_and_arcpy("reading and downloading the PBF files...")
+def log_message(message, level=None):
+    """Log using stdlib, and to ArcPy's message stack, if available."""
+    level = level or log.info
+    level(message)
+    if ARC_ENABLED:
+        arcpy.AddMessage(message)
+        arcpy.GetMessages()
 
 try:
-    sock = urllib2.urlopen(osm_url)
-    html_source = sock.read()
-    links = re.findall('\d\d\d\d.\d\d.\d\d.\d\d.\d\d.osm.pbf"', html_source)
-    sock.close()
+    import arcpy
+    ARC_ENABLED = True
+except ImportError:
+    ARC_ENABLED = False
+    debug(
+        "ArcPy doesn't seem to be available. Continuing with standard library."
+    )
 
-    if get_all == "1":
-        for l in links:
-            url = osm_url + l[:-1]
 
-            if os.path.exists(os.path.join(in_workspace,l[:-1])):
-                print_str_to_console_and_arcpy(os.path.join(in_workspace,l[:-1]) + " already exists")
-                continue
-            
-            print_str_to_console_and_arcpy("getting " + url)
-            get_pbfs(osm_url, l[:-1])
+def main(osm_url, workspace, get_all):
+    """Get files form the given URL and put to the workspace if needed.
 
-    #get latest file too
-        print_str_to_console_and_arcpy("getting latest.osm.pbf")    
+    :param str osm_url: url to PBF files (geofabrik)
+    :param str workspace: local directory path for output
+    :param str/bool get_all: a bool or bool-like string (1, from Arc)
+
+    """
+    def get_pbfs(url, fname):
+        """Get PBF files from geofabrik."""
+        sock = urllib2.urlopen(urlparse.urljoin(url, fname))
+        local_filename = os.path.join(workspace, fname)
+        with open(local_filename, "wb") as local_file:
+            local_file.write(sock.read())
+
+    if not os.path.exists(workspace):
+        log_message("The working directory doesn't exist, attempting create.")
+        os.mkdir(workspace)
+
+    log_message("Reading and downloading the PBF files...")
+    try:
+        sock = urllib2.urlopen(osm_url)
+        html_source = sock.read()
+        links = re.findall(
+            '\d{4}.\d{2}.\d{2}.\d{2}.\d{2}.osm.pbf"', html_source)
+        log_message("Found {} files.".format(len(links)))
+        sock.close()
+
+        if get_all and get_all in ["1", 1, True]:
+            for ix, link in enumerate(links[:1]):
+                _link = link[:-1]
+                debug("File number {} - {}".format(ix, link))
+                url = urlparse.urljoin(osm_url, _link)
+
+                if os.path.exists(os.path.join(workspace, _link)):
+                    log_message("{} already exists".format(
+                        os.path.join(workspace, _link)))
+                    continue
+
+                log_message("Getting {}".format(url))
+                get_pbfs(osm_url, _link)
+
+        # get latest file too
+        log_message("Getting latest.osm.pbf")
         get_pbfs(osm_url, "latest.osm.pbf")
-        
-    else: # only get the latest file
-        get_pbfs(osm_url, "latest.osm.pbf")
 
-    print_str_to_console_and_arcpy("...finished downloading PBF files")
-
-except:
-    print_str_to_console_and_arcpy("there is a problem!")
+        log_message("...finished downloading PBF files")
+    except Exception as e:
+        log_message("There is a problem: {}".format(e.message))
 
 
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        description='Gets OSM PBF files from Geofabrik.'
+    )
+    parser.add_argument(
+        '-o', '--output-dir',
+        help='Directory containing existing PBFs/place new files.'
+        ' (Defaults to current directory)',
+        default=os.getcwd()
+    )
+    parser.add_argument('--verbosity', '-v', action='count')
+    parser.add_argument(
+        '-a', '--get-all',
+        help="Get all files found at Geofabrik url. (Default false)",
+        action='store_true',
+        default=False
+    )
+    parser.add_argument('osm_url')  # positional, rather than option (required)
 
-    
+    if ARC_ENABLED:
+        osm_url = arcpy.GetParameterAsText(0)
+        workspace = arcpy.GetParameterAsText(1)
+        get_all = arcpy.GetParameterAsText(2)
+        main(osm_url, workspace, get_all)
+    else:
+        args = parser.parse_args()
+        if args.verbosity >= 2:
+            logging.basicConfig(level=logging.DEBUG)
+        else:
+            logging.basicConfig(level=logging.INFO)
 
+        main(args.osm_url, args.output_dir, args.get_all)
