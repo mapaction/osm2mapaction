@@ -29,7 +29,8 @@ class TestGlobalFunctions(unittest.TestCase):
 class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
-        excel_path = r"D:\work\custom-software-group\code\github\osm2mapaction\osm2ma\testfiles\fixtures.xls"
+        test_script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+        excel_path = os.path.join(test_script_path, r"testfiles\fixtures.xls")
         workbook = xlrd.open_workbook(os.path.realpath(excel_path))
         self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
         self.rawconf_invalid_heirarchy = workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
