@@ -8,8 +8,7 @@ before_install:
   - sudo apt-get install -qq python-numpy python-scientific
   - sudo apt-get install -qq proj
   - sudo apt-get install -qq python-gdal
-  - sudo apt-get install -qq python-cairo
 install:
-  - pip install . 'httmock >= 1.2'
+  - pip install -r requirements.txt
 script:  python osm2ma/osm2mapaction.py
 
