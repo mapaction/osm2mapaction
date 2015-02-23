@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+virtualenv:
+  system_site_packages: true
+before_install: 
+  - sudo apt-get install -qq libgdal1h
+  - sudo apt-get install -qq python-numpy python-scientific
+  - sudo apt-get install -qq proj
+  - sudo apt-get install -qq python-gdal
+  - sudo apt-get install -qq python-cairo
+install:
+  - pip install . 'httmock >= 1.2'
+script:  python osm2ma/osm2mapaction.py
+
