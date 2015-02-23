@@ -7,7 +7,6 @@ import xlrd
 # import fixtures
 
 
-
 class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
