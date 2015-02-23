@@ -1,14 +1,14 @@
 """
-raw_config_loader reads a suitably formatted Excel sheet and returns a table. 
+raw_config_loader reads a suitably formatted Excel sheet and returns a table.
 The table returned is an (as far as possible) an exact replica of the content
-Excel file. Minimal attempt is made in this module to verify that the 
+Excel file. Minimal attempt is made in this module to verify that the
 spreadsheet is in a suitable/correct format.
 
 The only requirements enforced in this module are:
 - The table in the spreadsheet must have a named range called "xwalk"
 
 Any other requirements of this table are specified or enforced elsewhere.
- 
+
 
 Author:      asmith
 Created:     01/09/2014

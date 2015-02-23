@@ -1,75 +1,77 @@
-#last edited by Chris Ewing, MapAction, 4th May 2014
+#first created by Chris Ewing, MapAction, 4th May 2014
 #0_get_OSM_files.py - gets the OSM pbf files from a geofabrik URL
 
 import arcpy
 from arcpy import env
 
-import subprocess, os
+import subprocess
+import os
+import urllib2
+import re
+import logging
 
-import urllib2, re
+log = logging.getLogger(__name__)
+
+
+def print_str_to_console_and_arcpy(message):
+    """Prints a string to the console, and also adds it to ArcPy's message stack"""
+    log.debug(message)
+    arcpy.AddMessage(message)
+    arcpy.GetMessages()
+
 
 #set the paths for the software
-gnupth = r"D:\GnuWin32\bin\wget.exe"
-osmopt = r"d:\osmosis\bin"
-osmopth = r"d:\osmosis\bin\osmosis"
-svnzpth = r"C:\program files\7-zip\7z.exe"
+gnupth = r"c:\GnuWin32\bin\wget.exe"
+osmopt = r"c:\osmosis\bin"
+osmopth = r"c:\osmosis\bin\osmosis"
+svnzpth = r"c:\program files\7-zip\7z.exe"
 
 
-osmURL = arcpy.GetParameterAsText(0)
-inWorkspace   = arcpy.GetParameterAsText(1)
-getAll = arcpy.GetParameterAsText(2)
+osm_url = arcpy.GetParameterAsText(0)
+in_workspace   = arcpy.GetParameterAsText(1)
+get_all = arcpy.GetParameterAsText(2)
 
 
-#function to get the PBF files
-def getPBFs(url, fn):   
+#function to get the PBF files from geofabrik
+
+def get_pbfs(url, fn):   
     sock = urllib2.urlopen(url + fn)
-    local_filename = inWorkspace + '\\' + fn
+    local_filename = in_workspace + '\\' + fn
     data = sock.read()    
     with open(local_filename, "wb") as local_file:
         local_file.write(data)
     local_file.close()
 
-
-str = "reading and downloading the PBF files..."
-print str
-arcpy.AddMessage(str)
+print_str_to_console_and_arcpy("reading and downloading the PBF files...")
 
 try:
-    sock = urllib2.urlopen(osmURL)
-    htmlSource = sock.read()
-    links = re.findall('\d\d\d\d.\d\d.\d\d.\d\d.\d\d.osm.pbf"', htmlSource)
+    sock = urllib2.urlopen(osm_url)
+    html_source = sock.read()
+    links = re.findall('\d\d\d\d.\d\d.\d\d.\d\d.\d\d.osm.pbf"', html_source)
     sock.close()
 
-    if getAll == 1:
+    if get_all == "1":
         for l in links:
-            url = osmURL + l[:-1]
+            url = osm_url + l[:-1]
 
-            if os.path.exists(inWorkspace + "\\" + l[:-1]) == True:
-                str = inWorkspace + "\\" + l[:-1] + " already exists"
-                print str
-                arcpy.AddMessage(str)
+            if os.path.exists(os.path.join(in_workspace,l[:-1])):
+                print_str_to_console_and_arcpy(os.path.join(in_workspace,l[:-1]) + " already exists")
                 continue
             
-            str = "getting " + url
-            print str
-            arcpy.AddMessage(str)
-            getPBFs(osmURL, l[:-1])
+            print_str_to_console_and_arcpy("getting " + url)
+            get_pbfs(osm_url, l[:-1])
 
     #get latest file too
-        getPBFs(osmURL, "latest.osm.pbf")
+        print_str_to_console_and_arcpy("getting latest.osm.pbf")    
+        get_pbfs(osm_url, "latest.osm.pbf")
         
     else: # only get the latest file
-        getPBFs(osmURL, "latest.osm.pbf")
-        
+        get_pbfs(osm_url, "latest.osm.pbf")
 
-    str = "...finished downloading PBF files"
-    print str
-    arcpy.AddMessage(str)
+    print_str_to_console_and_arcpy("...finished downloading PBF files")
 
 except:
-    str = "there is a problem!"
-    print str
-    arcpy.AddMessage(str)
+    print_str_to_console_and_arcpy("there is a problem!")
 
 
 
