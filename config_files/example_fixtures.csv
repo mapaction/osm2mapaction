@@ -1,0 +1,7 @@
+"OSM_tag_name", "OSM_tag_value", "Element_icon", "Comment", "Useful_for_MapAction", "Data Category description", "Cat_value", "Date Theme description", "Theme_value", "Conforms_to_MA_Hierarchy", "OSM_Element", "Data type", "pt", "ln", "py", "rel"
+"aeroway", "aerodrome", "Node Area", "An Aerodrome (UK), Airport (US)", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Node Area", "pt py", "pt", "#N/A", "py", "#N/A"
+"aeroway", "runway", "Way Area", "A strip of land kept clear and set aside for aeroplanes to take off from and land on. (Other languages)", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Way Area", "ln py", "#N/A", "ln", "py", "#N/A"
+"aeroway", "User defined", "Node Way", "All commonly used values according to Taginfo", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Node Way", "pt ln", "pt", "ln", "#N/A", "#N/A"
+"military", "airfield", "Node Area", "A place where military planes take off and land", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Node Area", "pt py", "pt", "#N/A", "py", "#N/A"
+"iata", "User Defined", "Node Way Area", "IATA International airport codes", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Node Way Area", "pt ln py", "pt", "ln", "py", "#N/A"
+"icao", "User Defined", "Node Way Area", "ICAO International airport codes", "Y", "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Node Way Area", "pt ln py", "pt", "ln", "py", "#N/A"
