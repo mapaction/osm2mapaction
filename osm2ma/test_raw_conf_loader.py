@@ -11,14 +11,14 @@ class TestRawConfig(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_isColumnNamesValid(self):
+    def test_is_column_names_valid(self):
         pass
 
-    def test_isColumnCountValid(self):
+    def test_is_column_count_valid(self):
         pass
 
     @unittest.skip("not implenemted")
-    def test_isRowCountValid(self):
+    def test_is_row_count_valid(self):
         pass
 
 
