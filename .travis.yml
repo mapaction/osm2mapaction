@@ -10,5 +10,4 @@ before_install:
   - sudo apt-get install -qq python-gdal
 install:
   - pip install -r requirements.txt
-script:  python osm2ma/osm2mapaction.py
-
+script:  python osm2ma/tests.py
