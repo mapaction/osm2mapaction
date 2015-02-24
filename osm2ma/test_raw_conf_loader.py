@@ -34,7 +34,8 @@ class TestGlobalFunctions(unittest.TestCase):
 class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
-        test_script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+        # test_script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
+        test_script_path = os.path.abspath(os.path.dirname(__file__))
         excel_path = os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
         workbook = xlrd.open_workbook(os.path.realpath(excel_path))
         self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
