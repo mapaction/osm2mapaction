@@ -44,8 +44,14 @@ class RawConfig:
     @staticmethod
     def _raw_config_columns_count_valid(myarea2d):
         sheet_object, rowxlo, rowxhi, colxlo, colxhi = myarea2d
-        # print colxhi, colxlo
         return 16 == colxhi - colxlo
+
+    @staticmethod
+    def _raw_config_columns_names_valid(myarea2d):
+        sheet_object, rowxlo, rowxhi, colxlo, colxhi = myarea2d
+        # get the first row assumed to be column headings
+        col_names = sheet_object.row_values(rowxlo, start_colx=colxlo, end_colx=colxhi)
+        return col_names
 
     def __init__(self, excel_file_path, excel_named_range):
         """

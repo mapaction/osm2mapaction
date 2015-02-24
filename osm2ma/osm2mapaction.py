@@ -15,8 +15,6 @@ Created:     01/09/2014
 Copyright:   MapAction 2014
 Licence:     GPL v3
 """
-import sys
-print sys.path
 import os
 import argparse
 import logging

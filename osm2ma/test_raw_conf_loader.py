@@ -6,6 +6,8 @@ import sys
 import xlrd
 from configengine import xwalk_from_raw_config
 from raw_config_loader import RawConfig
+import fixtures
+
 
 class TestRawConfig(unittest.TestCase):
     def setUp(self):
@@ -61,15 +63,16 @@ class TestRawConfigIterator(unittest.TestCase):
 
     def test_raw_config_columns_count_valid(self):
         mysheet, rowxlo, rowxhi, colxlo, colxhi = self.rawconf_good
-        self.assertTrue(RawConfig._raw_config_columns_count_valid(self.rawconf_good), "Raw Config table schema OK")
-        self.assertFalse(RawConfig._raw_config_columns_count_valid(self.rawconf_too_few_columns),
-                         "Raw Config table schema OK")
+        self.assertTrue(RawConfig._raw_config_columns_count_valid(self.rawconf_good),
+                        "Raw config column count for rawconf_good fixture")
+        self.assertRaises(RawConfig._raw_config_columns_count_valid(self.rawconf_too_few_columns),
+                          "Raw config column count for rawconf_too_few_columns fixture")
 
-    @unittest.skip("not implenemted")
     def test_raw_config_columns_names_valid(self):
-        self.assertTrue(raw_config_columns_names_valid(self.rawconf_good), "Raw Config table schema OK")
-        self.assertFalse(raw_config_columns_names_valid(self.rawconf_wrong_column_names),
-                         "Raw Config table; wrong column names")
+        self.assertEqual(RawConfig._raw_config_columns_names_valid(self.rawconf_good), fixtures.rawconf_col_names,
+                         "Raw Config column names for rawconf_good fixture")
+        self.assertRaises(RawConfig._raw_config_columns_names_valid(self.rawconf_wrong_column_names),
+                          "Raw Config column names for rawconf_wrong_column_names fixture")
 
     @unittest.skip("not implemented")
     def test_is_raw_config_heirarchy_compliant(self):
