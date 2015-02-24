@@ -14,7 +14,7 @@ def main():
     print "print gdal.__file__"
     print gdal.__file__
 
-    test_raw_conf_loader.unittest.main()
+    test_raw_conf_loader.runtests()
     # test_configengine.unittest.main()
     # test_ogrwrapper.unittest.main()
 

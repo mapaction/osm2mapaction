@@ -8,7 +8,7 @@ from configengine import xwalk_from_raw_config
 from raw_config_loader import RawConfig
 import fixtures
 
-
+@unittest.skip("not implenemted")
 class TestRawConfig(unittest.TestCase):
     def setUp(self):
         pass
@@ -26,7 +26,7 @@ class TestRawConfig(unittest.TestCase):
     def test_is_row_count_valid(self):
         pass
 
-
+@unittest.skip("not implenemted")
 class TestGlobalFunctions(unittest.TestCase):
     pass
 
@@ -65,8 +65,8 @@ class TestRawConfigIterator(unittest.TestCase):
         mysheet, rowxlo, rowxhi, colxlo, colxhi = self.rawconf_good
         self.assertTrue(RawConfig._raw_config_columns_count_valid(self.rawconf_good),
                         "Raw config column count for rawconf_good fixture")
-        self.assertRaises(RawConfig._raw_config_columns_count_valid(self.rawconf_too_few_columns),
-                          "Raw config column count for rawconf_too_few_columns fixture")
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_count_valid, self.rawconf_too_few_columns)
+        # "Raw config column count for rawconf_too_few_columns fixture")
 
     def test_raw_config_columns_names_valid(self):
         self.assertEqual(RawConfig._raw_config_columns_names_valid(self.rawconf_good), fixtures.rawconf_col_names,
@@ -79,5 +79,20 @@ class TestRawConfigIterator(unittest.TestCase):
         pass
 
 
+def runtests():
+    # unittest.main()
+    TestGlobalFunctions().run()
+    TestRawConfig().run()
+    TestRawConfigIterator().run()
+
 if __name__ == '__main__':
-    unittest.main()
+    runtests()
+    # from pprint import pprint
+    # stream = StringIO()
+    # runner = unittest.TextTestRunner(stream=stream)
+    # result = runner.run(unittest.makeSuite(MyTestCase))
+    # print 'Tests run ', result.testsRun
+    # print 'Errors ', result.errors
+    # pprint(result.failures)
+    # stream.seek(0)
+    # print 'Test output\n', stream.read()
