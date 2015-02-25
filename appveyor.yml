@@ -19,4 +19,4 @@ test_script:
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python osm2mapaction.py'
 branches:
   only:
-  - feature/excel-parse
+  - feature/excel-parse-tests
