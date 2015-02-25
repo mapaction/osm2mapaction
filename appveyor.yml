@@ -6,7 +6,7 @@ init:
   - mkdir %systemdrive%\OSGeo4w
   - cd %systemdrive%\OSGeo4w
   - ps: (new-object net.webclient).DownloadFile('http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe', 'osgeo4w-setup-x86_64.exe')
-  - osgeo4w-setup-x86_64.exe --quiet-mode --upgrade-also --delete-orphans --no-desktop --advanced  --root %systemdrive%\OSGeo4w --packages qgis,gis-globe-plugin,qgis-grass-plugin,gdal,gdal-filegdb,gdal-python,gdal-autotest,python-core,python-help,python-tcltk,python-tools,python-dateutil,python-devel,python-numpy,python-pil,python-shapely,python-simplejson,python-test,python-win32,python-xlrd,python-xlwt,wxpython,setup,setuptools,shell,msys,gs,curl,geos,gsl,libgeotiff,libjpeg,libjpeg12,libspatialindex,libtiff,msvcrt,openssl,proj,openjpeg,ffmpeg,msinttypes,opencv,cairo,avce00,expat,fftw,freexl,grass,gsl-libs,hdf4,hdf5,iconv,libmysql,libpng,libpq,libxml2,netcdf,ogdi,pdcurses,proj-datumgrid,proj-hpgn,psycopg2,pyopengl,pyqt4,pyspatialite,python-qscintilla,qgis-common,qscintilla,qt4-libs,qwt5-libs-qt4,sip,six,spatialite,sqlite3,xerces-c-vc10,zlib,mapscript-python,mapserver,qgis-server,fcgi,fribidi,apache,apache-manual,freetype-mingw,gdal15dll,gdal18dll,gdal19dll,libcairo,libintl,mod_fcgid,msys-grass,php,python,python-testsuite,spatialite3dll,mapnik,openlayers,tcltk,xerces-c,xerces-c-vc9,mapserver56 --site http://download.osgeo.org/osgeo4w
+  - osgeo4w-setup-x86_64.exe --quiet-mode --upgrade-also --delete-orphans --no-desktop --advanced  --root %systemdrive%\OSGeo4w --packages msvcrt setup shell avce00 zlib iconv libxml2 cairo openssl curl expat fcgi ffmpeg fftw freexl fribidi libpng libjpeg libjpeg12 libtiff libgeotiff proj-hpgn proj-datumgrid proj geos libmysql sqlite3 hdf5 netcdf libpq xerces-c-vc10 hdf4 ogdi openjpeg spatialite gdal python-core python-numpy gdal-python gdal-autotest gdal-filegdb pdcurses msys python-win32 wxpython python-pil pyopengl gs grass gsl-libs libspatialindex mapserver mapscript-python msinttypes opencv psycopg2 qt4-libs pyqt4 pyspatialite six python-dateutil python-devel python-help sip qscintilla python-qscintilla python-shapely python-simplejson python-tcltk python-test python-tools python-xlrd python-xlwt qwt5-libs-qt4 qgis-common qgis qgis-grass-plugin qgis-server setuptools --site http://download.osgeo.org/osgeo4w
   - cd %APPVEYOR_BUILD_FOLDER%
 
 build: off
@@ -14,5 +14,6 @@ build: off
 test_script:
   - cd osm2ma
   - echo %path%
+  - %systemdrive%\OSGeo4w\OSGeo4W.bat echo %path%
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python tests.py' 
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python osm2mapaction.py'
