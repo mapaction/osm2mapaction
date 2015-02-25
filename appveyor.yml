@@ -14,6 +14,9 @@ build: off
 test_script:
   - cd osm2ma
   - echo %path%
-  - %systemdrive%\OSGeo4w\OSGeo4W.bat echo %path%
+  - '%systemdrive%\OSGeo4w\OSGeo4W.bat echo %path%'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python tests.py' 
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python osm2mapaction.py'
+branches:
+  only:
+  - feature/excel-parse
