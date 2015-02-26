@@ -6,7 +6,7 @@ init:
   - mkdir %systemdrive%\OSGeo4w
   - cd %systemdrive%\OSGeo4w
   - ps: (new-object net.webclient).DownloadFile('http://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe', 'osgeo4w-setup-x86_64.exe')
-  - osgeo4w-setup-x86_64.exe --quiet-mode --upgrade-also --delete-orphans --no-desktop --advanced  --root %systemdrive%\OSGeo4w --packages msvcrt setup shell avce00 zlib iconv libxml2 cairo openssl curl expat fcgi ffmpeg fftw freexl fribidi libpng libjpeg libjpeg12 libtiff libgeotiff proj-hpgn proj-datumgrid proj geos libmysql sqlite3 hdf5 netcdf libpq xerces-c-vc10 hdf4 ogdi openjpeg spatialite gdal python-core python-numpy gdal-python gdal-autotest gdal-filegdb pdcurses msys python-win32 wxpython python-pil pyopengl gs grass gsl-libs libspatialindex mapserver mapscript-python msinttypes opencv psycopg2 qt4-libs pyqt4 pyspatialite six python-dateutil python-devel python-help sip qscintilla python-qscintilla python-shapely python-simplejson python-tcltk python-test python-tools python-xlrd python-xlwt qwt5-libs-qt4 qgis-common qgis qgis-grass-plugin qgis-server setuptools --site http://download.osgeo.org/osgeo4w
+  - osgeo4w-setup-x86_64.exe --quiet-mode --upgrade-also --delete-orphans --no-desktop --advanced  --root %systemdrive%\OSGeo4w --packages msvcrt,setup,shell,avce00,zlib,iconv,libxml2,cairo,openssl,curl,expat,fcgi,ffmpeg,fftw,freexl,fribidi,libpng,libjpeg,libjpeg12,libtiff,libgeotiff,proj-hpgn,proj-datumgrid,proj,geos,libmysql,sqlite3,hdf5,netcdf,libpq,xerces-c-vc10,hdf4,ogdi,openjpeg,spatialite,gdal,python-core,python-numpy,gdal-python,gdal-autotest,gdal-filegdb,pdcurses,msys,python-win32,wxpython,python-pil,pyopengl,gs,grass,gsl-libs,libspatialindex,mapserver,mapscript-python,msinttypes,opencv,psycopg2,qt4-libs,pyqt4,pyspatialite,six,python-dateutil,python-devel,python-help,sip,qscintilla,python-qscintilla,python-shapely,python-simplejson,python-tcltk,python-test,python-tools,python-xlrd,python-xlwt,qwt5-libs-qt4,qgis-common,qgis,qgis-grass-plugin,qgis-server,setuptools --site http://download.osgeo.org/osgeo4w
   - cd %APPVEYOR_BUILD_FOLDER%
 
 build: off
@@ -20,3 +20,4 @@ test_script:
 branches:
   only:
   - feature/excel-parse-tests
+  - test/appvey-config
