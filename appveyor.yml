@@ -16,7 +16,7 @@ test_script:
   - echo %path%
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat echo %path%'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat o-help'
-  - '%systemdrive%\OSGeo4w\bin\gdalinfo.exe --version'
+  - '%systemdrive%\OSGeo4w\OSGeo4W.bat gdalinfo --version'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python tests.py' 
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python -m unittest discover -s osm2ma' 
 branches:
