@@ -1,5 +1,8 @@
 version: 1.9.alpha.{build}
 
+environment:
+  os: unstable
+
 init:
   - echo %path%
   - path=C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Mercurial;C:\Program Files\7-Zip;C:\Tools\xUnit;C:\Tools\NUnit\bin;C:\Tools\NuGet;C:\Python27;C:\Tools\WebDriver;C:\Tools\MSpec;C:\Program Files\Java\jdk1.7.0\bin;C:\ProgramData\chocolatey\bin;C:\Tools\GitVersion;C:\Program Files (x86)\Git\cmd;C:\Program Files (x86)\Git\bin;C:\Program Files (x86)\CollabNet\Subversion Client;C:\Users\appveyor\AppData\Roaming\npm;C:\Ruby193\bin;C:\Program Files (x86)\CMake\bin;C:\go\bin;C:\Chocolatey\bin;C:\Program Files\AppVeyor\BuildAgent
