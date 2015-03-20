@@ -21,6 +21,7 @@ def log_message(message, level=None):
 try:
     import arcpy
     ARC_ENABLED = True
+    log_message("ArcPy is working")
 except ImportError:
     ARC_ENABLED = False
     debug(
@@ -48,15 +49,20 @@ def main(python_path, python_script, path_to_excel, path_to_pbf, path_to_output,
     try:
         args = [
             python_path,
-            'osm2mapaction.py',
-            path_to_excel,
+            python_script,
+            ' -c' + path_to_excel,
             path_to_pbf,
-            path_to_output,
-            geoextent,
-            scale,
+            ' -o' + path_to_output,
+            ' -g ' + geoextent,
+            ' -s ' + scale,
         ]
 
-        log_message("running osm2mapaction.py {} ...".format(" ".join(args)))
+
+        #C:\OSGeo4W64\OSGeo4W.bat python C:\Github\osm2mapaction\osm2ma\osm2mapaction.py -c
+        ## C:\Github\osm2mapaction\osm2ma\testfiles\OSM_to_MAv2.xls c:\github\osm2mapaction\osm2ma\testfiles\clipped.pbf
+        ## -o c:\github\osm2mapaction\osm2ma\testfiles\
+
+        log_message("running osm2mapaction.py using {} ...".format(" ".join(args)))
         os.system(" ".join(args))
         log_message("...finished!")
         log_message(
@@ -88,11 +94,11 @@ if __name__ == '__main__':
         default=r'c:\github\osm2mapaction\osm2ma\testfiles\oxfordshire-latest.osm.pbf'
     )
     parser.add_argument(
-        '-po', '--output path',
+        '-o', '--output path',
         help="path to output directory",
         default=os.getcwd()
     )
-    parser.add_argument('-ge', '--geoextent', choices=('wrl',), default='wrl')
+    parser.add_argument('-g', '--geoextent', choices=('wrl',), default='wrl')
     parser.add_argument('-s', '--scale', choices=('su',), default='su')
     args = parser.parse_args()
     main(args)
@@ -105,6 +111,6 @@ if ARC_ENABLED:
     geoextent = arcpy.GetParameterAsText(3)
     scale = arcpy.GetParameterAsText(4)
 
-
+    log_message("TEST")
+    arcpy.AddMessage("TEST2")
     main(python_path, python_script, path_to_excel, path_to_pbf, path_to_output, geoextent, scale)
-
