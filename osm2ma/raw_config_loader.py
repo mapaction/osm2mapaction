@@ -92,18 +92,15 @@ class RawConfig:
 
     def __init__(self, excel_file_path, excel_named_range):
         """
-        Currently the constructor does not check that the file path is valid,
-        nor does it check that the named range is present.
+        The constructor will check that the excel file can be read, the named range is in place and that the correct
+        column names are specified.
         """
         self._file_path = excel_file_path
         self._named_range = excel_named_range
-        self.area2d = self._get_area2d()
+        area2d = self._get_area2d()
+        if RawConfig._raw_config_columns_count_valid(area2d) and RawConfig._raw_config_columns_names_valid(area2d):
+            self.area2d = area2d
 
-
-
-    # RawConfig.is_table_schema_raw_config(self.rawconf_good), "Raw Config table schema OK")
-    # self.assertFalse(RawConfig.is_table_schema_raw_config(self.rawconf_too_few_columns), "Raw Config table; too few columns")
-    # self.assertFalse(RawConfig.is_table_schema_raw_config(self.rawconf_wrong_column_names),
 
 def raw_config_from_file(file_path):
     _excel = RawConfig(file_path, "xwalk")
