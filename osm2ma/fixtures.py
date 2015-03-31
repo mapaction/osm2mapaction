@@ -52,27 +52,27 @@ rawconf_good = [
      "ln", "py", "rel"]
 ]
 
-"""
-Correct column names
-"""
-rawconf_col_names = [
-    u'OSM_tag_name',
-    u'OSM_tag_value',
-    u'Element_icon ',
-    u'Comment ',
-    u'Useful_for_MapAction',
-    u'Data Category description',
-    u'Cat_value',
-    u'Date Theme description',
-    u'Theme_value',
-    u'Conforms_to_MA_Hierarchy',
-    u'OSM_Element',
-    u'Data type',
-    u'pt',
-    u'ln',
-    u'py',
-    u'rel'
-]
+# """
+# Correct column names
+# """
+# rawconf_col_names = [
+#     u'OSM_tag_name',
+#     u'OSM_tag_value',
+#     u'Element_icon ',
+#     u'Comment ',
+#     u'Useful_for_MapAction',
+#     u'Data Category description',
+#     u'Cat_value',
+#     u'Date Theme description',
+#     u'Theme_value',
+#     u'Conforms_to_MA_Hierarchy',
+#     u'OSM_Element',
+#     u'Data type',
+#     u'pt',
+#     u'ln',
+#     u'py',
+#     u'rel'
+# ]
 
 
 """Contains an invalid nesting of the Data Category and Data Theme hierarchy"""

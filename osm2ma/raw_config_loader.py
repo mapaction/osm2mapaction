@@ -25,6 +25,25 @@ class RawConfig:
     A RawConfig object holds the reference to a particular named range in a
     particular excel spreadsheet.
     """
+    _expected_col_names = {
+        u'OSM_tag_name',
+        u'OSM_tag_value',
+        u'Element_icon ',
+        u'Comment',
+        u'Useful_for_MapAction',
+        u'Data Category description',
+        u'Cat_value',
+        u'Date Theme description',
+        u'Theme_value',
+        u'Conforms_to_MA_Hierarchy',
+        u'OSM_Element',
+        u'Data type',
+        u'pt',
+        u'ln',
+        u'py',
+        u'rel'
+    }
+
     def get_raw_config(self):
         return self.area2d
 
@@ -44,14 +63,32 @@ class RawConfig:
     @staticmethod
     def _raw_config_columns_count_valid(myarea2d):
         sheet_object, rowxlo, rowxhi, colxlo, colxhi = myarea2d
-        return 16 == colxhi - colxlo
+        found = colxhi - colxlo
+        expected = len(RawConfig._expected_col_names)
+        if expected == found:
+            return True
+        else:
+            raise UserWarning("Incorrect number of columns in specified table. Found {f} columns."
+                              "Expecting {e} columns".format(f=found, e=expected))
 
     @staticmethod
     def _raw_config_columns_names_valid(myarea2d):
         sheet_object, rowxlo, rowxhi, colxlo, colxhi = myarea2d
         # get the first row assumed to be column headings
-        col_names = sheet_object.row_values(rowxlo, start_colx=colxlo, end_colx=colxhi)
-        return col_names
+        col_names = set(sheet_object.row_values(rowxlo, start_colx=colxlo, end_colx=colxhi))
+        if col_names == RawConfig._expected_col_names:
+            return True
+        else:
+            missing = RawConfig._expected_col_names - col_names
+            unnecessary = col_names - RawConfig._expected_col_names
+            raise UserWarning("The column names in specified table were not correct.\n"
+                              "The expected column names are:\n{e}\n"
+                              "These expected columns are missing:\n{m}\n"
+                              "These unnecessary columns were found columns:\n{u}\n"
+                              .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
+                                      m="\t'" + "'\n\t'".join(missing) + "'\n",
+                                      u="\t'" + "'\n\t'".join(unnecessary) + "'\n")
+                              )
 
     def __init__(self, excel_file_path, excel_named_range):
         """

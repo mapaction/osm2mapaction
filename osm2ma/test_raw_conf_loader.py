@@ -70,10 +70,10 @@ class TestRawConfigIterator(unittest.TestCase):
         # "Raw config column count for rawconf_too_few_columns fixture")
 
     def test_raw_config_columns_names_valid(self):
-        self.assertEqual(RawConfig._raw_config_columns_names_valid(self.rawconf_good), fixtures.rawconf_col_names,
-                         "Raw Config column names for rawconf_good fixture")
-        self.assertRaises(RawConfig._raw_config_columns_names_valid(self.rawconf_wrong_column_names),
-                          "Raw Config column names for rawconf_wrong_column_names fixture")
+        self.assertTrue(RawConfig._raw_config_columns_names_valid(self.rawconf_good),
+                        "Raw Config column names for rawconf_good fixture")
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, self.rawconf_wrong_column_names)
+        # "Raw Config column names for rawconf_wrong_column_names fixture")
 
     @unittest.skip("not implemented")
     def test_is_raw_config_heirarchy_compliant(self):
