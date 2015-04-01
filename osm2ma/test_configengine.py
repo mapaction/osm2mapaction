@@ -4,7 +4,7 @@ import unittest
 import os
 from configengine import xwalk_from_raw_config
 import xlrd
-# import fixtures
+import fixtures
 
 
 class TestRawConfigIterator(unittest.TestCase):
@@ -20,7 +20,7 @@ class TestRawConfigIterator(unittest.TestCase):
         pass
 
     @unittest.skip("not implenemted")
-    def testnext(self):
+    def test_next(self):
         pass
 
 
@@ -64,6 +64,16 @@ class TestGlobalFunctions(unittest.TestCase):
 
     def tearDown(self):
         pass
+
+    def test_xwalk_from_raw_config(self):
+        """
+        This is just an intergration test for the whole of the configengine module
+        :return:
+        """
+        result = xwalk_from_raw_config(fixtures.rawconf_good, "wrl", "su")
+        # print type(result)
+        self.assertIsInstance(result, list)
+
 
 if __name__ == '__main__':
     unittest.main()

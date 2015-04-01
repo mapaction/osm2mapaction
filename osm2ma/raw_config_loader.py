@@ -25,7 +25,7 @@ class RawConfig:
     A RawConfig object holds the reference to a particular named range in a
     particular excel spreadsheet.
     """
-    _expected_col_names = {
+    _expected_col_names = [
         u'OSM_tag_name',
         u'OSM_tag_value',
         u'Element_icon',
@@ -42,7 +42,7 @@ class RawConfig:
         u'ln',
         u'py',
         u'rel'
-    }
+    ]
 
     def get_raw_config(self):
         return self.area2d
@@ -74,12 +74,19 @@ class RawConfig:
     def _raw_config_columns_names_valid(myarea2d):
         sheet_object, rowxlo, rowxhi, colxlo, colxhi = myarea2d
         # get the first row assumed to be column headings
-        col_names = set(sheet_object.row_values(rowxlo, start_colx=colxlo, end_colx=colxhi))
+        col_names = sheet_object.row_values(rowxlo, start_colx=colxlo, end_colx=colxhi)
         if col_names == RawConfig._expected_col_names:
             return True
+        elif set(col_names) == set(RawConfig._expected_col_names):
+            raise UserWarning("The column names in config file were not in the correct order.\n"
+                              "The expected column names are expected in this order:\n{e}\n"
+                              "The columns names in the config file are in this order :\n{c}\n"
+                              .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
+                                      c="\t'" + "'\n\t'".join(col_names) + "'\n")
+                              )
         else:
-            missing = RawConfig._expected_col_names - col_names
-            unnecessary = col_names - RawConfig._expected_col_names
+            missing = set(RawConfig._expected_col_names) - set(col_names)
+            unnecessary = set(col_names) - set(RawConfig._expected_col_names)
             raise UserWarning("The column names in specified table were not correct.\n"
                               "The expected column names are:\n{e}\n"
                               "These expected columns are missing:\n{m}\n"

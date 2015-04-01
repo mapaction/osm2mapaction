@@ -8,11 +8,20 @@ Licence:     GPL v3
 """
 
 import os
+import xlrd
 
 
 def path_to_fixtures_xls():
     test_script_path = os.path.abspath(os.path.dirname(__file__))
     return os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
+
+_workbook = xlrd.open_workbook(os.path.realpath(path_to_fixtures_xls()))
+rawconf_good = _workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
+rawconf_invalid_heirarchy = _workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
+rawconf_too_few_columns = _workbook.name_map.get("rawconf_too_few_columns")[0].area2d(clipped=True)
+rawconf_wrong_column_names = _workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
+rawconf_wrong_column_order = _workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
+
 
 
 # rawconf_good = [

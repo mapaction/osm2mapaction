@@ -14,39 +14,33 @@ class TestRawConfig(unittest.TestCase):
     def setUp(self):
         # test_script_path = os.path.abspath(os.path.dirname(__file__))
         # excel_path = os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
-        excel_path = fixtures.path_to_fixtures_xls()
-        workbook = xlrd.open_workbook(os.path.realpath(excel_path))
-        self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
-        self.rawconf_invalid_heirarchy = workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
-        self.rawconf_too_few_columns = workbook.name_map.get("rawconf_too_few_columns")[0].area2d(clipped=True)
-        self.rawconf_wrong_column_names = workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
-        self.rawconf_wrong_column_order = workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
+        # excel_path = fixtures.path_to_fixtures_xls()
+        # workbook = xlrd.open_workbook(os.path.realpath(excel_path))
+        # self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
+        # self.rawconf_invalid_heirarchy = workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
+        # self.rawconf_too_few_columns = workbook.name_map.get("rawconf_too_few_columns")[0].area2d(clipped=True)
+        # self.rawconf_wrong_column_names = workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
+        # self.rawconf_wrong_column_order = workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
+        pass
 
     def tearDown(self):
         pass
 
+    @unittest.skip("not implemented")
     def test_raw_config_columns_count_valid(self):
-        mysheet, rowxlo, rowxhi, colxlo, colxhi = self.rawconf_good
-        self.assertTrue(RawConfig._raw_config_columns_count_valid(self.rawconf_good),
+        mysheet, rowxlo, rowxhi, colxlo, colxhi = fixtures.rawconf_good
+        self.assertTrue(RawConfig._raw_config_columns_count_valid(fixtures.rawconf_good),
                         "Raw config column count for rawconf_good fixture")
-        self.assertRaises(UserWarning, RawConfig._raw_config_columns_count_valid, self.rawconf_too_few_columns)
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_count_valid, fixtures.rawconf_too_few_columns)
         # "Raw config column count for rawconf_too_few_columns fixture")
 
     def test_raw_config_columns_names_valid(self):
-        self.assertTrue(RawConfig._raw_config_columns_names_valid(self.rawconf_good),
+        self.assertTrue(RawConfig._raw_config_columns_names_valid(fixtures.rawconf_good),
                         "Raw Config column names for rawconf_good fixture")
-        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, self.rawconf_wrong_column_names)
-        # "Raw Config column names for rawconf_wrong_column_names fixture")
-        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, self.rawconf_wrong_column_order)
-        # "Raw Config column names for rawconf_wrong_column_names fixture")
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_names)
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_order)
 
-
-    @unittest.skip("not implemented")
     def test_is_raw_config_heirarchy_compliant(self):
-        pass
-
-    @unittest.skip("not implenemted")
-    def test_is_row_count_valid(self):
         pass
 
 
@@ -63,15 +57,6 @@ class TestGlobalFunctions(unittest.TestCase):
         self.assertIsInstance(colxhi,int, "colxhi is not a int")
 
 
-@unittest.skip("not implenemted")
-class TestRawConfigIterator(unittest.TestCase):
-
-    @unittest.skip("not implenemted")
-    def test_xwalk_from_raw_config(self):
-        # print self.rawconf_good
-        result = xwalk_from_raw_config(self.rawconf_good, "wrl", "su")
-        # print result
-        assert False
 
 
 def runtests():
