@@ -36,8 +36,8 @@ About the config spreadsheet
 * The spreadsheet should contain a Named Range called "xwalk". See here.... for how to define a named range in excel
 * The named range should include the following columns:
 
-|Column						|Purpose										    |
-|--------------------------:|---------------------------------------------------|
+|Column			|Purpose			|
+|--------------------------:|:--------------------------------------------------|
 |OSM_tag_name				|Name of the OSM tag.								|
 |OSM_tag_value				|Value of the OSM tag. May be string, number or '*' for a wildcard.	|
 |Element_icon				|													|
