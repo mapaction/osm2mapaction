@@ -162,7 +162,7 @@ class ConfigXWalk:
                     osm_element,
                     '{geom}'
                 from config where
-                    instr(config.geom_str,'{geom}')
+                    config.geom_str like '%{geom}%'
                 '''.format(geom=geom)
             cur.execute(u_sql)
 

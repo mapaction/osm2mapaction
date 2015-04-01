@@ -3,3 +3,4 @@ osm2ma/.idea
 *.pyc
 *.coverage
 *.py,cover
+osm2ma/testfiles/output_shp/
