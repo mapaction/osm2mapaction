@@ -3,6 +3,7 @@
 import unittest
 import os
 from configengine import xwalk_from_raw_config
+from configengine import ConfigXWalk
 import xlrd
 import fixtures
 
@@ -27,7 +28,7 @@ class TestRawConfigIterator(unittest.TestCase):
 class TestConfigXWalk(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.configxwalk = ConfigXWalk(fixtures.rawconf_good, "wrl", "su")
 
     def tearDown(self):
         pass
@@ -42,7 +43,9 @@ class TestConfigXWalk(unittest.TestCase):
 
     @unittest.skip("not implemented")
     def test_populate_scratch_table(self):
-        pass
+        scratch = self.configxwalk
+        self.assertEquals(scratch, fixtures.scratch_table_good)
+
 
     @unittest.skip("not implemented")
     def test_populate_shpfile_table(self):

@@ -12,15 +12,6 @@ import fixtures
 class TestRawConfig(unittest.TestCase):
 
     def setUp(self):
-        # test_script_path = os.path.abspath(os.path.dirname(__file__))
-        # excel_path = os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
-        # excel_path = fixtures.path_to_fixtures_xls()
-        # workbook = xlrd.open_workbook(os.path.realpath(excel_path))
-        # self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
-        # self.rawconf_invalid_heirarchy = workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
-        # self.rawconf_too_few_columns = workbook.name_map.get("rawconf_too_few_columns")[0].area2d(clipped=True)
-        # self.rawconf_wrong_column_names = workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
-        # self.rawconf_wrong_column_order = workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
         pass
 
     def tearDown(self):
