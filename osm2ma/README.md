@@ -39,44 +39,18 @@ About the config spreadsheet
 |Column						|Purpose										    |
 |--------------------------:|---------------------------------------------------|
 |OSM_tag_name				|Name of the OSM tag.								|
-|OSM_tag_value				|Value of the OSM tag. May be string, number or '*' |
-|							|for a wildcard.									|
+|OSM_tag_value				|Value of the OSM tag. May be string, number or '*' for a wildcard.	|
 |Element_icon				|													|
 |Comment					|													|
-|Useful_for_MapAction		|Boolean. Controls whether on not the feature should|
-|							|be included in the exported shapefiles.			|
+|Useful_for_MapAction		|Boolean. Controls whether on not the feature should be included in the exported shapefiles.|
 |Data Category				|See MapAction's Data Naming Convention.			|
 |Cat_value					|Abbreviation of the Data Category.					|
 |Date Theme description		|See MapAction's Data Naming Convention.			|	
 |Theme_value				|Abbreviation of the Data Category.					|
-|Conforms_to_MA_Hierarchy	|Boolean, calculated via lookup in the spreadsheet. |
-|							|Confirms whether or not the Data Category and Theme|
-|							|values nest hierarchy as defined in MapAction's	|
-|							|Data Naming Convention. Not used by osm2ma.		|
-|OSM_Element				|List of OSM geometry types included in the feature.|
-|							|Should be a space separated list of one or more of |
-|							|"node", "way", "area", "closed" and "relation" 	|
-|							|(order and case insensitive).						|
-|Data type					|List of ESRI geometry types to be included in the	|
-|							|exported features. Should be a space separated list|
-|							|of one or more of "pt", "ln", "py", "rel" (order	|
-|							|and case insensitive).								|
-|pt							|Boolean - whether or not the feature includes a	|
-|							|point geometry. Calculated by the spreadsheet. 	|
-|							|Not used by osm2ma.								|
-|ln							|Boolean - whether or not the feature includes a	|
-|							|line geometry. Calculated by the spreadsheet. 		|
-|							|Not used by osm2ma.								|
-|py							|Boolean - whether or not the feature includes a 	|
-|							|polygon geometry. Calculated by the spreadsheet.	|
-|							|Not used by osm2ma.								|
-|rel						|Boolean - whether or not the feature includes a	| 
-|							|relationship. Calculated by the spreadsheet. Not	|
-|							|used by osm2ma.									|
-
-
-
-
-
-
-
+|Conforms_to_MA_Hierarchy	|Boolean, calculated via lookup in the spreadsheet. Confirms whether or not the Data Category and Theme values nest hierarchy as defined in MapAction's	Data Naming Convention. Not used by osm2ma.|
+|OSM_Element				|List of OSM geometry types included in the feature. Should be a space separated list of one or more of "node", "way", "area", "closed" and "relation" (order and case insensitive). |
+|Data type					|List of ESRI geometry types to be included in the exported features. Should be a space separated list of one or more of "pt", "ln", "py", "rel" (order	and case insensitive).|
+|pt							|Boolean - whether or not the feature includes a point geometry. Calculated by the spreadsheet. Not used by osm2ma.|
+|ln							|Boolean - whether or not the feature includes a line geometry. Calculated by the spreadsheet. Not used by osm2ma.|
+|py							|Boolean - whether or not the feature includes a polygon geometry. Calculated by the spreadsheet. Not used by osm2ma.|
+|rel						|Boolean - whether or not the feature includes a relationship. Calculated by the spreadsheet. Not used by osm2ma.|
