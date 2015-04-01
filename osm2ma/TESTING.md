@@ -1,3 +1,5 @@
+[![Coverage Status](https://coveralls.io/repos/mapaction/osm2mapaction/badge.svg)](https://coveralls.io/r/mapaction/osm2mapaction)
+
 Running Tests
 =============
 Run all unittests (from the osm2ma directory:
