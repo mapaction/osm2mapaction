@@ -2,65 +2,28 @@
 
 import unittest
 import os
-import sys
 import xlrd
 from configengine import xwalk_from_raw_config
+import raw_config_loader
 from raw_config_loader import RawConfig
 import fixtures
 
-@unittest.skip("not implenemted")
+
 class TestRawConfig(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def test_is_column_names_valid(self):
-        pass
-
-    def test_is_column_count_valid(self):
-        pass
-
-    @unittest.skip("not implenemted")
-    def test_is_row_count_valid(self):
-        pass
-
-@unittest.skip("not implenemted")
-class TestGlobalFunctions(unittest.TestCase):
-    pass
-
-
-class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
-        # test_script_path = os.path.abspath(os.path.dirname(sys.argv[0]))
-        test_script_path = os.path.abspath(os.path.dirname(__file__))
-        excel_path = os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
+        # test_script_path = os.path.abspath(os.path.dirname(__file__))
+        # excel_path = os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
+        excel_path = fixtures.path_to_fixtures_xls()
         workbook = xlrd.open_workbook(os.path.realpath(excel_path))
         self.rawconf_good = workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
         self.rawconf_invalid_heirarchy = workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
         self.rawconf_too_few_columns = workbook.name_map.get("rawconf_too_few_columns")[0].area2d(clipped=True)
         self.rawconf_wrong_column_names = workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
+        self.rawconf_wrong_column_order = workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
 
     def tearDown(self):
         pass
-
-    @unittest.skip("not implenemted")
-    def test_xwalk_from_raw_config(self):
-        # print self.rawconf_good
-        result = xwalk_from_raw_config(self.rawconf_good, "wrl", "su")
-        # print result
-        assert False
-
-    @unittest.skip("not implenemted")
-    def test_is_table_schema_raw_config(self):
-        mysheet, rowxlo, rowxhi, colxlo, colxhi = self.rawconf_good
-        self.assertTrue(RawConfig.is_table_schema_raw_config(self.rawconf_good), "Raw Config table schema OK")
-        self.assertFalse(RawConfig.is_table_schema_raw_config(self.rawconf_too_few_columns),
-                         "Raw Config table; too few columns")
-        self.assertFalse(RawConfig.is_table_schema_raw_config(self.rawconf_wrong_column_names),
-                         "Raw Config table; wrong column names")
 
     def test_raw_config_columns_count_valid(self):
         mysheet, rowxlo, rowxhi, colxlo, colxhi = self.rawconf_good
@@ -74,26 +37,48 @@ class TestRawConfigIterator(unittest.TestCase):
                         "Raw Config column names for rawconf_good fixture")
         self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, self.rawconf_wrong_column_names)
         # "Raw Config column names for rawconf_wrong_column_names fixture")
+        self.assertRaises(UserWarning, RawConfig._raw_config_columns_names_valid, self.rawconf_wrong_column_order)
+        # "Raw Config column names for rawconf_wrong_column_names fixture")
+
 
     @unittest.skip("not implemented")
     def test_is_raw_config_heirarchy_compliant(self):
         pass
 
+    @unittest.skip("not implenemted")
+    def test_is_row_count_valid(self):
+        pass
+
+
+class TestGlobalFunctions(unittest.TestCase):
+    """
+    This is an intergration test for the entire raw_config_loader module.
+    """
+    def test_raw_config_from_file(self):
+        mysheet, rowxlo, rowxhi, colxlo, colxhi = raw_config_loader.raw_config_from_file(fixtures.path_to_fixtures_xls())
+        self.assertIsInstance(mysheet,xlrd.sheet.Sheet, "mysheet is not a string")
+        self.assertIsInstance(rowxlo,int, "rowxlo is not a int")
+        self.assertIsInstance(rowxhi,int, "rowxhi is not a int")
+        self.assertIsInstance(colxlo,int, "colxlo is not a int")
+        self.assertIsInstance(colxhi,int, "colxhi is not a int")
+
+
+@unittest.skip("not implenemted")
+class TestRawConfigIterator(unittest.TestCase):
+
+    @unittest.skip("not implenemted")
+    def test_xwalk_from_raw_config(self):
+        # print self.rawconf_good
+        result = xwalk_from_raw_config(self.rawconf_good, "wrl", "su")
+        # print result
+        assert False
+
 
 def runtests():
     # unittest.main()
-    TestGlobalFunctions().run()
+    #TestGlobalFunctions().run()
     TestRawConfig().run()
     TestRawConfigIterator().run()
 
 if __name__ == '__main__':
     runtests()
-    # from pprint import pprint
-    # stream = StringIO()
-    # runner = unittest.TextTestRunner(stream=stream)
-    # result = runner.run(unittest.makeSuite(MyTestCase))
-    # print 'Tests run ', result.testsRun
-    # print 'Errors ', result.errors
-    # pprint(result.failures)
-    # stream.seek(0)
-    # print 'Test output\n', stream.read()

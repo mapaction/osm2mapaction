@@ -28,7 +28,7 @@ class RawConfig:
     _expected_col_names = {
         u'OSM_tag_name',
         u'OSM_tag_value',
-        u'Element_icon ',
+        u'Element_icon',
         u'Comment',
         u'Useful_for_MapAction',
         u'Data Category description',
@@ -54,7 +54,6 @@ class RawConfig:
         The returned value in the in form specified here:
         https://secure.simplistix.co.uk/svn/xlrd/trunk/xlrd/doc/xlrd.html?p=4966#__init__.Name.area2d-method
         """
-
         # TODO catch invalid file path, or non-excel file
         workbook = xlrd.open_workbook(os.path.realpath(self._file_path))
         namedrange = workbook.name_map.get(self._named_range)[0]
@@ -98,7 +97,7 @@ class RawConfig:
         self._file_path = excel_file_path
         self._named_range = excel_named_range
         area2d = self._get_area2d()
-        if RawConfig._raw_config_columns_count_valid(area2d) and RawConfig._raw_config_columns_names_valid(area2d):
+        if RawConfig._raw_config_columns_names_valid(area2d) and RawConfig._raw_config_columns_count_valid(area2d):
             self.area2d = area2d
 
 

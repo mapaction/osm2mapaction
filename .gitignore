@@ -1,3 +1,5 @@
 osm2ma/.idea
 *.sw[po]
 *.pyc
+*.coverage
+*.py,cover
