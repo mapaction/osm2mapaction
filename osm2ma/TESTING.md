@@ -28,10 +28,10 @@ testfiles\output_shp testfiles\oxfordshire-latest.osm.pbf
 
 Print (on cmdline) a report of coverage per module
 ```
-coverage report --omit=test*,fixtures*  *.py
+coverage report *.py
 ```
 
 Update copies of source files, annotated with which lines the tests reach or not:
 ```
-coverage annotate --omit=test*,fixtures* -d coverageoutput *.py
+coverage annotate -d coverageoutput *.py
 ```
