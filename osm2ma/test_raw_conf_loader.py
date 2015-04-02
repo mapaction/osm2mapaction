@@ -25,8 +25,10 @@ class TestRawConfig(unittest.TestCase):
     def test_raw_config_columns_names_valid(self):
         self.assertTrue(RawConfig._raw_config_columns_names_valid(fixtures.rawconf_good),
                         "Raw Config column names for rawconf_good fixture")
-        self.assertRaises(raw_config_loader.WarningWrongColumnNames, RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_names)
-        self.assertRaises(raw_config_loader.WarningWrongColumnOrder, RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_order)
+        self.assertRaises(raw_config_loader.WarningWrongColumnNames,
+                          RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_names)
+        self.assertRaises(raw_config_loader.WarningWrongColumnOrder,
+                          RawConfig._raw_config_columns_names_valid, fixtures.rawconf_wrong_column_order)
 
 
 class TestGlobalFunctions(unittest.TestCase):
@@ -34,10 +36,10 @@ class TestGlobalFunctions(unittest.TestCase):
     This is an intergration test for the entire raw_config_loader module.
     """
     def test_raw_config_from_file(self):
-        mysheet, rowxlo, rowxhi, colxlo, colxhi = raw_config_loader.raw_config_from_file(fixtures.path_to_fixtures_xls())
-        self.assertIsInstance(mysheet,xlrd.sheet.Sheet, "mysheet is not a string")
-        self.assertIsInstance(rowxlo,int, "rowxlo is not a int")
-        self.assertIsInstance(rowxhi,int, "rowxhi is not a int")
-        self.assertIsInstance(colxlo,int, "colxlo is not a int")
-        self.assertIsInstance(colxhi,int, "colxhi is not a int")
-
+        mysheet, rowxlo, rowxhi, colxlo, colxhi = \
+            raw_config_loader.raw_config_from_file(fixtures.path_to_fixtures_xls())
+        self.assertIsInstance(mysheet, xlrd.sheet.Sheet, "mysheet is not a string")
+        self.assertIsInstance(rowxlo, int, "rowxlo is not a int")
+        self.assertIsInstance(rowxhi, int, "rowxhi is not a int")
+        self.assertIsInstance(colxlo, int, "colxlo is not a int")
+        self.assertIsInstance(colxhi, int, "colxhi is not a int")
