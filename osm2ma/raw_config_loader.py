@@ -78,7 +78,7 @@ class RawConfig:
         if col_names == RawConfig._expected_col_names:
             return True
         elif set(col_names) == set(RawConfig._expected_col_names):
-            raise UserWarning("The column names in config file were not in the correct order.\n"
+            raise WarningWrongColumnOrder("The column names in config file were not in the correct order.\n"
                               "The expected column names are expected in this order:\n{e}\n"
                               "The columns names in the config file are in this order :\n{c}\n"
                               .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
@@ -87,7 +87,7 @@ class RawConfig:
         else:
             missing = set(RawConfig._expected_col_names) - set(col_names)
             unnecessary = set(col_names) - set(RawConfig._expected_col_names)
-            raise UserWarning("The column names in specified table were not correct.\n"
+            raise WarningWrongColumnNames("The column names in specified table were not correct.\n"
                               "The expected column names are:\n{e}\n"
                               "These expected columns are missing:\n{m}\n"
                               "These unnecessary columns were found columns:\n{u}\n"
@@ -106,6 +106,14 @@ class RawConfig:
         area2d = self._get_area2d()
         if RawConfig._raw_config_columns_names_valid(area2d) and RawConfig._raw_config_columns_count_valid(area2d):
             self.area2d = area2d
+
+
+class WarningWrongColumnNames(UserWarning):
+    pass
+
+
+class WarningWrongColumnOrder(UserWarning):
+    pass
 
 
 def raw_config_from_file(file_path):

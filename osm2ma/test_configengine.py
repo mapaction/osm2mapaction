@@ -41,9 +41,10 @@ class TestConfigXWalk(unittest.TestCase):
     def test_populate_config_table(self):
         pass
 
-    @unittest.skip("not implemented")
     def test_populate_scratch_table(self):
+        # TODO need to extract the scratch table from the ConfigXWalk object
         scratch = self.configxwalk
+        # TODO manually add an example scratch table to the fixtures module
         self.assertEquals(scratch, fixtures.scratch_table_good)
 
 
