@@ -4,6 +4,7 @@ import unittest
 import os
 from configengine import xwalk_from_raw_config
 from configengine import ConfigXWalk
+from configengine import RawConfigIterator
 import xlrd
 import fixtures
 
@@ -11,20 +12,36 @@ import fixtures
 class TestRawConfigIterator(unittest.TestCase):
 
     def setUp(self):
-        pass
+        self.rci = RawConfigIterator(fixtures.rawconf_good)
 
     def tearDown(self):
         pass
 
-    @unittest.skip("not implenemted")
     def test__iter__(self):
-        pass
+        self.assertEquals(self.rci, self.rci.__iter__())
 
-    @unittest.skip("not implenemted")
     def test_next(self):
-        pass
+        # There are 18 rows in fixtures.rawconf_good
+        # Each row contains 16 cells
+        for x in range(0, 18):
+            nextrow = self.rci.next()
+            # print len(nextrow)
+            self.assertIsInstance(nextrow, list, "Expected another row to be returned as a list object.")
+            self.assertEqual(len(nextrow), 16, "Expected row (list obj) to contain 16 cells.")
+
+        self.assertRaises(StopIteration, self.rci.next)
+
+    def test_parse_cell_values(self):
+        # special handling of '*' with None
+        self.assertEqual(RawConfigIterator._parse_cell_values(42), None)
+        # other ints should be returned
+        self.assertEqual(RawConfigIterator._parse_cell_values(41), 41)
+        self.assertEqual(RawConfigIterator._parse_cell_values(u' a'), u'a')
+        self.assertEqual(RawConfigIterator._parse_cell_values(u'a '), u'a')
+        self.assertEqual(RawConfigIterator._parse_cell_values(u''), u'')
 
 
+@unittest.skip("not implemented")
 class TestConfigXWalk(unittest.TestCase):
 
     def setUp(self):
@@ -41,23 +58,51 @@ class TestConfigXWalk(unittest.TestCase):
     def test_populate_config_table(self):
         pass
 
-    @unittest.skip("not implemented")
     def test_populate_scratch_table(self):
-        # TODO need to extract the scratch table from the ConfigXWalk object
-        scratch = self.configxwalk
-        # TODO manually add an example scratch table to the fixtures module
+        scratch = self.configxwalk.cursor.execute('''select * from scratch''').fetchall()
         self.assertEquals(scratch, fixtures.scratch_table_good)
 
-    @unittest.skip("not implemented")
     def test_populate_shpfile_table(self):
-        pass
+        shpf_list = self.configxwalk.cursor.execute('''select * from shpf_list''').fetchall()
+        print
+        print shpf_list
+        print
+        self.assertEquals(shpf_list, fixtures.shpf_list_table_good)
 
     @unittest.skip("not implemented")
     def test_init_db_funcs(self):
         pass
 
+    def test_get_xwalk(self):
+        shpf_list = self.configxwalk.get_xwalk()
+        self.assertEquals(shpf_list, fixtures.shpf_list_table_good)
+
     @unittest.skip("not implemented")
-    def testgetXWalk(self):
+    def test_create_shpf_name(self):
+        pass
+
+
+@unittest.skip("not implemented")
+class TestAttribList(unittest.TestCase):
+
+    @unittest.skip("not implemented")
+    def test_step(self):
+        pass
+
+    @unittest.skip("not implemented")
+    def test_finalize(self):
+        pass
+
+
+@unittest.skip("not implemented")
+class TestSelectClause(unittest.TestCase):
+
+    @unittest.skip("not implemented")
+    def test_step(self):
+        pass
+
+    @unittest.skip("not implemented")
+    def test_finalize(self):
         pass
 
 
@@ -69,6 +114,7 @@ class TestGlobalFunctions(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @unittest.skip("not implemented")
     def test_xwalk_from_raw_config(self):
         """
         This is just an intergration test for the whole of the configengine module
@@ -77,7 +123,3 @@ class TestGlobalFunctions(unittest.TestCase):
         result = xwalk_from_raw_config(fixtures.rawconf_good, "wrl", "su")
         # print type(result)
         self.assertIsInstance(result, list)
-
-
-if __name__ == '__main__':
-    unittest.main()

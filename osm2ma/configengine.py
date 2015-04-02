@@ -27,28 +27,27 @@ class RawConfigIterator:
     def __iter__(self):
         return self
 
-    def next(self):
-        def parse_cell_values(val):
-            """
-            Convert values to UTF8, handling any oddities
-            """
-            # TODO I'm sure there was a good reason for this hack, but I'm also
-            # sure there wasn't a good reason for failing to document it at the
-            # time. It is something to do with string encodings.
-            if (type(val) == int) and (val == 42):
-                return None
-            elif type(val) == unicode:
-                return val.strip()
-            else:
-                return val
+    @staticmethod
+    def _parse_cell_values(val):
+        """
+        Convert values to UTF8, handling any oddities
+        """
+        # replace '*' (utf-8 char 42) with None
+        if (type(val) == int) and (val == 42):
+            return None
+        elif type(val) == unicode:
+            return val.strip()
+        else:
+            return val
 
+    def next(self):
         if self.row_current >= self.rowxhi:
             raise StopIteration
         else:
             self.row_current += 1
             u_rtn_list = self.mysheet.row_values(
                 self.row_current - 1, self.colxlo, self.colxhi)
-            utf8_rtn_list = map(parse_cell_values, u_rtn_list)
+            utf8_rtn_list = map(RawConfigIterator._parse_cell_values, u_rtn_list)
             logging.debug(utf8_rtn_list)
             return utf8_rtn_list
 
@@ -347,7 +346,6 @@ class ConfigXWalk:
             geographic area being converted.
         :param scale_clause: A string of the scale clause suitable for the
             features being converted.
-
         """
         self.db = sqlite3.connect(':memory:')
         self.cursor = self.db.cursor()
