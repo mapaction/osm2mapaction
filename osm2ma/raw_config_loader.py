@@ -79,22 +79,22 @@ class RawConfig:
             return True
         elif set(col_names) == set(RawConfig._expected_col_names):
             raise WarningWrongColumnOrder("The column names in config file were not in the correct order.\n"
-                              "The expected column names are expected in this order:\n{e}\n"
-                              "The columns names in the config file are in this order :\n{c}\n"
-                              .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
-                                      c="\t'" + "'\n\t'".join(col_names) + "'\n")
-                              )
+                                          "The expected column names are expected in this order:\n{e}\n"
+                                          "The columns names in the config file are in this order :\n{c}\n"
+                                          .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
+                                                  c="\t'" + "'\n\t'".join(col_names) + "'\n")
+                                          )
         else:
             missing = set(RawConfig._expected_col_names) - set(col_names)
             unnecessary = set(col_names) - set(RawConfig._expected_col_names)
             raise WarningWrongColumnNames("The column names in specified table were not correct.\n"
-                              "The expected column names are:\n{e}\n"
-                              "These expected columns are missing:\n{m}\n"
-                              "These unnecessary columns were found columns:\n{u}\n"
-                              .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
-                                      m="\t'" + "'\n\t'".join(missing) + "'\n",
-                                      u="\t'" + "'\n\t'".join(unnecessary) + "'\n")
-                              )
+                                          "The expected column names are:\n{e}\n"
+                                          "These expected columns are missing:\n{m}\n"
+                                          "These unnecessary columns were found columns:\n{u}\n"
+                                          .format(e="\t'" + "'\n\t'".join(RawConfig._expected_col_names) + "'\n",
+                                                  m="\t'" + "'\n\t'".join(missing) + "'\n",
+                                                  u="\t'" + "'\n\t'".join(unnecessary) + "'\n")
+                                          )
 
     def __init__(self, excel_file_path, excel_named_range):
         """
