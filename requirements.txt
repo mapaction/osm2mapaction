@@ -1,2 +1,2 @@
-GDAL==1.11.1
 xlrd==0.9.3
+pysqlite==2.6.0

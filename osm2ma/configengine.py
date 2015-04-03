@@ -72,10 +72,12 @@ class ConfigXWalk:
                 osm_key_value text,
                 element_icon text,
                 comment text,
+                useful text,
                 data_category text,
                 cat_value text,
                 data_theme text,
                 theme_value text,
+                conforms_to_hierarchy text,
                 osm_element text,
                 geom_str text,
                 pt text,
@@ -119,17 +121,19 @@ class ConfigXWalk:
                 osm_key_value,
                 element_icon,
                 comment,
+                useful,
                 data_category,
                 cat_value,
                 data_Theme,
                 theme_value,
+                conforms_to_hierarchy,
                 osm_element,
                 geom_str,
                 pt,
                 ln,
                 py,
                 rel)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', RawConfigIterator(area2d))
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', RawConfigIterator(area2d))
 
     def _populate_scratch_table(self):
         """
@@ -158,7 +162,7 @@ class ConfigXWalk:
                     osm_element,
                     '{geom}'
                 from config where
-                    instr(config.geom_str,'{geom}')
+                    config.geom_str like '%{geom}%'
                 '''.format(geom=geom)
             cur.execute(u_sql)
 

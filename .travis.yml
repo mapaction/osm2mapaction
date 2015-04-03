@@ -1,0 +1,13 @@
+language: python
+python:
+  - "2.7"
+virtualenv:
+  system_site_packages: true
+before_install: 
+  - sudo apt-get install -qq libgdal1h
+  - sudo apt-get install -qq python-numpy python-scientific
+  - sudo apt-get install -qq proj
+  - sudo apt-get install -qq python-gdal
+install:
+  - pip install -r requirements.txt
+script: python -m unittest discover -s osm2ma

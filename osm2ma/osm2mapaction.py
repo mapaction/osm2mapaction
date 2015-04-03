@@ -66,8 +66,8 @@ if __name__ == '__main__':
         default=os.path.join(
             os.getcwd(), '..', 'config_files', 'OSM_to_MA_ascii_v6.xlsx')
     )
-    parser.add_argument('-g', '--geoextent', choices=('wrl',), default='wrl')
-    parser.add_argument('-s', '--scale', choices=('su',), default='su')
+    parser.add_argument('-g', '--geoextent', default='wrl')
+    parser.add_argument('-s', '--scale', default='su')
     parser.add_argument('-o', '--output-dir', default=os.getcwd())
     args = parser.parse_args()
     main(args)
