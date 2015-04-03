@@ -209,6 +209,18 @@ class ConfigXWalk:
 
         cur.execute(u_sql)
 
+    @staticmethod
+    def _create_shpf_name(geo_extd, data_cat, data_thm, geom_type, scale):
+        # geoextent_datacategory_datatheme_datatype[_scale]_source[_permission][_FreeText]
+        output_filename = "{geo_extd}_{cat}_{thm}_{geom_type}_{scale}_osm_pp.shp".format(
+            geo_extd=geo_extd,
+            cat=data_cat,
+            thm=data_thm,
+            geom_type=geom_type,
+            scale=scale
+        )
+        return output_filename
+
     def _init_db_funcs(self):
         """
         Initialise in-memory DB with required custom & aggregation functions.
@@ -224,22 +236,6 @@ class ConfigXWalk:
 
         """
         con = self.db
-
-        # TODO This funciton is not specific to the internal DB, and
-        # encapsulates knowledge of the MA DNC. Therefore it might be best if
-        # it is moved from this class and passed as a value.
-        def create_shpf_name(geo_extd, data_cat, data_thm, geom_type, scale):
-            # geoextent_datacategory_datatheme_datatype[_scale]_source[_permission][_FreeText]
-            output_filename = (
-                u'{geo_extd}_{cat}_{thm}_{geom_type}_{scale}_osm_pp.shp'
-            ).format(
-                geo_extd=geo_extd,
-                cat=data_cat,
-                thm=data_thm,
-                geom_type=geom_type,
-                scale=scale
-            )
-            return output_filename
 
         class AttribList:
             """
@@ -302,7 +298,7 @@ class ConfigXWalk:
                 else:
                     return u''
 
-        con.create_function("shpf_name", 5, create_shpf_name)
+        con.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
         con.create_aggregate("attriblist", 1, AttribList)
         con.create_aggregate("condition_clause", 2, SelectClause)
 
