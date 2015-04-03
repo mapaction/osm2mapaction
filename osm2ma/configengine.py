@@ -331,20 +331,21 @@ class _SelectClause:
                 # sure that the val or key won't contain a quote, for
                 # example.
                 # FIXME: Use params to execute?
-                key = u"'{key}'='{val}'".format(
+                unique_clause = u"'{key}'='{val}'".format(
                     key=osm_key, val=val.strip()
                 )
-                self.query_args[key] = osm_key
+                self.query_args[unique_clause] = osm_key
 
     def finalize(self):
         cleaned_pairs = set()
-        for key, val in self.query_args.iteritems():
-            if val in self.exclude_keys:
-                cleaned_pairs.add(
-                    u"'{val}' IS NOT null".format(val=val)
-                )
-            else:
-                cleaned_pairs.add(key)
+        for osm_key in self.exclude_keys:
+            cleaned_pairs.add(
+                u"'{val}' IS NOT null".format(val=osm_key)
+            )
+
+        for unique_clause, osm_key in self.query_args.iteritems():
+            if osm_key not in self.exclude_keys:
+                cleaned_pairs.add(unique_clause)
 
         if len(cleaned_pairs) > 0:
             return u" or ".join(sorted(cleaned_pairs))

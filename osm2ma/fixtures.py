@@ -81,10 +81,46 @@ shpf_list_table_good = [
 ]
 
 """
-A list of which are
-unsorted
-contains duplicates
-contains blacnk strings
+A list of which are unsorted, contain duplicates and contains blank strings.
 """
 attrib_list_args = ['f', 'a', 'b', 'c', 'd', '', 'e', 'a', 'a']
 attrib_list_result = 'a, b, c, d, e, f'
+
+"""
+A list of tuples.
+Each tuple has as its first item
+- A list of tuples of string pairs, representing OSM key value pairs
+- A string of the resulting selct clause
+"""
+select_clause_args_and_result_pairs = [
+    (
+        [
+            (u"border_type",    u"*")
+        ],
+        u"'border_type' IS NOT null"
+    ),
+    (
+        [
+            (u"boundary",	    u"administrative"),
+            (u"boundary",	    u"maritime"),
+            (u"boundary",	    u"political"),
+            (u"boundary",	    u"user defined"),
+            (u"border_type",    u"*")
+        ],
+        u"'border_type' IS NOT null or 'boundary' IS NOT null"
+    ),
+    (
+        [
+            (u"boundary",	    u"administrative"),
+            (u"boundary",	    u"maritime"),
+            (u"boundary",	    u"political")
+        ],
+        u"'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"
+    ),
+    (
+        [
+            (u"admin_level",	    u"Number"),
+        ],
+        u"'admin_level' is not null"
+    )
+]
