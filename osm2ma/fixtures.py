@@ -80,3 +80,11 @@ shpf_list_table_good = [
     (u'wrl_tran_air_py_su_osm_pp.shp', u'tran', u'py', u'aeroway, iata, icao, military', u"'aeroway'='aerodrome' or 'aeroway'='runway' or 'military'='airfield'", u'something')
 ]
 
+"""
+A list of which are
+unsorted
+contains duplicates
+contains blacnk strings
+"""
+attrib_list_args = ['f', 'a', 'b', 'c', 'd', '', 'e', 'a', 'a']
+attrib_list_result = 'a, b, c, d, e, f'

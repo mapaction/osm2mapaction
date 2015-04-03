@@ -233,74 +233,10 @@ class ConfigXWalk:
             into each shapefile
 
         :return: None
-
         """
-        con = self.db
-
-        class AttribList:
-            """
-            Creates comma delimited list of attribute names for SELECT
-
-            See:
-            docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
-
-            """
-            def __init__(self):
-                self.set_attribs = set()
-
-            def step(self, value):
-                self.set_attribs.add(value)
-
-            def finalize(self):
-                return ", ".join(sorted(self.set_attribs))
-
-        class SelectClause:
-            """
-            Generates WHERE clause, to select the contents of a shapefile.
-
-            Certain values (eg '*' and 'user defined') are filtered out.
-
-            See:
-            https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
-
-            """
-            def __init__(self):
-                self.query_args = dict()
-                self.exclude_keys = set()
-
-            def step(self, osm_key, osm_value):
-                if (type(osm_value) == unicode) and (
-                        osm_value.lower() in {u'*', u'user defined'}):
-                    self.exclude_keys.add(osm_key)
-                else:
-                    for val in osm_value.split(u'/'):
-                        # TODO: This might be dangerous, because you can't be
-                        # sure that the val or key won't contain a quote, for
-                        # example.
-                        # FIXME: Use params to execute?
-                        key = u"'{key}'='{val}'".format(
-                            key=osm_key, val=val.strip()
-                        )
-                        self.query_args[key] = osm_key
-
-            def finalize(self):
-                cleaned_pairs = set()
-                for key, val in self.query_args.iteritems():
-                    if val in self.exclude_keys:
-                        cleaned_pairs.add(
-                            u"'{val}' IS NOT null".format(val=val)
-                        )
-                    else:
-                        cleaned_pairs.add(key)
-
-                if len(cleaned_pairs) > 0:
-                    return u" or ".join(sorted(cleaned_pairs))
-                else:
-                    return u''
-
-        con.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
-        con.create_aggregate("attriblist", 1, AttribList)
-        con.create_aggregate("condition_clause", 2, SelectClause)
+        self.db.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
+        self.db.create_aggregate("attriblist", 1, _AttribList)
+        self.db.create_aggregate("condition_clause", 2, _SelectClause)
 
     def get_xwalk(self):
         """
@@ -352,6 +288,68 @@ class ConfigXWalk:
         self._populate_scratch_table()
         self._populate_shpfile_table(geoextent_clause, scale_clause)
         self.db.commit()
+
+
+class _AttribList:
+    """
+    Creates comma delimited list of attribute names for SELECT
+
+    See:
+    docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+    """
+    def __init__(self):
+        self.set_attribs = set()
+
+    def step(self, value):
+        if len(value) > 0:
+            self.set_attribs.add(value)
+
+    def finalize(self):
+        return ", ".join(sorted(self.set_attribs))
+
+
+class _SelectClause:
+    """
+    Generates WHERE clause, to select the contents of a shapefile.
+
+    Certain values (eg '*' and 'user defined') are filtered out.
+
+    See:
+    https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+    """
+    def __init__(self):
+        self.query_args = dict()
+        self.exclude_keys = set()
+
+    def step(self, osm_key, osm_value):
+        if (type(osm_value) == unicode) and (
+                osm_value.lower() in {u'*', u'user defined'}):
+            self.exclude_keys.add(osm_key)
+        else:
+            for val in osm_value.split(u'/'):
+                # TODO: This might be dangerous, because you can't be
+                # sure that the val or key won't contain a quote, for
+                # example.
+                # FIXME: Use params to execute?
+                key = u"'{key}'='{val}'".format(
+                    key=osm_key, val=val.strip()
+                )
+                self.query_args[key] = osm_key
+
+    def finalize(self):
+        cleaned_pairs = set()
+        for key, val in self.query_args.iteritems():
+            if val in self.exclude_keys:
+                cleaned_pairs.add(
+                    u"'{val}' IS NOT null".format(val=val)
+                )
+            else:
+                cleaned_pairs.add(key)
+
+        if len(cleaned_pairs) > 0:
+            return u" or ".join(sorted(cleaned_pairs))
+        else:
+            return u''
 
 
 def xwalk_from_raw_config(raw_config, geoextent_clause, scale_clause):
