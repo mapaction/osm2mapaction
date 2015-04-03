@@ -99,8 +99,7 @@ class ConfigXWalk:
                 cat_value text,
                 geom_type text,
                 attrib_str text,
-                condition_str text,
-                cmdline_str text
+                condition_str text
             );
 
             ''')
@@ -183,8 +182,7 @@ class ConfigXWalk:
                 cat_value,
                 geom_type,
                 attrib_str,
-                condition_str,
-                cmdline_str
+                condition_str
             )
             SELECT
                 shpf_name(
@@ -194,8 +192,7 @@ class ConfigXWalk:
                 scratch.cat_value,
                 scratch.geom_type,
                 attriblist(scratch.osm_key_name),
-                condition_clause(scratch.osm_key_name, scratch.osm_key_value),
-                'something'
+                condition_clause(scratch.osm_key_name, scratch.osm_key_value)
             FROM scratch
             GROUP BY
                 shpf_name(
@@ -203,8 +200,7 @@ class ConfigXWalk:
                     scratch.geom_type, '{scale}'
                 ),
                 scratch.cat_value,
-                scratch.geom_type,
-                'something'
+                scratch.geom_type
             '''.format(geo_extd=geo_extd, scale=scale)
 
         cur.execute(u_sql)

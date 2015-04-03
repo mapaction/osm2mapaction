@@ -68,16 +68,16 @@ scratch_table_good = [
 ]
 
 shpf_list_table_good = [
-    (u'wrl_admn_ad_ln_su_osm_pp.shp', u'admn', u'ln', u'border_type, boundary', u"'border_type' IS NOT null or 'boundary' IS NOT null", u'something'),
-    (u'wrl_admn_ad_pt_su_osm_pp.shp', u'admn', u'pt', u'boundary', u"'boundary' IS NOT null", u'something'),
-    (u'wrl_admn_ad_py_su_osm_pp.shp', u'admn', u'py', u'admin_level, border_type, boundary', u"'admin_level' IS NOT null or 'border_type' IS NOT null or 'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'", u'something'),
-    (u'wrl_osms_met_ln_su_osm_pp.shp', u'osms', u'ln', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null", u'something'),
-    (u'wrl_osms_met_pt_su_osm_pp.shp', u'osms', u'pt', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null", u'something'),
-    (u'wrl_osms_met_py_su_osm_pp.shp', u'osms', u'py', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null", u'something'),
-    (u'wrl_osms_met_rel_su_osm_pp.shp', u'osms', u'rel', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null", u'something'),
-    (u'wrl_tran_air_ln_su_osm_pp.shp', u'tran', u'ln', u'aeroway, iata, icao', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null", u'something'),
-    (u'wrl_tran_air_pt_su_osm_pp.shp', u'tran', u'pt', u'aeroway, iata, icao, military', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'", u'something'),
-    (u'wrl_tran_air_py_su_osm_pp.shp', u'tran', u'py', u'aeroway, iata, icao, military', u"'aeroway'='aerodrome' or 'aeroway'='runway' or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'", u'something')
+    (u'wrl_admn_ad_ln_su_osm_pp.shp', u'admn', u'ln', u'border_type, boundary', u"'border_type' IS NOT null or 'boundary' IS NOT null"),
+    (u'wrl_admn_ad_pt_su_osm_pp.shp', u'admn', u'pt', u'boundary', u"'boundary' IS NOT null"),
+    (u'wrl_admn_ad_py_su_osm_pp.shp', u'admn', u'py', u'admin_level, border_type, boundary', u"'admin_level' IS NOT null or 'border_type' IS NOT null or 'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"),
+    (u'wrl_osms_met_ln_su_osm_pp.shp', u'osms', u'ln', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_pt_su_osm_pp.shp', u'osms', u'pt', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_py_su_osm_pp.shp', u'osms', u'py', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_rel_su_osm_pp.shp', u'osms', u'rel', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_tran_air_ln_su_osm_pp.shp', u'tran', u'ln', u'aeroway, iata, icao', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null"),
+    (u'wrl_tran_air_pt_su_osm_pp.shp', u'tran', u'pt', u'aeroway, iata, icao, military', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'"),
+    (u'wrl_tran_air_py_su_osm_pp.shp', u'tran', u'py', u'aeroway, iata, icao, military', u"'aeroway'='aerodrome' or 'aeroway'='runway' or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'")
 ]
 
 

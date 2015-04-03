@@ -56,9 +56,9 @@ class TestConfigXWalk(unittest.TestCase):
     def test_populate_shpfile_table(self):
         shpf_list = self.configxwalk.cursor.execute('''select * from shpf_list''').fetchall()
         for x in range(0, len(shpf_list)):
-            self.assertEquals(shpf_list[x], fixtures.shpf_list_table_good[x], "Shapefile name table incorrect, row {}".format(x))
+            self.assertEquals(shpf_list[x], fixtures.shpf_list_table_good[x],
+                              "Shapefile name table incorrect, row {}".format(x))
 
-    @unittest.skip("not implemented")
     def test_get_xwalk(self):
         shpf_list = self.configxwalk.get_xwalk()
         self.assertEquals(shpf_list, fixtures.shpf_list_table_good)
