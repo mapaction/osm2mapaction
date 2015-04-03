@@ -1,3 +1,11 @@
+
+## Master branch
+[![Build Status](https://travis-ci.org/mapaction/osm2mapaction.svg?branch=master)](https://travis-ci.org/mapaction/osm2mapaction)  [![Coverage Status](https://coveralls.io/repos/mapaction/osm2mapaction/badge.svg?branch=master)](https://coveralls.io/r/mapaction/osm2mapaction?branch=unittest-configengine)
+
+## branch unittest-configengine
+[![Build Status](https://travis-ci.org/mapaction/osm2mapaction.svg?branch=unittest-configengine)](https://travis-ci.org/mapaction/osm2mapaction)  [![Coverage Status](https://coveralls.io/repos/mapaction/osm2mapaction/badge.svg?branch=unittest-configengine)](https://coveralls.io/r/mapaction/osm2mapaction?branch=unittest-configengine)
+  
+  
 # Convert PBF to SHP and rename to MapAction scheme, instructions
 
 1. Copy the entire contents of the `osm2mapaction` directory including
