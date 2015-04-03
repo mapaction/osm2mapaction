@@ -323,7 +323,7 @@ class _SelectClause:
 
     def step(self, osm_key, osm_value):
         if (type(osm_value) == unicode) and (
-                osm_value.lower() in {u'*', u'user defined'}):
+                osm_value.lower() in {u'*', u'user defined', u'number'}):
             self.exclude_keys.add(osm_key)
         else:
             for val in osm_value.split(u'/'):

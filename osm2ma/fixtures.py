@@ -121,6 +121,10 @@ select_clause_args_and_result_pairs = [
         [
             (u"admin_level",	    u"Number"),
         ],
-        u"'admin_level' is not null"
+        u"'admin_level' IS NOT null"
+    ),
+    (
+        [],
+        u''
     )
 ]

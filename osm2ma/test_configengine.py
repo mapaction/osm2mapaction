@@ -2,6 +2,7 @@
 
 import unittest
 import xlrd
+from configengine import _AttribList, _SelectClause
 from configengine import xwalk_from_raw_config
 from configengine import ConfigXWalk
 from configengine import RawConfigIterator
@@ -43,33 +44,18 @@ class TestRawConfigIterator(unittest.TestCase):
 class TestConfigXWalk(unittest.TestCase):
 
     def setUp(self):
-        # self.configxwalk = ConfigXWalk(fixtures.rawconf_good, "wrl", "su")
-        pass
+        self.configxwalk = ConfigXWalk(fixtures.rawconf_good, "wrl", "su")
 
     def tearDown(self):
         pass
 
-    @unittest.skip("not implemented")
-    def test_init_db_tables(self):
-        pass
-
-    @unittest.skip("not implemented")
-    def test_populate_config_table(self):
-        pass
-
-    @unittest.skip("not implemented")
     def test_populate_scratch_table(self):
         scratch = self.configxwalk.cursor.execute('''select * from scratch''').fetchall()
         self.assertEquals(scratch, fixtures.scratch_table_good, "Scratch table incorrect")
 
-    @unittest.skip("not implemented")
     def test_populate_shpfile_table(self):
         shpf_list = self.configxwalk.cursor.execute('''select * from shpf_list''').fetchall()
         self.assertEquals(shpf_list, fixtures.shpf_list_table_good, "Shapefile name table incorrect")
-
-    @unittest.skip("not implemented")
-    def test_init_db_funcs(self):
-        pass
 
     @unittest.skip("not implemented")
     def test_get_xwalk(self):
@@ -88,38 +74,53 @@ class TestConfigXWalk(unittest.TestCase):
         self.assertEqual(newname, testname, "Shapefile name incorrectly formed")
 
 
-@unittest.skip("not implemented")
 class TestAttribList(unittest.TestCase):
 
-    @unittest.skip("not implemented")
-    def test_step(self):
+    def setUp(self):
+        self.al = _AttribList()
+
+    def tearDown(self):
         pass
 
-    @unittest.skip("not implemented")
-    def test_finalize(self):
-        pass
+    def test_class_function(self):
+        """
+        This test is a functional test of the whole class not of individual methods. The main purpose of the case is to
+        maintian state during the aggreegation process. Therefore it is difficult to meaningfully subdivide tests.
+        :return:
+        """
+        for arg in fixtures.attrib_list_args:
+            self.al.step(arg)
+
+        self.assertEqual(self.al.finalize(), fixtures.attrib_list_result)
 
 
-@unittest.skip("not implemented")
 class TestSelectClause(unittest.TestCase):
-
-    @unittest.skip("not implemented")
-    def test_step(self):
-        pass
-
-    @unittest.skip("not implemented")
-    def test_finalize(self):
-        pass
-
-
-@unittest.skip("not implemented")
-class TestGlobalFunctions(unittest.TestCase):
 
     def setUp(self):
         pass
 
     def tearDown(self):
         pass
+
+    def test_class_function(self):
+        """
+        This test is a functional test of the whole class not of individual methods. The main purpose of the case is to
+        maintian state during the aggreegation process. Therefore it is difficult to meaningfully subdivide tests.
+        :return:
+        """
+        for args, result in fixtures.select_clause_args_and_result_pairs:
+            sc = _SelectClause()
+            for key, val in args:
+                sc.step(key, val)
+
+            self.assertEqual(sc.finalize(), result)
+
+
+class TestGlobalFunctions(unittest.TestCase):
+
+    def setUp(self):
+        pass
+
 
     def test_xwalk_from_raw_config(self):
         """
