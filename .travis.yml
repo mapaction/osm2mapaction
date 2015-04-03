@@ -11,6 +11,6 @@ before_install:
 install:
   - pip install coveralls
   - pip install -r requirements.txt
-script: coverage run -m unittest discover -s osm2ma
+script: coverage run --include=%CD%\*.py -m unittest discover -s osm2ma
 after_success:
   coveralls
