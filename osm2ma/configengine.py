@@ -27,28 +27,27 @@ class RawConfigIterator:
     def __iter__(self):
         return self
 
-    def next(self):
-        def parse_cell_values(val):
-            """
-            Convert values to UTF8, handling any oddities
-            """
-            # TODO I'm sure there was a good reason for this hack, but I'm also
-            # sure there wasn't a good reason for failing to document it at the
-            # time. It is something to do with string encodings.
-            if (type(val) == int) and (val == 42):
-                return None
-            elif type(val) == unicode:
-                return val.strip()
-            else:
-                return val
+    @staticmethod
+    def _parse_cell_values(val):
+        """
+        Convert values to UTF8, handling any oddities
+        """
+        # replace '*' (utf-8 char 42) with None
+        if (type(val) == int) and (val == 42):
+            return None
+        elif type(val) == unicode:
+            return val.strip()
+        else:
+            return val
 
+    def next(self):
         if self.row_current >= self.rowxhi:
             raise StopIteration
         else:
             self.row_current += 1
             u_rtn_list = self.mysheet.row_values(
                 self.row_current - 1, self.colxlo, self.colxhi)
-            utf8_rtn_list = map(parse_cell_values, u_rtn_list)
+            utf8_rtn_list = map(RawConfigIterator._parse_cell_values, u_rtn_list)
             logging.debug(utf8_rtn_list)
             return utf8_rtn_list
 
@@ -100,8 +99,7 @@ class ConfigXWalk:
                 cat_value text,
                 geom_type text,
                 attrib_str text,
-                condition_str text,
-                cmdline_str text
+                condition_str text
             );
 
             ''')
@@ -184,8 +182,7 @@ class ConfigXWalk:
                 cat_value,
                 geom_type,
                 attrib_str,
-                condition_str,
-                cmdline_str
+                condition_str
             )
             SELECT
                 shpf_name(
@@ -195,8 +192,7 @@ class ConfigXWalk:
                 scratch.cat_value,
                 scratch.geom_type,
                 attriblist(scratch.osm_key_name),
-                condition_clause(scratch.osm_key_name, scratch.osm_key_value),
-                'something'
+                condition_clause(scratch.osm_key_name, scratch.osm_key_value)
             FROM scratch
             GROUP BY
                 shpf_name(
@@ -204,11 +200,22 @@ class ConfigXWalk:
                     scratch.geom_type, '{scale}'
                 ),
                 scratch.cat_value,
-                scratch.geom_type,
-                'something'
+                scratch.geom_type
             '''.format(geo_extd=geo_extd, scale=scale)
 
         cur.execute(u_sql)
+
+    @staticmethod
+    def _create_shpf_name(geo_extd, data_cat, data_thm, geom_type, scale):
+        # geoextent_datacategory_datatheme_datatype[_scale]_source[_permission][_FreeText]
+        output_filename = "{geo_extd}_{cat}_{thm}_{geom_type}_{scale}_osm_pp.shp".format(
+            geo_extd=geo_extd,
+            cat=data_cat,
+            thm=data_thm,
+            geom_type=geom_type,
+            scale=scale
+        )
+        return output_filename
 
     def _init_db_funcs(self):
         """
@@ -222,90 +229,10 @@ class ConfigXWalk:
             into each shapefile
 
         :return: None
-
         """
-        con = self.db
-
-        # TODO This funciton is not specific to the internal DB, and
-        # encapsulates knowledge of the MA DNC. Therefore it might be best if
-        # it is moved from this class and passed as a value.
-        def create_shpf_name(geo_extd, data_cat, data_thm, geom_type, scale):
-            # geoextent_datacategory_datatheme_datatype[_scale]_source[_permission][_FreeText]
-            output_filename = (
-                u'{geo_extd}_{cat}_{thm}_{geom_type}_{scale}_osm_pp.shp'
-            ).format(
-                geo_extd=geo_extd,
-                cat=data_cat,
-                thm=data_thm,
-                geom_type=geom_type,
-                scale=scale
-            )
-            return output_filename
-
-        class AttribList:
-            """
-            Creates comma delimited list of attribute names for SELECT
-
-            See:
-            docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
-
-            """
-            def __init__(self):
-                self.set_attribs = set()
-
-            def step(self, value):
-                self.set_attribs.add(value)
-
-            def finalize(self):
-                return ", ".join(sorted(self.set_attribs))
-
-        class SelectClause:
-            """
-            Generates WHERE clause, to select the contents of a shapefile.
-
-            Certain values (eg '*' and 'user defined') are filtered out.
-
-            See:
-            https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
-
-            """
-            def __init__(self):
-                self.query_args = dict()
-                self.exclude_keys = set()
-
-            def step(self, osm_key, osm_value):
-                if (type(osm_value) == unicode) and (
-                        osm_value.lower() in {u'*', u'user defined'}):
-                    self.exclude_keys.add(osm_key)
-                else:
-                    for val in osm_value.split(u'/'):
-                        # TODO: This might be dangerous, because you can't be
-                        # sure that the val or key won't contain a quote, for
-                        # example.
-                        # FIXME: Use params to execute?
-                        key = u"'{key}'='{val}'".format(
-                            key=osm_key, val=val.strip()
-                        )
-                        self.query_args[key] = osm_key
-
-            def finalize(self):
-                cleaned_pairs = set()
-                for key, val in self.query_args.iteritems():
-                    if val in self.exclude_keys:
-                        cleaned_pairs.add(
-                            u"'{val}' IS NOT null".format(val=val)
-                        )
-                    else:
-                        cleaned_pairs.add(key)
-
-                if len(cleaned_pairs) > 0:
-                    return u" or ".join(sorted(cleaned_pairs))
-                else:
-                    return u''
-
-        con.create_function("shpf_name", 5, create_shpf_name)
-        con.create_aggregate("attriblist", 1, AttribList)
-        con.create_aggregate("condition_clause", 2, SelectClause)
+        self.db.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
+        self.db.create_aggregate("attriblist", 1, _AttribList)
+        self.db.create_aggregate("condition_clause", 2, _SelectClause)
 
     def get_xwalk(self):
         """
@@ -347,7 +274,6 @@ class ConfigXWalk:
             geographic area being converted.
         :param scale_clause: A string of the scale clause suitable for the
             features being converted.
-
         """
         self.db = sqlite3.connect(':memory:')
         self.cursor = self.db.cursor()
@@ -358,6 +284,69 @@ class ConfigXWalk:
         self._populate_scratch_table()
         self._populate_shpfile_table(geoextent_clause, scale_clause)
         self.db.commit()
+
+
+class _AttribList:
+    """
+    Creates comma delimited list of attribute names for SELECT
+
+    See:
+    docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+    """
+    def __init__(self):
+        self.set_attribs = set()
+
+    def step(self, value):
+        if len(value) > 0:
+            self.set_attribs.add(value)
+
+    def finalize(self):
+        return ", ".join(sorted(self.set_attribs))
+
+
+class _SelectClause:
+    """
+    Generates WHERE clause, to select the contents of a shapefile.
+
+    Certain values (eg '*' and 'user defined') are filtered out.
+
+    See:
+    https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+    """
+    def __init__(self):
+        self.query_args = dict()
+        self.exclude_keys = set()
+
+    def step(self, osm_key, osm_value):
+        if (type(osm_value) == unicode) and (
+                osm_value.lower() in {u'*', u'user defined', u'number', u'url or article title'}):
+            self.exclude_keys.add(osm_key)
+        else:
+            for val in osm_value.split(u'/'):
+                # TODO: This might be dangerous, because you can't be
+                # sure that the val or key won't contain a quote, for
+                # example.
+                # FIXME: Use params to execute?
+                unique_clause = u"'{key}'='{val}'".format(
+                    key=osm_key, val=val.strip()
+                )
+                self.query_args[unique_clause] = osm_key
+
+    def finalize(self):
+        cleaned_pairs = set()
+        for osm_key in self.exclude_keys:
+            cleaned_pairs.add(
+                u"'{val}' IS NOT null".format(val=osm_key)
+            )
+
+        for unique_clause, osm_key in self.query_args.iteritems():
+            if osm_key not in self.exclude_keys:
+                cleaned_pairs.add(unique_clause)
+
+        if len(cleaned_pairs) > 0:
+            return u" or ".join(sorted(cleaned_pairs))
+        else:
+            return u''
 
 
 def xwalk_from_raw_config(raw_config, geoextent_clause, scale_clause):

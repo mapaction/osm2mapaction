@@ -1,3 +1,11 @@
+
+## Master branch
+[![Build Status](https://travis-ci.org/mapaction/osm2mapaction.svg?branch=master)](https://travis-ci.org/mapaction/osm2mapaction)  [![Coverage Status](https://coveralls.io/repos/mapaction/osm2mapaction/badge.svg?branch=master)](https://coveralls.io/r/mapaction/osm2mapaction?branch=unittest-configengine)
+
+## branch unittest-configengine
+[![Build Status](https://travis-ci.org/mapaction/osm2mapaction.svg?branch=unittest-configengine)](https://travis-ci.org/mapaction/osm2mapaction)  [![Coverage Status](https://coveralls.io/repos/mapaction/osm2mapaction/badge.svg?branch=unittest-configengine)](https://coveralls.io/r/mapaction/osm2mapaction?branch=unittest-configengine)
+  
+  
 # Convert PBF to SHP and rename to MapAction scheme, instructions
 
 1. Copy the entire contents of the `osm2mapaction` directory including
@@ -39,7 +47,7 @@ About the config spreadsheet
 |Column			|Purpose			|
 |--------------------------:|:--------------------------------------------------|
 |OSM_tag_name				|Name of the OSM tag.								|
-|OSM_tag_value				|Value of the OSM tag. May be string, number or '*' for a wildcard.	|
+|OSM_tag_value				|Value of the OSM tag. May be a string, a number or '*'. If the keywords 'user defined', 'number', 'url or article title' or '*' then **any** not null value (strings or numbers) will be accepted.	|
 |Element_icon				|													|
 |Comment					|													|
 |Useful_for_MapAction		|Boolean. Controls whether on not the feature should be included in the exported shapefiles.|

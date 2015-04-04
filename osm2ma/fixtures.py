@@ -22,86 +22,110 @@ rawconf_too_few_columns = _workbook.name_map.get("rawconf_too_few_columns")[0].a
 rawconf_wrong_column_names = _workbook.name_map.get("rawconf_wrong_column_names")[0].area2d(clipped=True)
 rawconf_wrong_column_order = _workbook.name_map.get("rawconf_wrong_column_order")[0].area2d(clipped=True)
 
+scratch_table_good = [
+    (u'aeroway', u'aerodrome', u'tran', u'air', u'Node Area', u'pt'),
+    (u'aeroway',u'User defined', u'tran', u'air', u'Node Way', u'pt'),
+    (u'military', u'airfield', u'tran', u'air', u'Node Area', u'pt'),
+    (u'iata', u'User Defined', u'tran', u'air', u'Node Way Area', u'pt'),
+    (u'icao', u'User Defined', u'tran', u'air', u'Node Way Area', u'pt'),
+    (u'boundary', u'user defined', u'admn', u'ad', u'Node Way', u'pt'),
+    (u'fixme', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'pt'),
+    (u'source', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'pt'),
+    (u'source', u'historical', u'osms', u'met', u'Node Way Area Relation', u'pt'),
+    (u'source:name', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'pt'),
+    (u'wikipedia', u'URL or article title', u'osms', u'met', u'Node Way Area Relation', u'pt'),
+    (u'aeroway', u'runway', u'tran', u'air', u'Way Area', u'ln'),
+    (u'aeroway', u'User defined', u'tran', u'air', u'Node Way', u'ln'),
+    (u'iata', u'User Defined', u'tran', u'air', u'Node Way Area', u'ln'),
+    (u'icao', u'User Defined', u'tran', u'air', u'Node Way Area', u'ln'),
+    (u'border_type', u'*',u'admn', u'ad', u'Way Area', u'ln'),
+    (u'boundary', u'user defined', u'admn', u'ad', u'Node Way', u'ln'),
+    (u'fixme', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'ln'),
+    (u'source', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'ln'),
+    (u'source', u'historical', u'osms', u'met', u'Node Way Area Relation', u'ln'),
+    (u'source:name', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'ln'),
+    (u'wikipedia', u'URL or article title', u'osms',u'met', u'Node Way Area Relation', u'ln'),
+    (u'aeroway', u'aerodrome', u'tran', u'air', u'Node Area', u'py'),
+    (u'aeroway', u'runway', u'tran', u'air', u'Way Area', u'py'),
+    (u'military', u'airfield', u'tran', u'air', u'Node Area', u'py'),
+    (u'iata', u'User Defined', u'tran', u'air', u'Node Way Area', u'py'),
+    (u'icao', u'User Defined', u'tran', u'air', u'Node Way Area', u'py'),
+    (u'boundary', u'administrative', u'admn', u'ad', u'Area', u'py'),
+    (u'boundary', u'maritime', u'admn', u'ad', u'Area', u'py'),
+    (u'boundary', u'political', u'admn', u'ad', u'Area', u'py'),
+    (u'border_type', u'*', u'admn', u'ad', u'Way Area', u'py'),
+    (u'admin_level', u'Number', u'admn', u'ad', u'Area', u'py'),
+    (u'fixme', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'py'),
+    (u'source', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'py'),
+    (u'source', u'historical', u'osms', u'met', u'Node Way Area Relation', u'py'),
+    (u'source:name', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'py'),
+    (u'wikipedia', u'URL or article title', u'osms', u'met', u'Node Way Area Relation', u'py'),
+    (u'fixme', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'rel'),
+    (u'source', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'rel'),
+    (u'source', u'historical', u'osms', u'met', u'Node Way Area Relation', u'rel'),
+    (u'source:name', u'User defined', u'osms', u'met', u'Node Way Area Relation', u'rel'),
+    (u'wikipedia', u'URL or article title', u'osms', u'met', u'Node Way Area Relation', u'rel')
+]
+
+shpf_list_table_good = [
+    (u'wrl_admn_ad_ln_su_osm_pp.shp', u'admn', u'ln', u'border_type, boundary', u"'border_type' IS NOT null or 'boundary' IS NOT null"),
+    (u'wrl_admn_ad_pt_su_osm_pp.shp', u'admn', u'pt', u'boundary', u"'boundary' IS NOT null"),
+    (u'wrl_admn_ad_py_su_osm_pp.shp', u'admn', u'py', u'admin_level, border_type, boundary', u"'admin_level' IS NOT null or 'border_type' IS NOT null or 'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"),
+    (u'wrl_osms_met_ln_su_osm_pp.shp', u'osms', u'ln', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_pt_su_osm_pp.shp', u'osms', u'pt', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_py_su_osm_pp.shp', u'osms', u'py', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_osms_met_rel_su_osm_pp.shp', u'osms', u'rel', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
+    (u'wrl_tran_air_ln_su_osm_pp.shp', u'tran', u'ln', u'aeroway, iata, icao', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null"),
+    (u'wrl_tran_air_pt_su_osm_pp.shp', u'tran', u'pt', u'aeroway, iata, icao, military', u"'aeroway' IS NOT null or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'"),
+    (u'wrl_tran_air_py_su_osm_pp.shp', u'tran', u'py', u'aeroway, iata, icao, military', u"'aeroway'='aerodrome' or 'aeroway'='runway' or 'iata' IS NOT null or 'icao' IS NOT null or 'military'='airfield'")
+]
 
 
-# rawconf_good = [
-#     ["OSM_tag_name", "OSM_tag_value", "Element_icon", "Comment", "Useful_for_MapAction", "Data Category description",
-#      "Cat_value", "Date Theme description", "Theme_value", "Conforms_to_MA_Hierarchy", "OSM_Element", "Data type", "pt",
-#      "ln", "py", "rel"],
-#     ["aeroway", "aerodrome", "Node Area", "An Aerodrome (UK), Airport (US)", "Y", "Transport", "tran",
-#      "Airport / Airstrip", "air", "#N/A", "Node Area", "pt py", "pt", "#N/A", "py", "#N/A"],
-#     ["aeroway", "runway", "Way Area",
-#      "A strip of land kept clear and set aside for aeroplanes to take off from and land on. (Other languages)", "Y",
-#      "Transport", "tran", "Airport / Airstrip", "air", "#N/A", "Way Area", "ln py", "#N/A", "ln", "py", "#N/A"],
-#     ["aeroway", "User defined", "Node Way", "All commonly used values according to Taginfo", "Y", "Transport", "tran",
-#      "Airport / Airstrip", "air", "#N/A", "Node Way", "pt ln", "pt", "ln", "#N/A", "#N/A"],
-#     ["military", "airfield", "Node Area", "A place where military planes take off and land", "Y", "Transport", "tran",
-#      "Airport / Airstrip", "air", "#N/A", "Node Area", "pt py", "pt", "#N/A", "py", "#N/A"],
-#     ["iata", "User Defined", "Node Way Area", "IATA International airport codes", "Y", "Transport", "tran",
-#      "Airport / Airstrip", "air", "#N/A", "Node Way Area", "pt ln py", "pt", "ln", "py", "#N/A"],
-#     ["icao", "User Defined", "Node Way Area", "ICAO International airport codes", "Y", "Transport", "tran",
-#      "Airport / Airstrip", "air", "#N/A", "Node Way Area", "pt ln py", "pt", "ln", "py", "#N/A"],
-#     ["boundary", "administrative", "Area",
-#      "An administrative boundary. Subdivisions of areas/territories/jurisdictions recognised by governments or other organisations for administrative purposes. These range from large groups of nation states right down to small administrative districts and suburbs, as indicated by the 'admin_level=*' combo tag", "Y", "Admin", "admn", "Administrative boundary (various levels)", "ad", "#N/A", "Area", "py", "#N/A", "#N/A", "py", "#N/A"],
-#     ["boundary", "maritime", "Area", "Maritime boundaries", "Y", "Admin", "admn",
-#      "Administrative boundary (various levels)", "ad", "#N/A", "Area", "py", "#N/A", "#N/A", "py", "#N/A"],
-#     ["boundary", "political", "Area", "Electoral boundaries", "Y", "Admin", "admn",
-#      "Administrative boundary (various levels)", "ad", "#N/A", "Area", "py", "#N/A", "#N/A", "py", "#N/A"],
-#     ["border_type", "*", "Way Area",
-#      "To distinguish between types of boundary where admin_level isn't enough. Used in several different ways e.g in maritime contexts", "Y", "Admin", "admn", "Administrative boundary (various levels)", "ad", "#N/A", "Way Area", "ln py", "#N/A", "ln", "py", "#N/A"],
-#     ["boundary", "user defined", "Node Way", "All commonly used values according to Taginfo", "Y", "Admin", "admn",
-#      "Administrative boundary (various levels)", "ad", "#N/A", "Node Way", "pt ln", "pt", "ln", "#N/A", "#N/A"],
-#     ["admin_level", "Number", "Area",
-#      "Applies to boundary=administrative and is usually in the range 1 to 10, except for Germany where it might be 11 - see boundary.", "Y", "Admin", "admn", "Administrative boundary (various levels)", "ad", "#N/A", "Area", "py", "#N/A", "#N/A", "py", "#N/A"],
-#     ["fixme", "User defined", "Node Way Area Relation",
-#      "A description to yourself or to other mappers of a (possible) error in the map", "Y", "Open Street Map Specific",
-#      "osms", "Metadata", "met", "#N/A", "Node Way Area Relation", "pt ln py rel", "pt", "ln", "py", "rel"],
-#     ["source", "User defined", "Node Way Area Relation", "", "Y", "Open Street Map Specific", "osms", "Metadata", "met",
-#      "#N/A", "Node Way Area Relation", "pt ln py rel", "pt", "ln", "py", "rel"],
-#     ["source", "historical", "Node Way Area Relation", "from out-of-copyright mapping or other historical document",
-#      "Y", "Open Street Map Specific", "osms", "Metadata", "met", "#N/A", "Node Way Area Relation", "pt ln py rel", "pt",
-#      "ln", "py", "rel"],
-#     ["source:name", "User defined", "Node Way Area Relation",
-#      "Source used to gather name information; e.g., for street names", "Y", "Open Street Map Specific", "osms",
-#      "Metadata", "met", "#N/A", "Node Way Area Relation", "pt ln py rel", "pt", "ln", "py", "rel"],
-#     ["wikipedia", "URL or article title", "Node Way Area Relation", "Wikipedia article associated with an object", "Y",
-#      "Open Street Map Specific", "osms", "Metadata", "met", "#N/A", "Node Way Area Relation", "pt ln py rel", "pt",
-#      "ln", "py", "rel"]
-# ]
+"""
+A list of which are unsorted, contain duplicates and contains blank strings.
+"""
+attrib_list_args = ['f', 'a', 'b', 'c', 'd', '', 'e', 'a', 'a']
+attrib_list_result = 'a, b, c, d, e, f'
 
-# """
-# Correct column names
-# """
-# rawconf_col_names = [
-#     u'OSM_tag_name',
-#     u'OSM_tag_value',
-#     u'Element_icon ',
-#     u'Comment ',
-#     u'Useful_for_MapAction',
-#     u'Data Category description',
-#     u'Cat_value',
-#     u'Date Theme description',
-#     u'Theme_value',
-#     u'Conforms_to_MA_Hierarchy',
-#     u'OSM_Element',
-#     u'Data type',
-#     u'pt',
-#     u'ln',
-#     u'py',
-#     u'rel'
-# ]
-
-#
-# """Contains an invalid nesting of the Data Category and Data Theme hierarchy"""
-# #rawconf_invalid_heirarchy =
-#
-# #xWalk_good =
-#
-#
-# def mock_from_table_xwalk(table):
-#     """
-#     Create a mock XWalk data structure from a simple table.
-#     :param table:
-#     :return:
-#     """
-#     pass
+"""
+A list of tuples.
+Each tuple has as its first item
+- A list of tuples of string pairs, representing OSM key value pairs
+- A string of the resulting selct clause
+"""
+select_clause_args_and_result_pairs = [
+    (
+        [
+            (u"border_type",    u"*")
+        ],
+        u"'border_type' IS NOT null"
+    ),
+    (
+        [
+            (u"boundary",	    u"administrative"),
+            (u"boundary",	    u"maritime"),
+            (u"boundary",	    u"political"),
+            (u"boundary",	    u"user defined"),
+            (u"border_type",    u"*")
+        ],
+        u"'border_type' IS NOT null or 'boundary' IS NOT null"
+    ),
+    (
+        [
+            (u"boundary",	    u"administrative"),
+            (u"boundary",	    u"maritime"),
+            (u"boundary",	    u"political")
+        ],
+        u"'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"
+    ),
+    (
+        [
+            (u"admin_level",	    u"Number"),
+        ],
+        u"'admin_level' IS NOT null"
+    ),
+    (
+        [],
+        u''
+    )
+]
