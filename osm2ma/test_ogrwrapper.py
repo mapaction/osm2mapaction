@@ -63,5 +63,6 @@ class TestGlobalFunctions(unittest.TestCase):
         ogrw.batch_convert(xwalk, fixtures.example_pbf, self.tmpdir)
         result_dir_listing = []
         for root, dirs, files in os.walk(self.tmpdir):
+            dirs = sorted(dirs, reverse=False)
             result_dir_listing.append([os.path.relpath(root, self.tmpdir), dirs, files])
         self.assertEqual(result_dir_listing, fixtures.output_dir_listing)
