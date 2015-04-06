@@ -7,6 +7,8 @@ import os
 import ogrwrapper as ogrw
 from osgeo import ogr
 from osgeo import osr
+from configengine import xwalk_from_raw_config
+import fixtures
 
 
 class TestGlobalFunctions(unittest.TestCase):
@@ -17,34 +19,26 @@ class TestGlobalFunctions(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.tmpdir, ignore_errors=True)
 
-    def test_create_datacat_dir(self):
+    def test_medium_create_datacat_dir(self):
         test_data_cat = "test_data_cat"
         # test trying to create shpfile twice (shouldn't error)
-        for x in range(0,2):
+        for x in range(0, 2):
             created_path = ogrw._create_datacat_dir(self.tmpdir, test_data_cat)
             self.assertEqual(created_path, os.path.join(self.tmpdir, test_data_cat))
             self.assertTrue(os.path.exists(created_path))
 
-    def test_create_new_shpfile(self):
+    def test_medium_create_new_shpfile(self):
         test_shpfile = "test_shpfile"
         dest_srs = osr.SpatialReference()
         dest_srs.ImportFromEPSG(3857)     # from EPSG
 
         # test trying to create shpfile twice (shouldn't error)
-        for x in range(0,2):
+        for x in range(0, 2):
             ogrw._create_new_shpfile(test_shpfile+".shp", self.tmpdir, ogr.wkbLineString, dest_srs)
             for extn in (u'.dbf', u'.prj', u'.shp', u'.shx'):
                 self.assertTrue(os.path.exists(os.path.join(self.tmpdir, test_shpfile + extn)))
 
-    @unittest.skip("not implemented")
-    def test_copy_attributes(self):
-        pass
-
-    @unittest.skip("not implemented")
-    def test_copy_features(self):
-        pass
-
-    def testget_geom_details(self):
+    def testget_short_geom_details(self):
         source_layer, dest_geom = ogrw.get_geom_details("pt")
         self.assertEqual(source_layer, "points")
         self.assertEqual(dest_geom, ogr.wkbPoint)
@@ -64,13 +58,10 @@ class TestGlobalFunctions(unittest.TestCase):
         # Test an invalid geometry type value.
         self.assertRaises(ValueError, ogrw.get_geom_details, "abcde")
 
-    @unittest.skip("not implemented")
-    def testdo_ogr2ogr_process(self):
-        pass
-
-    @unittest.skip("not implemented")
-    def testbatch_convert(self):
-        pass
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_long_batch_convert(self):
+        xwalk = xwalk_from_raw_config(fixtures.rawconf_good, 'wrl', 'su')
+        ogrw.batch_convert(xwalk, fixtures.example_pbf, self.tmpdir)
+        result_dir_listing = []
+        for root, dirs, files in os.walk(self.tmpdir):
+            result_dir_listing.append([os.path.relpath(root, self.tmpdir), dirs, files])
+        self.assertEqual(result_dir_listing, fixtures.output_dir_listing)
