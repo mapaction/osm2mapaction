@@ -15,6 +15,11 @@ def path_to_fixtures_xls():
     test_script_path = os.path.abspath(os.path.dirname(__file__))
     return os.path.join(test_script_path, r"testfiles", r"fixtures.xls")
 
+example_pbf = os.path.join(os.path.abspath(os.path.dirname(__file__)),
+                           r"testfiles",
+                           r"oxfordshire-latest.osm.pbf"
+                           )
+
 _workbook = xlrd.open_workbook(os.path.realpath(path_to_fixtures_xls()))
 rawconf_good = _workbook.name_map.get("rawconf_good")[0].area2d(clipped=True)
 rawconf_invalid_heirarchy = _workbook.name_map.get("rawconf_invalid_heirarchy")[0].area2d(clipped=True)
@@ -128,4 +133,44 @@ select_clause_args_and_result_pairs = [
         [],
         u''
     )
+]
+
+output_dir_listing = [
+    [
+        ".",
+        ['admn', 'osms', 'tran'],
+        []
+    ],
+    [
+        "admn",
+        [],
+        ['wrl_admn_ad_ln_su_osm_pp.dbf', 'wrl_admn_ad_ln_su_osm_pp.prj',
+         'wrl_admn_ad_ln_su_osm_pp.shp', 'wrl_admn_ad_ln_su_osm_pp.shx',
+         'wrl_admn_ad_pt_su_osm_pp.dbf', 'wrl_admn_ad_pt_su_osm_pp.prj',
+         'wrl_admn_ad_pt_su_osm_pp.shp', 'wrl_admn_ad_pt_su_osm_pp.shx',
+         'wrl_admn_ad_py_su_osm_pp.dbf', 'wrl_admn_ad_py_su_osm_pp.prj',
+         'wrl_admn_ad_py_su_osm_pp.shp', 'wrl_admn_ad_py_su_osm_pp.shx']
+    ],
+    [
+        "osms",
+        [],
+        ['wrl_osms_met_ln_su_osm_pp.dbf', 'wrl_osms_met_ln_su_osm_pp.prj',
+         'wrl_osms_met_ln_su_osm_pp.shp', 'wrl_osms_met_ln_su_osm_pp.shx',
+         'wrl_osms_met_pt_su_osm_pp.dbf', 'wrl_osms_met_pt_su_osm_pp.prj',
+         'wrl_osms_met_pt_su_osm_pp.shp', 'wrl_osms_met_pt_su_osm_pp.shx',
+         'wrl_osms_met_py_su_osm_pp.dbf', 'wrl_osms_met_py_su_osm_pp.prj',
+         'wrl_osms_met_py_su_osm_pp.shp', 'wrl_osms_met_py_su_osm_pp.shx',
+         'wrl_osms_met_rel_su_osm_pp.dbf', 'wrl_osms_met_rel_su_osm_pp.prj',
+         'wrl_osms_met_rel_su_osm_pp.shp', 'wrl_osms_met_rel_su_osm_pp.shx']
+    ],
+    [
+        "tran",
+        [],
+        ['wrl_tran_air_ln_su_osm_pp.dbf', 'wrl_tran_air_ln_su_osm_pp.prj',
+         'wrl_tran_air_ln_su_osm_pp.shp', 'wrl_tran_air_ln_su_osm_pp.shx',
+         'wrl_tran_air_pt_su_osm_pp.dbf', 'wrl_tran_air_pt_su_osm_pp.prj',
+         'wrl_tran_air_pt_su_osm_pp.shp', 'wrl_tran_air_pt_su_osm_pp.shx',
+         'wrl_tran_air_py_su_osm_pp.dbf', 'wrl_tran_air_py_su_osm_pp.prj',
+         'wrl_tran_air_py_su_osm_pp.shp', 'wrl_tran_air_py_su_osm_pp.shx']
+    ]
 ]
