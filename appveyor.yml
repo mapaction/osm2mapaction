@@ -21,6 +21,7 @@ test_script:
   - echo %path%
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat echo %path%'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat o-help'
+  - '%systemdrive%\OSGeo4w\OSGeo4W.bat where gdalinfo'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat gdalinfo --version'
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python tests.py' 
   - '%systemdrive%\OSGeo4w\OSGeo4W.bat python gdal_on_appveyour_test.py' 
