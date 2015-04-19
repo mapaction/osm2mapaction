@@ -4,3 +4,4 @@ osm2ma/.idea
 *.coverage
 *.py,cover
 osm2ma/testfiles/output_shp/
+geofabrik/

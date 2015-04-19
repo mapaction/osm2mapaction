@@ -58,6 +58,7 @@ class TestGlobalFunctions(unittest.TestCase):
         # Test an invalid geometry type value.
         self.assertRaises(ValueError, ogrw.get_geom_details, "abcde")
 
+    @unittest.skip("too long")
     def test_long_batch_convert(self):
         xwalk = xwalk_from_raw_config(fixtures.rawconf_good, 'wrl', 'su')
         ogrw.batch_convert(xwalk, fixtures.example_pbf, self.tmpdir)

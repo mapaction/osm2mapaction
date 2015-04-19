@@ -71,7 +71,7 @@ class ConfigXWalk:
                 osm_key_value text,
                 element_icon text,
                 comment text,
-                useful text,
+                useful text COLLATE NOCASE,
                 data_category text,
                 cat_value text,
                 data_theme text,
@@ -160,7 +160,7 @@ class ConfigXWalk:
                     osm_element,
                     '{geom}'
                 from config where
-                    config.geom_str like '%{geom}%'
+                    config.geom_str like '%{geom}%' and config.useful = 'y'
                 '''.format(geom=geom)
             cur.execute(u_sql)
 

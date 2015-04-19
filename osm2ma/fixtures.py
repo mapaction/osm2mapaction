@@ -56,7 +56,6 @@ scratch_table_good = [
     (u'iata', u'User Defined', u'tran', u'air', u'Node Way Area', u'py'),
     (u'icao', u'User Defined', u'tran', u'air', u'Node Way Area', u'py'),
     (u'boundary', u'administrative', u'admn', u'ad', u'Area', u'py'),
-    (u'boundary', u'maritime', u'admn', u'ad', u'Area', u'py'),
     (u'boundary', u'political', u'admn', u'ad', u'Area', u'py'),
     (u'border_type', u'*', u'admn', u'ad', u'Way Area', u'py'),
     (u'admin_level', u'Number', u'admn', u'ad', u'Area', u'py'),
@@ -75,7 +74,7 @@ scratch_table_good = [
 shpf_list_table_good = [
     (u'wrl_admn_ad_ln_su_osm_pp.shp', u'admn', u'ln', u'border_type, boundary', u"'border_type' IS NOT null or 'boundary' IS NOT null"),
     (u'wrl_admn_ad_pt_su_osm_pp.shp', u'admn', u'pt', u'boundary', u"'boundary' IS NOT null"),
-    (u'wrl_admn_ad_py_su_osm_pp.shp', u'admn', u'py', u'admin_level, border_type, boundary', u"'admin_level' IS NOT null or 'border_type' IS NOT null or 'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"),
+    (u'wrl_admn_ad_py_su_osm_pp.shp', u'admn', u'py', u'admin_level, border_type, boundary', u"'admin_level' IS NOT null or 'border_type' IS NOT null or 'boundary'='administrative' or 'boundary'='political'"),
     (u'wrl_osms_met_ln_su_osm_pp.shp', u'osms', u'ln', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
     (u'wrl_osms_met_pt_su_osm_pp.shp', u'osms', u'pt', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
     (u'wrl_osms_met_py_su_osm_pp.shp', u'osms', u'py', u'fixme, source, source:name, wikipedia', u"'fixme' IS NOT null or 'source' IS NOT null or 'source:name' IS NOT null or 'wikipedia' IS NOT null"),
