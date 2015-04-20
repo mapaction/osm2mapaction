@@ -137,6 +137,13 @@ class ConfigXWalk:
         """
         Duplicate config table which has been normalised wrt geometry type.
 
+        TODO: ammend this to properly handle the generic OSM tags
+        TODO: update fixtures for this.
+
+        1st; Run existing insert query but EXCLUDING cat_value = 'OSM'
+        2nd; For each unique cat_value, theme_value pair now in scratch, insert from config where cat_value = 'OSM', but
+        replacing with  the loop's current values of cat_value, theme_value
+
         :return: None
 
         """
