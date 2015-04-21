@@ -73,7 +73,7 @@ class ConfigXWalk:
                 comment text,
                 useful text COLLATE NOCASE,
                 data_category text,
-                cat_value text,
+                cat_value text COLLATE NOCASE,
                 data_theme text,
                 theme_value text,
                 conforms_to_hierarchy text,
@@ -91,7 +91,8 @@ class ConfigXWalk:
                 cat_value text,
                 theme_value text,
                 osm_element,
-                geom_type text
+                geom_type text,
+                osm_metadata boolean
             );
 
             create table shpf_list (
@@ -157,7 +158,8 @@ class ConfigXWalk:
                     cat_value,
                     theme_value,
                     osm_element,
-                    geom_type
+                    geom_type,
+                    osm_metadata
                 )
                 select
                     osm_key_name,
@@ -165,10 +167,52 @@ class ConfigXWalk:
                     cat_value,
                     theme_value,
                     osm_element,
-                    '{geom}'
+                    '{geom}',
+                    'FALSE'
                 from config where
-                    config.geom_str like '%{geom}%' and config.useful = 'y'
+                    config.geom_str like '%{geom}%'
+                    and config.useful = 'y'
+                    and config.cat_value != 'osms'
                 '''.format(geom=geom)
+            cur.execute(u_sql)
+
+        u_sql = '''
+            select
+                cat_value,
+                theme_value,
+                geom_type
+            from scratch
+            group by
+                cat_value,
+                theme_value,
+                geom_type
+            '''
+
+        for cat, theme, geom in cur.execute(u_sql).fetchall():
+            #print 'cat = {}, theme = {}, geom = {}'.format(cat, theme, geom)
+            u_sql = '''
+                INSERT INTO scratch (
+                    osm_key_name,
+                    osm_key_value,
+                    cat_value,
+                    theme_value,
+                    osm_element,
+                    geom_type,
+                    osm_metadata
+                )
+                select
+                    osm_key_name,
+                    osm_key_value,
+                    '{cat_value}',
+                    '{theme_value}',
+                    osm_element,
+                    '{geom}',
+                    'TRUE'
+                from config where
+                    config.geom_str like '%{geom}%'
+                    and config.useful = 'y'
+                    and config.cat_value == 'osms'
+                '''.format(cat_value=cat, theme_value=theme, geom=geom)
             cur.execute(u_sql)
 
     def _populate_shpfile_table(self, geo_extd, scale):
@@ -198,8 +242,8 @@ class ConfigXWalk:
                 ),
                 scratch.cat_value,
                 scratch.geom_type,
-                attriblist(scratch.osm_key_name),
-                condition_clause(scratch.osm_key_name, scratch.osm_key_value)
+                attriblist(scratch.osm_key_name, scratch.osm_metadata),
+                condition_clause(scratch.osm_key_name, scratch.osm_key_value, scratch.osm_metadata)
             FROM scratch
             GROUP BY
                 shpf_name(
@@ -238,8 +282,8 @@ class ConfigXWalk:
         :return: None
         """
         self.db.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
-        self.db.create_aggregate("attriblist", 1, _AttribList)
-        self.db.create_aggregate("condition_clause", 2, _SelectClause)
+        self.db.create_aggregate("attriblist", 2, _AttribList)
+        self.db.create_aggregate("condition_clause", 3, _SelectClause)
 
     def get_xwalk(self):
         """
@@ -302,13 +346,19 @@ class _AttribList:
     """
     def __init__(self):
         self.set_attribs = set()
+        self.set_meta = set()
 
-    def step(self, value):
+    def step(self, value, meta):
         if len(value) > 0:
-            self.set_attribs.add(value)
+            if 'true' == meta.lower():
+                self.set_meta.add(value)
+            else:
+                self.set_attribs.add(value)
 
     def finalize(self):
-        return ", ".join(sorted(self.set_attribs))
+        attribs = ", ".join(sorted(self.set_attribs))
+        meta = ", ".join(sorted(self.set_meta))
+        return "{}, {}".format(attribs, meta)
 
 
 class _SelectClause:
@@ -324,20 +374,21 @@ class _SelectClause:
         self.query_args = dict()
         self.exclude_keys = set()
 
-    def step(self, osm_key, osm_value):
-        if (type(osm_value) == unicode) and (
-                osm_value.lower() in {u'*', u'user defined', u'number', u'url or article title'}):
-            self.exclude_keys.add(osm_key)
-        else:
-            for val in osm_value.split(u'/'):
-                # TODO: This might be dangerous, because you can't be
-                # sure that the val or key won't contain a quote, for
-                # example.
-                # FIXME: Use params to execute?
-                unique_clause = u"'{key}'='{val}'".format(
-                    key=osm_key, val=val.strip()
-                )
-                self.query_args[unique_clause] = osm_key
+    def step(self, osm_key, osm_value, osm_meta):
+        if u'false' == osm_meta.lower():
+            if (type(osm_value) == unicode) and (
+                    osm_value.lower() in {u'*', u'user defined', u'number', u'url or article title'}):
+                self.exclude_keys.add(osm_key)
+            else:
+                for val in osm_value.split(u'/'):
+                    # TODO: This might be dangerous, because you can't be
+                    # sure that the val or key won't contain a quote, for
+                    # example.
+                    # FIXME: Use params to execute?
+                    unique_clause = u"'{key}'='{val}'".format(
+                        key=osm_key, val=val.strip()
+                    )
+                    self.query_args[unique_clause] = osm_key
 
     def finalize(self):
         cleaned_pairs = set()
