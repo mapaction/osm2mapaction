@@ -38,6 +38,8 @@ class TestGlobalFunctions(unittest.TestCase):
             for extn in (u'.dbf', u'.prj', u'.shp', u'.shx'):
                 self.assertTrue(os.path.exists(os.path.join(self.tmpdir, test_shpfile + extn)))
 
+        self.assertTrue(False, "Need to add test to ensure the correct attributes are created")
+
     def testget_short_geom_details(self):
         source_layer, dest_geom = ogrw.get_geom_details("pt")
         self.assertEqual(source_layer, "points")
