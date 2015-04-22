@@ -151,16 +151,16 @@ temp_shpf_list_table_osm_only = [
 """
 A list of which are unsorted, contain duplicates and contains blank strings.
 """
-attrib_list_args = [('f', 'FALSE'),
-                    ('a', 'FALSE'),
-                    ('b', 'TRUE' ),
-                    ('c', 'FALSE'),
-                    ('d', 'FALSE'),
-                    ('',  'FALSE'),
-                    ('e', 'FALSE'),
-                    ('a', 'FALSE'),
-                    ('a', 'FALSE')]
-attrib_list_result = 'a, c, d, e, f, b'
+attrib_list_args = [('ffff', 'FALSE'),
+                    ('aaaa', 'FALSE'),
+                    ('bbbb', 'TRUE' ),
+                    ('cccc', 'FALSE'),
+                    ('dddd', 'FALSE'),
+                    ('',     'FALSE'),
+                    ('eeee', 'FALSE'),
+                    ('aaaa', 'FALSE'),
+                    ('aaaa', 'FALSE')]
+attrib_list_result = 'aaaa, cccc, dddd, eeee, ffff, bbbb'
 
 """
 A list of tuples.

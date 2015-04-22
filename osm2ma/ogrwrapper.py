@@ -128,8 +128,11 @@ def get_geom_details(shpf_geom_type):
 def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     shpf_name, data_cat, shpf_geom_type, attribs, where_clause = shp_defn
     cat_dir_path = _create_datacat_dir(output_dir, data_cat)
-    logging.debug(
+    logging.info(
         'starting ogr2ogr process for shapefile: {}'.format(shpf_name))
+    #logging.info(
+    #    'using attributes : {}'.format(', '.join(attribs)))
+    print "using attributes: ".join(attribs)
 
     osm_source_layer, dest_geom = get_geom_details(shpf_geom_type)
 
@@ -143,14 +146,16 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     # if pbf_lyr.GetFeatureCount() was working I'd test to only copy files with
     # > 0 features.
     logging.debug('do_ogr2ogr_process: about to create new shapefile')
-    shp_data_source, shp_lyr = _create_new_shpfile(
-        shpf_name, cat_dir_path, dest_geom, pbf_srs)
+    shp_data_source, shp_lyr = _create_new_shpfile(shpf_name, cat_dir_path, dest_geom, pbf_srs)
+
     logging.debug('do_ogr2ogr_process: created new shapefile')
     logging.debug('do_ogr2ogr_process: about to copy attributes')
     _copy_attributes(pbf_lyr, shp_lyr, attribs)
+
     logging.debug('do_ogr2ogr_process: copied attributes')
     logging.debug('do_ogr2ogr_process: about to copy features')
     _copy_features(pbf_lyr, shp_lyr, attribs)
+
     logging.debug('do_ogr2ogr_process: copied features')
     # cmd_str = compose_ogr2ogr_cmd(
     #     data_cat, geom_type, attribs, where_clause, pbf_file, shpf_name,
