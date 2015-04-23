@@ -24,6 +24,9 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
     logging.info('Creating shapefile: {}'.format(shpf_name))
     # Create the output Layer
     shpf_path = os.path.join(shpf_dir, shpf_name)
+    shpf_name = shpf_name.encode('utf-8')
+    shpf_path = shpf_path.encode('utf-8')
+
     shpf_driver = ogr.GetDriverByName("ESRI Shapefile")
 
     # Remove output shapefile if it already exists
@@ -32,28 +35,36 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
 
     # Create the output shapefile
     shp_data_source = shpf_driver.CreateDataSource(shpf_path)
-    # out_lyr_name = os.path.splitext( os.path.split( outShapefile )[1] )[0]
-    # This should be just the shapefile name without extension - need to check
     out_layer = None
 
     shpf_name = shpf_name.encode('utf-8')
     out_layer = shp_data_source.CreateLayer(
         os.path.splitext(shpf_name)[1], srs=dest_srs, geom_type=dest_geom_type
     )
-    # out_layer = shpDataSource.CreateLayer(name=u'wrl_util_bdg_py_su_osm_pp')
+    #_create_attributes(source_lyr, out_layer, attribs)
+
     return shp_data_source, out_layer
 
 
 # do stuff
-def _copy_attributes(source_lyr, dest_lyr, target_attribs):
+def _create_attributes(source_lyr, dest_lyr, target_attribs):
     logging.debug('copying attributes')
     # Add input Layer Fields to the output Layer if it is the one we want
+    # By copying the field definition from the source it saves us having to worry
+    # about data type or string widths etc.
     source_lyr_defn = source_lyr.GetLayerDefn()
+    lst_attribs = map(unicode.strip, target_attribs.split(","))
+    # print(lst_attribs)
     for i in range(0, source_lyr_defn.GetFieldCount()):
         field_defn = source_lyr_defn.GetFieldDefn(i)
         field_name = field_defn.GetName()
-        if field_name in target_attribs:
-            dest_lyr.CreateField(field_defn)
+        dest_lyr.CreateField(field_defn)
+    #    if field_name in lst_attribs:
+    #        dest_lyr.CreateField(field_defn)
+    #    else:
+    #        print "PBF attrib not required; {}".format(field_name)
+    #for attrib in target_attribs.split('r'):
+    #    lyr.CreateField(field_defn)
 
 
 # do stuff
@@ -132,7 +143,7 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
         'starting ogr2ogr process for shapefile: {}'.format(shpf_name))
     #logging.info(
     #    'using attributes : {}'.format(', '.join(attribs)))
-    print "using attributes: ".join(attribs)
+    print "using attributes: {}".format(attribs)
 
     osm_source_layer, dest_geom = get_geom_details(shpf_geom_type)
 
@@ -146,11 +157,11 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     # if pbf_lyr.GetFeatureCount() was working I'd test to only copy files with
     # > 0 features.
     logging.debug('do_ogr2ogr_process: about to create new shapefile')
-    shp_data_source, shp_lyr = _create_new_shpfile(shpf_name, cat_dir_path, dest_geom, pbf_srs)
+    shp_data_source, shp_lyr = _create_new_shpfile(shpf_name, cat_dir_path, dest_geom, pbf_srs, )
 
     logging.debug('do_ogr2ogr_process: created new shapefile')
     logging.debug('do_ogr2ogr_process: about to copy attributes')
-    _copy_attributes(pbf_lyr, shp_lyr, attribs)
+    _create_attributes(pbf_lyr, shp_lyr, attribs)
 
     logging.debug('do_ogr2ogr_process: copied attributes')
     logging.debug('do_ogr2ogr_process: about to copy features')

@@ -7,6 +7,7 @@ import os
 import ogrwrapper as ogrw
 from osgeo import ogr
 from osgeo import osr
+from osgeo import gdal
 from configengine import xwalk_from_raw_config
 import fixtures
 
@@ -14,6 +15,8 @@ import fixtures
 class TestGlobalFunctions(unittest.TestCase):
 
     def setUp(self):
+        gdal.UseExceptions()
+        gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
         self.tmpdir = tempfile.mkdtemp()
 
     def tearDown(self):
@@ -33,12 +36,45 @@ class TestGlobalFunctions(unittest.TestCase):
         dest_srs.ImportFromEPSG(3857)     # from EPSG
 
         # test trying to create shpfile twice (shouldn't error)
-        for x in range(0, 2):
-            ogrw._create_new_shpfile(test_shpfile+".shp", self.tmpdir, ogr.wkbLineString, dest_srs)
-            for extn in (u'.dbf', u'.prj', u'.shp', u'.shx'):
-                self.assertTrue(os.path.exists(os.path.join(self.tmpdir, test_shpfile + extn)))
+        for i in range(2):
+            ogrw._create_new_shpfile(test_shpfile+".shp",
+                                     self.tmpdir,
+                                     ogr.wkbLineString,
+                                     dest_srs)
 
-        self.assertTrue(False, "Need to add test to ensure the correct attributes are created")
+        # check the file exists on disk
+        for extn in (u'.dbf', u'.prj', u'.shp', u'.shx'):
+            self.assertTrue(os.path.exists(os.path.join(self.tmpdir, test_shpfile + extn)))
+
+    def test_create_attributes(self):
+        test_shpfile = "test_shpfile"
+        dest_srs = osr.SpatialReference()
+        dest_srs.ImportFromEPSG(3857)     # from EPSG
+        # test_attribs = ["attrib1", "attrib2", "attrib3", "attrib4", "attrib5"]
+        test_attribs = ["name", "other_tags"]
+
+        shp_source, shp_lyr = ogrw._create_new_shpfile(
+            test_shpfile+".shp",
+            self.tmpdir,
+            ogr.wkbLineString,
+            dest_srs)
+
+        pbf_driver = ogr.GetDriverByName("OSM")
+        pbf_data_source = pbf_driver.Open(fixtures.example_pbf, 0)
+        pbf_lyr = pbf_data_source.GetLayerByName("points")
+
+        ogrw._create_attributes(pbf_lyr, shp_lyr, ", ".join(test_attribs))
+        lyr_defn = shp_lyr.GetLayerDefn()
+        result_attribs = []
+        for i in range(lyr_defn.GetFieldCount()):
+            result_attribs.append(lyr_defn.GetFieldDefn(i).GetName())
+
+        print(sorted(test_attribs))
+        print(sorted(result_attribs))
+
+        self.assertEquals(sorted(test_attribs),
+                          sorted(result_attribs),
+                          "Need to add test to ensure the correct attributes are created")
 
     def testget_short_geom_details(self):
         source_layer, dest_geom = ogrw.get_geom_details("pt")
