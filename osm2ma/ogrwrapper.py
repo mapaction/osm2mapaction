@@ -178,7 +178,9 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
 def batch_convert(xwalk, pbf_file, output_dir):
     gdal.UseExceptions()
     gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
-    # Open input PBF driver
+
+    osmconf_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), r'osmconf.ini')
+    gdal.SetConfigOption('OSM_CONFIG_FILE', osmconf_path)    # Open input PBF driver
     pbf_driver = ogr.GetDriverByName("OSM")
     pbf_data_source = pbf_driver.Open(pbf_file, 0)
 
