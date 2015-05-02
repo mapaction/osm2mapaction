@@ -89,8 +89,8 @@ class TestAttribList(unittest.TestCase):
         maintian state during the aggreegation process. Therefore it is difficult to meaningfully subdivide tests.
         :return:
         """
-        for arg in fixtures.attrib_list_args:
-            self.al.step(arg)
+        for arg, meta in fixtures.attrib_list_args:
+            self.al.step(arg, meta)
 
         self.assertEqual(self.al.finalize(), fixtures.attrib_list_result)
 
@@ -111,8 +111,8 @@ class TestSelectClause(unittest.TestCase):
         """
         for args, result in fixtures.select_clause_args_and_result_pairs:
             sc = _SelectClause()
-            for key, val in args:
-                sc.step(key, val)
+            for key, val, meta in args:
+                sc.step(key, val, meta)
 
             self.assertEqual(sc.finalize(), result)
 
