@@ -57,8 +57,9 @@ def _copy_attributes(source_lyr, dest_lyr, target_attribs):
             dest_lyr.CreateField(field_defn)
 
 
-# do stuff
 def _copy_features(source_lyr, dest_lyr, target_attribs):
+    '''Copy the specified attributed features from an input layer, with query set, to an output
+    '''
     logging.debug('copying features')
     logging.debug('copying features, value sourceLyr {}'.format(source_lyr))
     logging.debug('copying features, value destLyr {}'.format(dest_lyr))
@@ -74,6 +75,9 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
     #    'count of features {} in sourceLyr {}'.format(
     #        source_lyr.GetFeatureCount(force=True), source_lyr.GetName()))
     # Add features to the ouput Layer
+
+    # track the number of features we copy this way, since the GetFeatureCount
+    # doesn't work
     n = 0
     for s_feature in source_lyr:
         # logging.debug('copying features, in loop through sourceLyr')
@@ -97,9 +101,46 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         # Add new feature to output Layer
         dest_lyr.CreateFeature(d_feature)
         n += 1
-    #logging.debug("Copied {} features".format(n))
     return n
 
+def _copy_features_interleaved(source_lyr, dest_lyr, target_attribs):
+    '''As for _copy_features but disposes of features, to (hopefully) fix interleaved reading
+
+    See http://lists.osgeo.org/pipermail/gdal-dev/2014-April/038634.html for sample code.
+    This isn't working: it may be that there is a bug or limitation in reading interleaved
+    when the scenario is more "complicated" i.e. a definition query is in place.
+    '''
+    thereIsDataInLayer = True
+    n=0
+    dest_lyr_defn = dest_lyr.GetLayerDefn()
+
+    while thereIsDataInLayer:
+        thereIsDataInLayer = False
+        s_feature = source_lyr.GetNextFeature()
+        while(s_feature is not None):
+            thereIsDataInLayer = True
+            d_feature = ogr.Feature(dest_lyr_defn)
+
+            # Add field values from input Layer
+            for i in range(0, dest_lyr_defn.GetFieldCount()):
+                field_defn = dest_lyr_defn.GetFieldDefn(i)
+                field_name = field_defn.GetName()
+                if field_name in target_attribs:
+                    d_feature.SetField(
+                        dest_lyr_defn.GetFieldDefn(i).GetNameRef(),
+                        s_feature.GetField(i)
+                    )
+
+            # Set geometry as centroid
+            geom = s_feature.GetGeometryRef()
+            d_feature.SetGeometry(geom.Clone())
+            # Add new feature to output Layer
+            dest_lyr.CreateFeature(d_feature)
+            n += 1
+
+            s_feature.Destroy()
+            s_feature = source_lyr.GetNextFeature()
+    return n
 
 # functional
 def get_geom_details(shpf_geom_type):
@@ -157,12 +198,21 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     pbf_lyr.SetAttributeFilter(where_clause)
 
     nCopied = _copy_features(pbf_lyr, shp_lyr, attribs)
+    # "Correct" approach seems to make no difference.
+    # Looks like if we want / need to use the interleaved reading,
+    # we would have to read the entire source layer (points, lines, polygons)
+    # unfiltered into an intermediate format (sqlite?) then apply the query to that
+    # before writing to shapefile.
+    #nCopied = _copy_features_interleaved(pbf_lyr, shp_lyr, attribs)
+
     logging.debug('do_ogr2ogr_process: copied features')
     # cmd_str = compose_ogr2ogr_cmd(
     #     data_cat, geom_type, attribs, where_clause, pbf_file, shpf_name,
     #     cat_dir_path)
     createdFilePath = shp_data_source.GetName()
     shp_data_source.Destroy()
+    # As we were unable to pre-test the number of features, instead we delete
+    # the output shapefile if the return value indicates it was empty
     if nCopied == 0:
         shpf_driver = ogr.GetDriverByName("ESRI Shapefile")
         shpf_driver.DeleteDataSource(createdFilePath)
@@ -175,13 +225,22 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
 # do stuff
 def batch_convert(xwalk, pbf_file, output_dir):
     gdal.UseExceptions()
+
+    # This option probably "should" be set for safety in reading large files but
+    # as it is, it causes NO data to be copied except for points. Turning it off
+    # actually seems to work with the test oxfordshire file at least.
+    # Turning it on causes only point data to be copied, even with the "correct"
+    # reading function that destroys features before moving on.
     #gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
+
     # Open input PBF driver
     pbf_driver = ogr.GetDriverByName("OSM")
-    #
 
-    # Do conversation for each shpFile
+    # Do conversion for each shpFile
     for shpDefinition in xwalk:
+        # reopen the file for each reading to be extra sure we are resetting the
+        # read position. Otherwise we are relying on the changing definition
+        # query to reset the read position which "feels" a bit risky
         pbf_data_source = pbf_driver.Open(pbf_file, 0)
         logging.debug(shpDefinition[0])
         do_ogr2ogr_process(shpDefinition, pbf_data_source, output_dir)
