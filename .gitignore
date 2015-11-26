@@ -6,3 +6,5 @@ osm2ma/.idea
 osm2ma/testfiles/output_shp/
 geofabrik/
 *.psproj
+# Ignore FME Log file
+*.log
