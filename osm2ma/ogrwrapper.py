@@ -223,7 +223,7 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
 
 
 # do stuff
-def batch_convert(xwalk, pbf_file, output_dir):
+def batch_convert(xwalk, pbf_file, osmconf_path, output_dir):
     gdal.UseExceptions()
 
     # This option probably "should" be set for safety in reading large files but
@@ -232,6 +232,9 @@ def batch_convert(xwalk, pbf_file, output_dir):
     # Turning it on causes only point data to be copied, even with the "correct"
     # reading function that destroys features before moving on.
     #gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
+
+    # Tell OGR where to find the custom osmconf ini file
+    gdal.SetConfigOption("OSM_CONFIG_FILE", osmconf_path)
 
     # Open input PBF driver
     pbf_driver = ogr.GetDriverByName("OSM")

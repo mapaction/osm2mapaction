@@ -29,6 +29,7 @@ logging.basicConfig(level=logging.DEBUG)
 def main(args):
     """Parse commandline parameters and call convert()."""
     excel_full_path = args.config_path
+    osmconf_path = args.osmconf_path
 
     geoextent_clause = args.geoextent
     scale_clause = args.scale
@@ -38,12 +39,12 @@ def main(args):
 
     # now do the conversion
     convert(
-        excel_full_path, geoextent_clause, scale_clause, pbf_file,
+        excel_full_path, osmconf_path, geoextent_clause, scale_clause, pbf_file,
         output_dir
     )
 
 
-def convert(raw_config_path, geoextent_clause, scale_clause, pbf_file,
+def convert(raw_config_path, osmconf_path, geoextent_clause, scale_clause, pbf_file,
             output_dir):
     """Read the config file and convert PBF file to multiple shapefiles."""
     # Load the raw (denormalised) config from Excel
@@ -51,7 +52,7 @@ def convert(raw_config_path, geoextent_clause, scale_clause, pbf_file,
     # Normalise the raw config table
     _xwalk = xwalk_from_raw_config(_raw_conf, geoextent_clause, scale_clause)
     # Do the conversion
-    batch_convert(_xwalk, pbf_file, output_dir)
+    batch_convert(_xwalk, pbf_file, osmconf_path, output_dir)
 
 
 if __name__ == '__main__':
@@ -65,6 +66,11 @@ if __name__ == '__main__':
         '-c', '--config-path',
         default=os.path.join(
             os.getcwd(), '..', 'config_files', 'OSM_to_MA_ascii_v6.xlsx')
+    )
+    parser.add_argument(
+        '-f', '--osmconf_path',
+        default=os.path.join(
+            os.getcwd(), '..', 'config_files', 'osmconf_mapaction.ini')
     )
     parser.add_argument('-g', '--geoextent', default='wrl')
     parser.add_argument('-s', '--scale', default='su')
