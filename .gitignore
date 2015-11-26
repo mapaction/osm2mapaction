@@ -5,3 +5,4 @@ osm2ma/.idea
 *.py,cover
 osm2ma/testfiles/output_shp/
 geofabrik/
+*.psproj

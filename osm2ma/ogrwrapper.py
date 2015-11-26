@@ -47,6 +47,7 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
 # do stuff
 def _copy_attributes(source_lyr, dest_lyr, target_attribs):
     logging.debug('copying attributes')
+    logging.debug(str(target_attribs))
     # Add input Layer Fields to the output Layer if it is the one we want
     source_lyr_defn = source_lyr.GetLayerDefn()
     for i in range(0, source_lyr_defn.GetFieldCount()):
@@ -68,11 +69,12 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
     logging.debug('copying features, got dest_lyr_defn {}'.format(
         dest_lyr_defn))
 
-    # sourceLyr.ResetReading()
-    logging.info(
-        'count of features {} in sourceLyr {}'.format(
-            source_lyr.GetFeatureCount(force=True), source_lyr.GetName()))
+    source_lyr.ResetReading()
+    # logging.info(
+    #    'count of features {} in sourceLyr {}'.format(
+    #        source_lyr.GetFeatureCount(force=True), source_lyr.GetName()))
     # Add features to the ouput Layer
+    n = 0
     for s_feature in source_lyr:
         # logging.debug('copying features, in loop through sourceLyr')
         # Create output Feature
@@ -94,6 +96,9 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         d_feature.SetGeometry(geom.Clone())
         # Add new feature to output Layer
         dest_lyr.CreateFeature(d_feature)
+        n += 1
+    #logging.debug("Copied {} features".format(n))
+    return n
 
 
 # functional
@@ -126,6 +131,7 @@ def get_geom_details(shpf_geom_type):
 
 # do stuff
 def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
+    logging.info("###########################################")
     shpf_name, data_cat, shpf_geom_type, attribs, where_clause = shp_defn
     cat_dir_path = _create_datacat_dir(output_dir, data_cat)
     logging.debug(
@@ -134,10 +140,7 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     osm_source_layer, dest_geom = get_geom_details(shpf_geom_type)
 
     pbf_lyr = pbf_data_source.GetLayerByName(osm_source_layer)
-    where_clause = where_clause.encode('utf-8')
-    pbf_lyr.SetAttributeFilter(None)
-    pbf_lyr.SetAttributeFilter(where_clause)
-
+    where_clause = str(where_clause) #.encode('utf-8')
     pbf_srs = pbf_lyr.GetSpatialRef()
 
     # if pbf_lyr.GetFeatureCount() was working I'd test to only copy files with
@@ -150,26 +153,39 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     _copy_attributes(pbf_lyr, shp_lyr, attribs)
     logging.debug('do_ogr2ogr_process: copied attributes')
     logging.debug('do_ogr2ogr_process: about to copy features')
-    _copy_features(pbf_lyr, shp_lyr, attribs)
+    pbf_lyr.SetAttributeFilter(None)
+    pbf_lyr.SetAttributeFilter(where_clause)
+
+    nCopied = _copy_features(pbf_lyr, shp_lyr, attribs)
     logging.debug('do_ogr2ogr_process: copied features')
     # cmd_str = compose_ogr2ogr_cmd(
     #     data_cat, geom_type, attribs, where_clause, pbf_file, shpf_name,
     #     cat_dir_path)
+    createdFilePath = shp_data_source.GetName()
     shp_data_source.Destroy()
+    if nCopied == 0:
+        shpf_driver = ogr.GetDriverByName("ESRI Shapefile")
+        shpf_driver.DeleteDataSource(createdFilePath)
+        logging.info("Removed empty shapefile output!")
+        logging.info("where clause was "+where_clause)
+    else:
+        logging.info("Copied {0} features!".format(nCopied))
 
 
 # do stuff
 def batch_convert(xwalk, pbf_file, output_dir):
     gdal.UseExceptions()
-    gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
+    #gdal.SetConfigOption("OGR_INTERLEAVED_READING", "YES")
     # Open input PBF driver
     pbf_driver = ogr.GetDriverByName("OSM")
-    pbf_data_source = pbf_driver.Open(pbf_file, 0)
+    #
 
     # Do conversation for each shpFile
     for shpDefinition in xwalk:
+        pbf_data_source = pbf_driver.Open(pbf_file, 0)
         logging.debug(shpDefinition[0])
         do_ogr2ogr_process(shpDefinition, pbf_data_source, output_dir)
+        pbf_data_source.Destroy()
 
     # Close input PBF file
-    pbf_data_source.Destroy()
+    #pbf_data_source.Destroy()
