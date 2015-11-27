@@ -67,6 +67,7 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         target_attribs))
 
     dest_lyr_defn = dest_lyr.GetLayerDefn()
+    src_lyr_defn = source_lyr.GetLayerDefn()
     logging.debug('copying features, got dest_lyr_defn {}'.format(
         dest_lyr_defn))
 
@@ -79,6 +80,22 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
     # track the number of features we copy this way, since the GetFeatureCount
     # doesn't work
     n = 0
+
+    # dest lyr only has the target attribs already so we don't need to recheck
+    destFields = [dest_lyr_defn.GetFieldDefn(i).GetName()
+        for i in range(dest_lyr_defn.GetFieldCount())]
+
+    # there was a bug here, using the same index i to get the field from the
+    # source and destination layers. The destination layer doesn't have all
+    # the fields of the source, so the indices aren't the same. This resulted
+    # in fields getting values from the wrong input fields.
+
+    # Instead, map the destination to the source field indices:
+    destSrcMap = {
+        i : src_lyr_defn.GetFieldIndex(destFields[i])
+            for i in range(len(destFields))
+    }
+
     for s_feature in source_lyr:
         # logging.debug('copying features, in loop through sourceLyr')
         # Create output Feature
@@ -86,14 +103,10 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         # logging.debug('copying features, got d_feature {}'.format(d_feature))
 
         # Add field values from input Layer
-        for i in range(0, dest_lyr_defn.GetFieldCount()):
-            field_defn = dest_lyr_defn.GetFieldDefn(i)
-            field_name = field_defn.GetName()
-            if field_name in target_attribs:
-                d_feature.SetField(
-                    dest_lyr_defn.GetFieldDefn(i).GetNameRef(),
-                    s_feature.GetField(i)
-                )
+        for dIdx, sIdx in destSrcMap.iteritems():
+            if sIdx != -1:
+                # else the name got laundered and doesn't match: we should handle this
+                d_feature.SetField(dIdx, s_feature.GetField(sIdx))
 
         # Set geometry as centroid
         geom = s_feature.GetGeometryRef()
@@ -103,44 +116,44 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         n += 1
     return n
 
-def _copy_features_interleaved(source_lyr, dest_lyr, target_attribs):
-    '''As for _copy_features but disposes of features, to (hopefully) fix interleaved reading
-
-    See http://lists.osgeo.org/pipermail/gdal-dev/2014-April/038634.html for sample code.
-    This isn't working: it may be that there is a bug or limitation in reading interleaved
-    when the scenario is more "complicated" i.e. a definition query is in place.
-    '''
-    thereIsDataInLayer = True
-    n=0
-    dest_lyr_defn = dest_lyr.GetLayerDefn()
-
-    while thereIsDataInLayer:
-        thereIsDataInLayer = False
-        s_feature = source_lyr.GetNextFeature()
-        while(s_feature is not None):
-            thereIsDataInLayer = True
-            d_feature = ogr.Feature(dest_lyr_defn)
-
-            # Add field values from input Layer
-            for i in range(0, dest_lyr_defn.GetFieldCount()):
-                field_defn = dest_lyr_defn.GetFieldDefn(i)
-                field_name = field_defn.GetName()
-                if field_name in target_attribs:
-                    d_feature.SetField(
-                        dest_lyr_defn.GetFieldDefn(i).GetNameRef(),
-                        s_feature.GetField(i)
-                    )
-
-            # Set geometry as centroid
-            geom = s_feature.GetGeometryRef()
-            d_feature.SetGeometry(geom.Clone())
-            # Add new feature to output Layer
-            dest_lyr.CreateFeature(d_feature)
-            n += 1
-
-            s_feature.Destroy()
-            s_feature = source_lyr.GetNextFeature()
-    return n
+##def _copy_features_interleaved(source_lyr, dest_lyr, target_attribs):
+##    '''As for _copy_features but disposes of features, to (hopefully) fix interleaved reading
+##
+##    See http://lists.osgeo.org/pipermail/gdal-dev/2014-April/038634.html for sample code.
+##    This isn't working: it may be that there is a bug or limitation in reading interleaved
+##    when the scenario is more "complicated" i.e. a definition query is in place.
+##    '''
+##    thereIsDataInLayer = True
+##    n=0
+##    dest_lyr_defn = dest_lyr.GetLayerDefn()
+##
+##    while thereIsDataInLayer:
+##        thereIsDataInLayer = False
+##        s_feature = source_lyr.GetNextFeature()
+##        while(s_feature is not None):
+##            thereIsDataInLayer = True
+##            d_feature = ogr.Feature(dest_lyr_defn)
+##
+##            # Add field values from input Layer
+##            for i in range(0, dest_lyr_defn.GetFieldCount()):
+##                field_defn = dest_lyr_defn.GetFieldDefn(i)
+##                field_name = field_defn.GetName()
+##                if field_name in target_attribs:
+##                    d_feature.SetField(
+##                        dest_lyr_defn.GetFieldDefn(i).GetNameRef(),
+##                        s_feature.GetField(i)
+##                    )
+##
+##            # Set geometry as centroid
+##            geom = s_feature.GetGeometryRef()
+##            d_feature.SetGeometry(geom.Clone())
+##            # Add new feature to output Layer
+##            dest_lyr.CreateFeature(d_feature)
+##            n += 1
+##
+##            s_feature.Destroy()
+##            s_feature = source_lyr.GetNextFeature()
+##    return n
 
 # functional
 def get_geom_details(shpf_geom_type):
