@@ -11,7 +11,8 @@
 
 import sqlite3
 import logging
-
+import json
+import re
 logging.basicConfig(level=logging.INFO)
 
 
@@ -232,7 +233,7 @@ class ConfigXWalk:
         """
         self.db.create_function("shpf_name", 5, ConfigXWalk._create_shpf_name)
         self.db.create_aggregate("attriblist", 1, _AttribList)
-        self.db.create_aggregate("condition_clause", 2, _SelectClause)
+        self.db.create_aggregate("condition_clause", 2, _SelectClauseDict)
 
     def get_xwalk(self):
         """
@@ -303,12 +304,93 @@ class _AttribList:
     def finalize(self):
         return ", ".join(sorted(self.set_attribs))
 
+class _SelectClauseDict:
+    """
+    Generates dictionary of components of a where clause to select contents of a shapefile.
+
+    Dictionary is keyed by the column name and values are the where clause
+    components in which that column name is mentioned. Dictionary is returned
+    as a json-encoded string for compatibility with the sqlite create_aggregate
+    usage.
+
+    Certain values (eg '*' and 'user defined') are filtered out.
+
+    See:
+    https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
+    """
+
+    def __init__(self):
+        self.query_args = dict()
+        self.exclude_keys = set()
+
+    def step(self, osm_key, osm_value):
+        # need to quote any fieldnames starting with digit, including a space, or
+        # possibly some other characters too
+        # e.g. 'public transport', '4wd_only'
+        # can't make this check work as a separate function for some reason
+        dodgyRE = '(^\d)|_|\s|:'
+        keyNeedsQualifying = False
+        if re.search(dodgyRE, osm_key):
+            keyNeedsQualifying = True
+
+        if (type(osm_value) == unicode) and (
+                osm_value.lower() in {u'*', u'user defined', u'number', u'url or article title'}):
+            self.exclude_keys.add(osm_key)
+        else:
+            if "/" in osm_value:
+                trySplitChar = u'/'
+            else:
+                # some things in the sheet are comma delimited instead, e.g. voltage
+                trySplitChar = u','
+            for val in osm_value.split(trySplitChar):
+                # TODO: This might be dangerous, because you can't be
+                # sure that the val or key won't contain a quote, for
+                # example.
+                # FIXME: Use params to execute?
+                if keyNeedsQualifying:
+                    qualKey = "'{key}'".format(key=osm_key)
+                else:
+                    qualKey = osm_key
+
+                unique_clause = u"{key}='{val}'".format(
+                    key=qualKey, val=val.strip()
+                )
+                # we build query_args the opposite way round i.e. keys are the
+                # col name not the clause: don't know why it was the other way
+                # round anyway
+                if osm_key not in self.query_args:
+                    self.query_args[osm_key] = [unique_clause]
+                else:
+                    self.query_args[osm_key].append(unique_clause)
+
+    def finalize(self):
+        dodgyRE = '(^\d)|_|\s|:'
+        for osm_key in self.exclude_keys:
+            keyNeedsQualifying = False
+            if re.search(dodgyRE, osm_key):
+                keyNeedsQualifying = True
+
+            if keyNeedsQualifying:
+                qualKey = "'{key}'".format(key=osm_key)
+            else:
+                qualKey = osm_key
+
+            self.query_args[osm_key] =(
+                [u"({key} IS NOT null AND {key} NOT IN ('', 'None'))"
+                    .format(key=qualKey)
+                    ]
+                )
+        # return (to the column in the DB!) a string representation of the dict
+        # which the ogrwrapper code will be able to reconstruct once it knows
+        # what's actually in the data so it can use only the relevant clauses
+        return json.dumps(self.query_args)
 
 class _SelectClause:
     """
     Generates WHERE clause, to select the contents of a shapefile.
 
     Certain values (eg '*' and 'user defined') are filtered out.
+    Will be redundant if _SelectClauseDict is ok
 
     See:
     https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
@@ -316,6 +398,8 @@ class _SelectClause:
     def __init__(self):
         self.query_args = dict()
         self.exclude_keys = set()
+        # probably a better way of getting this to the constructor but i'm unsure how
+        self.tblName = 'scratch'
 
     def step(self, osm_key, osm_value):
         if (type(osm_value) == unicode) and (
@@ -327,7 +411,7 @@ class _SelectClause:
                 # sure that the val or key won't contain a quote, for
                 # example.
                 # FIXME: Use params to execute?
-                unique_clause = u"'{key}'='{val}'".format(
+                unique_clause = u"{key}='{val}'".format(
                     key=osm_key, val=val.strip()
                 )
                 self.query_args[unique_clause] = osm_key
@@ -336,13 +420,16 @@ class _SelectClause:
         cleaned_pairs = set()
         for osm_key in self.exclude_keys:
             cleaned_pairs.add(
-                u"'{val}' IS NOT null".format(val=osm_key)
+                # investigation of why sometimes all features go through: looking at
+                # whether it was a wrong "null" being exposed.
+                # This doesn't seem to be the issue so could go back to is not null
+                # alone
+                u"({key} IS NOT null AND {key} NOT IN ('', 'None'))"
+                .format(key=osm_key)
             )
-
         for unique_clause, osm_key in self.query_args.iteritems():
             if osm_key not in self.exclude_keys:
                 cleaned_pairs.add(unique_clause)
-
         if len(cleaned_pairs) > 0:
             return u" or ".join(sorted(cleaned_pairs))
         else:

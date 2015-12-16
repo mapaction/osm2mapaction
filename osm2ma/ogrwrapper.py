@@ -4,6 +4,7 @@ from osgeo import ogr
 from osgeo import gdal
 import os
 import logging
+import json
 
 logging.basicConfig(level=logging.INFO)
 
@@ -182,19 +183,61 @@ def get_geom_details(shpf_geom_type):
 
     return source_layer, dest_geom
 
+def parseAndCheckWhereClause(jsonWhere, source_lyr):
+    ''' Create a where clause that only contains fields that are actually present.
 
-# do stuff
+    The PBF driver doesn't expose fields that aren't actually present in the data
+    even if they are specified in the osmconf.ini file. Furthermore it appears that
+    if such a field is mentioned in the where clause then the entire where
+    clause is ignored and all the data from that layer (points / lines / polygons)
+    are returned.
+
+    So we need to clean the where clause that was generated from the Excel file
+    to only mention fields that are present in our current dataset. This required
+    refactoring the where clause generation in configengine to return something
+    that can be more easily converted to a structured object again here i.e. json.
+    The actual where clause string is then generated here at "runtime" once we know
+    what is in the current pbf dataset.
+    '''
+    # the where clause is returned from configengine's in memory DB as a string
+    # so recreate the dictionary from it
+    where_clause_dict = json.loads(jsonWhere)
+    source_lyr_defn = source_lyr.GetLayerDefn()
+    # get all the fieldnames we actually have in the data
+    sourceFieldNames = [source_lyr_defn.GetFieldDefn(i).GetName()
+        for i in range(source_lyr_defn.GetFieldCount())]
+    # only keep the parts of the where clause that refer to a field that we
+    # actually have in the data
+    relevantClauses = [' or '.join(where_clause_dict[colName])
+        for colName in where_clause_dict.keys()
+        if colName in sourceFieldNames]
+    # return it as an or-separated string again
+    if len(relevantClauses) > 0:
+        return ' or '.join(relevantClauses)
+    else:
+        # if we don't have anything for the where clause then we won't want a
+        # shapefile to be created, returning false will cause this.
+        return '1 = 0'
+
 def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
-    logging.info("###########################################")
+    ''' Generate one output shapefile from the PBF using the provided specification
+    '''
     shpf_name, data_cat, shpf_geom_type, attribs, where_clause = shp_defn
-    cat_dir_path = _create_datacat_dir(output_dir, data_cat)
+
+    logging.info("".rjust(70,"_"))
     logging.debug(
         'starting ogr2ogr process for shapefile: {}'.format(shpf_name))
 
+    # create output subdirectory if not already there
+    cat_dir_path = _create_datacat_dir(output_dir, data_cat)
+    # get type points/lines/polys
     osm_source_layer, dest_geom = get_geom_details(shpf_geom_type)
-
     pbf_lyr = pbf_data_source.GetLayerByName(osm_source_layer)
-    where_clause = str(where_clause) #.encode('utf-8')
+
+    whereClauseStr = str(parseAndCheckWhereClause(where_clause, pbf_lyr))
+    logging.info("Where clause is " + whereClauseStr)
+
+    #where_clause = str(where_clause) #.encode('utf-8')
     pbf_srs = pbf_lyr.GetSpatialRef()
 
     # if pbf_lyr.GetFeatureCount() was working I'd test to only copy files with
@@ -203,13 +246,16 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     shp_data_source, shp_lyr = _create_new_shpfile(
         shpf_name, cat_dir_path, dest_geom, pbf_srs)
     logging.debug('do_ogr2ogr_process: created new shapefile')
+
     logging.debug('do_ogr2ogr_process: about to copy attributes')
     _copy_attributes(pbf_lyr, shp_lyr, attribs)
     logging.debug('do_ogr2ogr_process: copied attributes')
+
     logging.debug('do_ogr2ogr_process: about to copy features')
     pbf_lyr.SetAttributeFilter(None)
-    pbf_lyr.SetAttributeFilter(where_clause)
-
+    #pbf_lyr.SetAttributeFilter(where_clause)
+    #print whereClauseStr
+    pbf_lyr.SetAttributeFilter(whereClauseStr)
     nCopied = _copy_features(pbf_lyr, shp_lyr, attribs)
     # "Correct" approach seems to make no difference.
     # Looks like if we want / need to use the interleaved reading,
@@ -217,26 +263,27 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     # unfiltered into an intermediate format (sqlite?) then apply the query to that
     # before writing to shapefile.
     #nCopied = _copy_features_interleaved(pbf_lyr, shp_lyr, attribs)
-
     logging.debug('do_ogr2ogr_process: copied features')
+
     # cmd_str = compose_ogr2ogr_cmd(
     #     data_cat, geom_type, attribs, where_clause, pbf_file, shpf_name,
     #     cat_dir_path)
     createdFilePath = shp_data_source.GetName()
     shp_data_source.Destroy()
+
     # As we were unable to pre-test the number of features, instead we delete
     # the output shapefile if the return value indicates it was empty
     if nCopied == 0:
         shpf_driver = ogr.GetDriverByName("ESRI Shapefile")
         shpf_driver.DeleteDataSource(createdFilePath)
         logging.info("Removed empty shapefile output!")
-        logging.info("where clause was "+where_clause)
     else:
         logging.info("Copied {0} features!".format(nCopied))
 
 
-# do stuff
 def batch_convert(xwalk, pbf_file, osmconf_path, output_dir):
+    '''Generate each output shapefile that is specified in xwalk in turn, from pbf_file.
+    '''
     gdal.UseExceptions()
 
     # This option probably "should" be set for safety in reading large files but
@@ -254,13 +301,10 @@ def batch_convert(xwalk, pbf_file, osmconf_path, output_dir):
 
     # Do conversion for each shpFile
     for shpDefinition in xwalk:
-        # reopen the file for each reading to be extra sure we are resetting the
+        # reopen the file for each reading to be sure we are resetting the
         # read position. Otherwise we are relying on the changing definition
         # query to reset the read position which "feels" a bit risky
         pbf_data_source = pbf_driver.Open(pbf_file, 0)
         logging.debug(shpDefinition[0])
         do_ogr2ogr_process(shpDefinition, pbf_data_source, output_dir)
         pbf_data_source.Destroy()
-
-    # Close input PBF file
-    #pbf_data_source.Destroy()
