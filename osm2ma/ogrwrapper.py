@@ -44,19 +44,33 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
     # out_layer = shpDataSource.CreateLayer(name=u'wrl_util_bdg_py_su_osm_pp')
     return shp_data_source, out_layer
 
-
-# do stuff
 def _copy_attributes(source_lyr, dest_lyr, target_attribs):
+    ''' Creates in dest_lyr the attribs named in target_attribs, iif they exist in source_lyr.
+
+    target_attribs is now a set rather than a single comma-separated string.
+    This helps avoid the wrong attribs being copied over.
+    '''
     logging.debug('copying attributes')
     logging.debug(str(target_attribs))
+
     # Add input Layer Fields to the output Layer if it is the one we want
     source_lyr_defn = source_lyr.GetLayerDefn()
     for i in range(0, source_lyr_defn.GetFieldCount()):
         field_defn = source_lyr_defn.GetFieldDefn(i)
         field_name = field_defn.GetName()
+        # This "if x in y" check doesn't work well if y is a single string
+        # e.g. if source attribs are
+        #   ["osm_id", "id", "preying_mantid", "man"]
+        # and target attribs is
+        #   "preying_mantid, mandible_size"
+        # then we will end up copying over id, preying_mantid, and man,
+        # even though the only one of them we wanted was "preying_mantid"
+        # Whereas now target_attribs is a set of separate strings that won't
+        # happen.
+        # It is also now easier for client ogrwrapper code to add extra attribs
+        # e.g. name that weren't specified in the excel config file
         if field_name in target_attribs:
             dest_lyr.CreateField(field_defn)
-
 
 def _copy_features(source_lyr, dest_lyr, target_attribs):
     '''Copy the specified attributed features from an input layer, with query set, to an output
@@ -219,6 +233,18 @@ def parseAndCheckWhereClause(jsonWhere, source_lyr):
         # shapefile to be created, returning false will cause this.
         return '1 = 0'
 
+def parseAndCheckAttribs(jsonAttribs):
+    ''' Create a comma-separated list of attributes for the output shapefile.
+
+    The DB (configengine) code now returns a set object (json-encoded to a string).
+    See copyAttributes for justification of why.
+    Here we just recreate the set from the json.
+    '''
+    # json lib can't automatically serialize a set
+    listAttrs = json.loads(jsonAttribs)
+    setAttrs = set(listAttrs)
+    return setAttrs
+
 def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     ''' Generate one output shapefile from the PBF using the provided specification
     '''
@@ -248,15 +274,18 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     logging.debug('do_ogr2ogr_process: created new shapefile')
 
     logging.debug('do_ogr2ogr_process: about to copy attributes')
-    _copy_attributes(pbf_lyr, shp_lyr, attribs)
+    attribSet = parseAndCheckAttribs(attribs)
+    # Add the name attribute to the output
+    # TODO: maybe specify "always copy" attributes on the commandline and carry
+    # through to here?
+    attribSet.add("name")
+    _copy_attributes(pbf_lyr, shp_lyr, attribSet)
     logging.debug('do_ogr2ogr_process: copied attributes')
 
     logging.debug('do_ogr2ogr_process: about to copy features')
     pbf_lyr.SetAttributeFilter(None)
-    #pbf_lyr.SetAttributeFilter(where_clause)
-    #print whereClauseStr
     pbf_lyr.SetAttributeFilter(whereClauseStr)
-    nCopied = _copy_features(pbf_lyr, shp_lyr, attribs)
+    nCopied = _copy_features(pbf_lyr, shp_lyr, attribSet)
     # "Correct" approach seems to make no difference.
     # Looks like if we want / need to use the interleaved reading,
     # we would have to read the entire source layer (points, lines, polygons)

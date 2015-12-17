@@ -302,7 +302,13 @@ class _AttribList:
             self.set_attribs.add(value)
 
     def finalize(self):
-        return ", ".join(sorted(self.set_attribs))
+        # returning (or rather, using) a single comma-joined string of attrib
+        # names is a bit risky because if we are looking for an attribute like
+        # "id" this will pull out attributes like "orchid". The client code
+        # _should_ be more sensible, but if we return a set then we force it to be.
+        # Actually we do a list as json can't serialize set
+        return json.dumps(list(self.set_attribs))
+        #return ", ".join(sorted(self.set_attribs))
 
 class _SelectClauseDict:
     """
