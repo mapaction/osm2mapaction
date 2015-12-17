@@ -8,3 +8,4 @@ geofabrik/
 *.psproj
 # Ignore FME Log file
 *.log
+*.sl3
