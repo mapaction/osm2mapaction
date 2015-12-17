@@ -289,7 +289,10 @@ class ConfigXWalk:
 
 class _AttribList:
     """
-    Creates comma delimited list of attribute names for SELECT
+    Creates comma delimited list of attribute names for SELECT.
+
+    Return object is a json-serialized version of the python list of attrib names.
+    Decode with json.loads(obj).
 
     See:
     docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate
@@ -317,7 +320,7 @@ class _SelectClauseDict:
     Dictionary is keyed by the column name and values are the where clause
     components in which that column name is mentioned. Dictionary is returned
     as a json-encoded string for compatibility with the sqlite create_aggregate
-    usage.
+    usage. Decode with json.loads(obj)
 
     Certain values (eg '*' and 'user defined') are filtered out.
 
@@ -396,7 +399,7 @@ class _SelectClause:
     Generates WHERE clause, to select the contents of a shapefile.
 
     Certain values (eg '*' and 'user defined') are filtered out.
-    Will be redundant if _SelectClauseDict is ok
+    Class will be redundant if _SelectClauseDict is ok
 
     See:
     https://docs.python.org/2/library/sqlite3.html#sqlite3.Connection.create_aggregate

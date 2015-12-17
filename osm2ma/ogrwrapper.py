@@ -8,8 +8,6 @@ import json
 
 logging.basicConfig(level=logging.INFO)
 
-
-# do stuff
 def _create_datacat_dir(output_dir, data_cat):
     """Create a per-datacategory subdirectory if required"""
     if os.path.isdir(output_dir):
@@ -20,8 +18,8 @@ def _create_datacat_dir(output_dir, data_cat):
     # TODO raise error if invalid input
 
 
-# do stuff
 def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
+    """Creates an output shapefile (but does add any attributes)"""
     logging.info('Creating shapefile: {}'.format(shpf_name))
     # Create the output Layer
     shpf_path = os.path.join(shpf_dir, shpf_name)
@@ -87,10 +85,6 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         dest_lyr_defn))
 
     source_lyr.ResetReading()
-    # logging.info(
-    #    'count of features {} in sourceLyr {}'.format(
-    #        source_lyr.GetFeatureCount(force=True), source_lyr.GetName()))
-    # Add features to the ouput Layer
 
     # track the number of features we copy this way, since the GetFeatureCount
     # doesn't work
@@ -112,16 +106,17 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
     }
 
     for s_feature in source_lyr:
-        # logging.debug('copying features, in loop through sourceLyr')
         # Create output Feature
         d_feature = ogr.Feature(dest_lyr_defn)
-        # logging.debug('copying features, got d_feature {}'.format(d_feature))
 
         # Add field values from input Layer
         for dIdx, sIdx in destSrcMap.iteritems():
             if sIdx != -1:
-                # else the name got laundered and doesn't match: we should handle this
                 d_feature.SetField(dIdx, s_feature.GetField(sIdx))
+            # else the name requested isn't found in the source.
+            # This would happen if it just doesn't occur in the present data file
+            # so isn't necessarily a problem. May be worth logging them though in
+            # case it's indicative of a misspelling in the config file.
 
         # Set geometry as centroid
         geom = s_feature.GetGeometryRef()
@@ -129,6 +124,7 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         # Add new feature to output Layer
         dest_lyr.CreateFeature(d_feature)
         n += 1
+        # s_feature.Destroy() # maybe ought to do this?
     return n
 
 ##def _copy_features_interleaved(source_lyr, dest_lyr, target_attribs):
@@ -170,8 +166,8 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
 ##            s_feature = source_lyr.GetNextFeature()
 ##    return n
 
-# functional
 def get_geom_details(shpf_geom_type):
+    """Map geom type in config file (e.g. "pt") to ogr layer name and geom type"""
     logging.debug('get geometery details')
     # TODO What about the "multilinestrings" layer?
     # FIXME: source_geom is assigned to but never used
@@ -214,7 +210,7 @@ def parseAndCheckWhereClause(jsonWhere, source_lyr):
     what is in the current pbf dataset.
     '''
     # the where clause is returned from configengine's in memory DB as a string
-    # so recreate the dictionary from it
+    # which is a serialized view of the dict, so recreate the dictionary from it
     where_clause_dict = json.loads(jsonWhere)
     source_lyr_defn = source_lyr.GetLayerDefn()
     # get all the fieldnames we actually have in the data
@@ -294,9 +290,6 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     #nCopied = _copy_features_interleaved(pbf_lyr, shp_lyr, attribs)
     logging.debug('do_ogr2ogr_process: copied features')
 
-    # cmd_str = compose_ogr2ogr_cmd(
-    #     data_cat, geom_type, attribs, where_clause, pbf_file, shpf_name,
-    #     cat_dir_path)
     createdFilePath = shp_data_source.GetName()
     shp_data_source.Destroy()
 
