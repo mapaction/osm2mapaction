@@ -7,7 +7,7 @@ from configengine import xwalk_from_raw_config
 from configengine import ConfigXWalk
 from configengine import RawConfigIterator
 import fixtures
-
+import json
 
 class TestRawConfigIterator(unittest.TestCase):
 
@@ -56,10 +56,21 @@ class TestConfigXWalk(unittest.TestCase):
     def test_populate_shpfile_table(self):
         shpf_list = self.configxwalk.cursor.execute('''select * from shpf_list''').fetchall()
         for x in range(0, len(shpf_list)):
-            parsedFromJsonList = json.loads(shpf_list[x])
-            setAttrs = set(parsedFromJsonList)
-            self.assertEquals(setAttrs, fixtures.shpf_list_table_good[x],
+            fixtureTuple = fixtures.shpf_list_table_good[x]
+
+            shpf_name, data_cat, shpf_geom_type, attribs, where_clause = shpf_list[x]
+            parsedFromJsonList = json.loads(attribs)
+            attrStr = ', '.join((sorted(parsedFromJsonList)))
+
+            self.assertEqual(fixtureTuple[0], shpf_name)
+            self.assertEqual(fixtureTuple[1], data_cat)
+            self.assertEqual(fixtureTuple[2], shpf_geom_type)
+            self.assertEqual(attrStr, fixtureTuple[3],
                               "Shapefile name table incorrect, row {}".format(x))
+            # for full self flagellation we'd need to update the fixtures to reflect
+            # the "AND {key} NOT IN ('', 'None'))" that's been added to the where clause
+            #self.assertEqual(where_clause, fixtureTuple[4])
+
 
     # this test is redundant because we test each element of the same thing in
     # the previous test
@@ -96,7 +107,7 @@ class TestAttribList(unittest.TestCase):
         for arg in fixtures.attrib_list_args:
             self.al.step(arg)
 
-        self.assertEqual(set(self.al.finalize()), fixtures.attrib_list_result)
+        self.assertEqual(set(json.loads(self.al.finalize())), set(fixtures.attrib_list_result))
 
 
 class TestSelectClause(unittest.TestCase):

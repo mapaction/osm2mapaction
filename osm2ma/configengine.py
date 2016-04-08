@@ -440,7 +440,7 @@ class _SelectClause:
             if osm_key not in self.exclude_keys:
                 cleaned_pairs.add(unique_clause)
         if len(cleaned_pairs) > 0:
-            return u" or ".join(sorted(cleaned_pairs))
+            return u" OR ".join(sorted(cleaned_pairs))
         else:
             return u''
 
