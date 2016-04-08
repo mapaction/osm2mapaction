@@ -184,7 +184,7 @@ def _copy_features(source_lyr, dest_lyr, target_attrib_map):
             if sIdx != -1:
                 # Set to blank (empty string) rather than "None"
                 # if pbf driver returns None
-                d_feature.SetField(dIdx, (str(s_feature.GetField(sIdx)) or ''))
+                d_feature.SetField(dIdx, (s_feature.GetField(sIdx) or ''))
             # else the name requested isn't found in the source.
             # This would happen if it just doesn't occur in the present data file
             # so isn't necessarily a problem. May be worth logging them though in
