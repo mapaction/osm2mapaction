@@ -42,42 +42,111 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
     # out_layer = shpDataSource.CreateLayer(name=u'wrl_util_bdg_py_su_osm_pp')
     return shp_data_source, out_layer
 
-def _copy_attributes(source_lyr, dest_lyr, target_attribs):
+def _copy_attributes(source_lyr, dest_lyr, target_attribs, scan_schema):
     ''' Creates in dest_lyr the attribs named in target_attribs, iif they exist in source_lyr.
 
-    target_attribs is now a set rather than a single comma-separated string.
+    target_attribs is a set of string attribute names that we would like to copy,
+    so long as they exist.
+    NB, target_attribs is now a set rather than a single comma-separated string.
     This helps avoid the wrong attribs being copied over.
+
+    Note that we don't know the length of any of the fields as the PBF
+    format doesn't expose them; and it calls them all string type.
+    We optionally attempt to get width of fields by scanning up to 5000 features.
+
+    Returns a dictionary mapping input (source) layer attributes that have been
+    copied, to their name in the shapefile (given that it may be truncated).
     '''
     logging.debug('copying attributes')
     logging.debug(str(target_attribs))
+    createdAttribMap = {}
 
     # Add input Layer Fields to the output Layer if it is the one we want
     source_lyr_defn = source_lyr.GetLayerDefn()
+    # do we want to scan the input data to guesstimate the field widths?
+    features_to_scan = 5000 if scan_schema else 0
+    source_lyr_widths = _estimate_widths(source_lyr, target_attribs,
+        features_to_scan)
     for i in range(0, source_lyr_defn.GetFieldCount()):
         field_defn = source_lyr_defn.GetFieldDefn(i)
         field_name = field_defn.GetName()
-        # This "if x in y" check doesn't work well if y is a single string
-        # e.g. if source attribs are
+
+        # Previously target_Attribs was a single comma-delimited string.
+        # This "if x in y" check was therefore a bug: e.g. if source attribs are
         #   ["osm_id", "id", "preying_mantid", "man"]
         # and target attribs is
         #   "preying_mantid, mandible_size"
-        # then we will end up copying over id, preying_mantid, and man,
+        # then we end up copying over id, preying_mantid, and man,
         # even though the only one of them we wanted was "preying_mantid"
-        # Whereas now target_attribs is a set of separate strings that won't
+        # Now target_attribs is a set of separate strings that won't
         # happen.
         # It is also now easier for client ogrwrapper code to add extra attribs
         # e.g. name that weren't specified in the excel config file
         if field_name in target_attribs:
+            # my reading of the docs suggests that we should create a copy
+            # as we are now modifying the defn (to set the width)
+            # field_defn = ogr.FieldDefn(old_defn)
+            # but this doesn't seem to work, and modifying the old does seem to...
+            if source_lyr_widths[field_name] > 0:
+                field_defn.SetWidth(source_lyr_widths[field_name])
             dest_lyr.CreateField(field_defn)
 
-def _copy_features(source_lyr, dest_lyr, target_attribs):
+            # The shapefile attribute name will be automatically truncated if
+            # it was too long (over 10 chars) or laundered if it was a duplicate
+            # including if this duplication only happened after truncation.
+            # We don't know  thru the API if this has happened. We need to get
+            # back the created field name.
+            lyrDef = dest_lyr.GetLayerDefn()
+            newCount = lyrDef.GetFieldCount()
+            createdName = lyrDef.GetFieldDefn(newCount-1).GetName()
+            createdAttribMap[field_name] = createdName
+    return createdAttribMap
+
+def _estimate_widths(source_lyr, target_attribs, searchFeatures):
+    ''' Estimates how wide the output (string) fields should be
+
+    Reads the first n (default=5000) features from the pbf layer (after
+    definition query applied) to see how long the values in each required
+    field are. Returns 0 for a field if no content is found.
+
+    TODO should we also try to estimate type e.g. can all values be parsed to
+    integer / float? For now all fields will be string.'''
+    source_lyr.ResetReading()
+    src_lyr_defn = source_lyr.GetLayerDefn()
+    nFields = src_lyr_defn.GetFieldCount()
+    fieldsToCheck = {i: src_lyr_defn.GetFieldDefn(i).GetName()
+       for i in range(nFields)
+       if src_lyr_defn.GetFieldDefn(i).GetName() in target_attribs}
+    if searchFeatures == 0:
+        fieldWidths = {fieldsToCheck[i]: 80 for i in fieldsToCheck}
+        return fieldWidths
+    fieldWidths = {fieldsToCheck[i]: 0 for i in fieldsToCheck}
+    # don't want to do GetFeature(n) on pbf data source, I don't know if it
+    # even works and is certainly inefficient owing to the interleaved nature
+    # of the format
+    n = 0
+    feat = source_lyr.GetNextFeature()
+    while (feat is not None):
+       for idx, name in fieldsToCheck.iteritems():
+           valWidth = len(feat.GetFieldAsString(idx).strip())
+           if valWidth > fieldWidths[name]:
+               fieldWidths[name] = valWidth
+       feat.Destroy()
+       n += 1
+       if n == searchFeatures:
+           break
+       feat = source_lyr.GetNextFeature()
+    return fieldWidths
+
+
+def _copy_features(source_lyr, dest_lyr, target_attrib_map):
     '''Copy the specified attributed features from an input layer, with query set, to an output
     '''
     logging.debug('copying features')
     logging.debug('copying features, value sourceLyr {}'.format(source_lyr))
     logging.debug('copying features, value destLyr {}'.format(dest_lyr))
     logging.debug('copying features, value target_attribs {}'.format(
-        target_attribs))
+        str(target_attrib_map)))
 
     dest_lyr_defn = dest_lyr.GetLayerDefn()
     src_lyr_defn = source_lyr.GetLayerDefn()
@@ -90,19 +159,20 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
     # doesn't work
     n = 0
 
-    # dest lyr only has the target attribs already so we don't need to recheck
-    destFields = [dest_lyr_defn.GetFieldDefn(i).GetName()
-        for i in range(dest_lyr_defn.GetFieldCount())]
-
     # there was a bug here, using the same index i to get the field from the
     # source and destination layers. The destination layer doesn't have all
     # the fields of the source, so the indices aren't the same. This resulted
     # in fields getting values from the wrong input fields.
 
-    # Instead, map the destination to the source field indices:
+    # Instead we now take in a map of source to target field names.
+    # Translate this into field indices to save doing it in the loop for each
+    # feature
+    # Note that target_attrib_map is source:dest and we are swapping to d:s
+    # Note also that it contains only the fields we want to copy, not all from
+    # the source
     destSrcMap = {
-        i : src_lyr_defn.GetFieldIndex(destFields[i])
-            for i in range(len(destFields))
+        dest_lyr_defn.GetFieldIndex(v) : src_lyr_defn.GetFieldIndex(k)
+            for k,v in target_attrib_map.iteritems()
     }
 
     for s_feature in source_lyr:
@@ -112,7 +182,9 @@ def _copy_features(source_lyr, dest_lyr, target_attribs):
         # Add field values from input Layer
         for dIdx, sIdx in destSrcMap.iteritems():
             if sIdx != -1:
-                d_feature.SetField(dIdx, s_feature.GetField(sIdx))
+                # Set to blank (empty string) rather than "None"
+                # if pbf driver returns None
+                d_feature.SetField(dIdx, (str(s_feature.GetField(sIdx)) or ''))
             # else the name requested isn't found in the source.
             # This would happen if it just doesn't occur in the present data file
             # so isn't necessarily a problem. May be worth logging them though in
@@ -197,10 +269,12 @@ def parseAndCheckWhereClause(jsonWhere, source_lyr):
     ''' Create a where clause that only contains fields that are actually present.
 
     The PBF driver doesn't expose fields that aren't actually present in the data
-    even if they are specified in the osmconf.ini file. Furthermore it appears that
-    if such a field is mentioned in the where clause then the entire where
-    clause is ignored and all the data from that layer (points / lines / polygons)
-    are returned.
+    even if they are specified in the osmconf.ini file.
+
+    Furthermore it appears that if such a field is mentioned in the where clause
+    then the entire where clause is ignored! All the data from that layer
+    (points / lines / polygons) are returned, causing many shapefiles to contain
+    _all_ features of that geom type!
 
     So we need to clean the where clause that was generated from the Excel file
     to only mention fields that are present in our current dataset. This required
@@ -232,16 +306,17 @@ def parseAndCheckWhereClause(jsonWhere, source_lyr):
 def parseAndCheckAttribs(jsonAttribs):
     ''' Create a comma-separated list of attributes for the output shapefile.
 
-    The DB (configengine) code now returns a set object (json-encoded to a string).
+    The DB (configengine) code now returns a list object (json-encoded to a string).
     See copyAttributes for justification of why.
     Here we just recreate the set from the json.
     '''
-    # json lib can't automatically serialize a set
+    # json lib can't automatically serialize a set so we returned a list instead
     listAttrs = json.loads(jsonAttribs)
     setAttrs = set(listAttrs)
     return setAttrs
 
-def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
+def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir,
+    schm_scn_strat):
     ''' Generate one output shapefile from the PBF using the provided specification
     '''
     shpf_name, data_cat, shpf_geom_type, attribs, where_clause = shp_defn
@@ -275,13 +350,14 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     # TODO: maybe specify "always copy" attributes on the commandline and carry
     # through to here?
     attribSet.add("name")
-    _copy_attributes(pbf_lyr, shp_lyr, attribSet)
+    attribMap = _copy_attributes(pbf_lyr, shp_lyr, attribSet,
+        schm_scn_strat=='fast')
     logging.debug('do_ogr2ogr_process: copied attributes')
 
     logging.debug('do_ogr2ogr_process: about to copy features')
     pbf_lyr.SetAttributeFilter(None)
     pbf_lyr.SetAttributeFilter(whereClauseStr)
-    nCopied = _copy_features(pbf_lyr, shp_lyr, attribSet)
+    nCopied = _copy_features(pbf_lyr, shp_lyr, attribMap)
     # "Correct" approach seems to make no difference.
     # Looks like if we want / need to use the interleaved reading,
     # we would have to read the entire source layer (points, lines, polygons)
@@ -289,6 +365,12 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
     # before writing to shapefile.
     #nCopied = _copy_features_interleaved(pbf_lyr, shp_lyr, attribs)
     logging.debug('do_ogr2ogr_process: copied features')
+
+    if schm_scn_strat == 'full':
+        # we can use this feature of OGR shp driver to determine optimal
+        # field widths after the fact, rather than having to pre-scan, but
+        # it slows things down somewhat.
+        shp_data_source.ExecuteSQL('RESIZE {0}'.format(shp_lyr.GetName()))
 
     createdFilePath = shp_data_source.GetName()
     shp_data_source.Destroy()
@@ -303,12 +385,12 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir):
         logging.info("Copied {0} features!".format(nCopied))
 
 
-def batch_convert(xwalk, pbf_file, osmconf_path, output_dir):
+def batch_convert(xwalk, pbf_file, osmconf_path, output_dir, schema_scan_strategy):
     '''Generate each output shapefile that is specified in xwalk in turn, from pbf_file.
     '''
     gdal.UseExceptions()
 
-    # This option probably "should" be set for safety in reading large files but
+    # This option "should" be set for safety in reading large files but
     # as it is, it causes NO data to be copied except for points. Turning it off
     # actually seems to work with the test oxfordshire file at least.
     # Turning it on causes only point data to be copied, even with the "correct"
@@ -328,5 +410,6 @@ def batch_convert(xwalk, pbf_file, osmconf_path, output_dir):
         # query to reset the read position which "feels" a bit risky
         pbf_data_source = pbf_driver.Open(pbf_file, 0)
         logging.debug(shpDefinition[0])
-        do_ogr2ogr_process(shpDefinition, pbf_data_source, output_dir)
+        do_ogr2ogr_process(shpDefinition, pbf_data_source, output_dir,
+            schema_scan_strategy)
         pbf_data_source.Destroy()
