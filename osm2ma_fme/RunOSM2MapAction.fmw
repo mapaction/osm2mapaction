@@ -1,0 +1,719 @@
+#! <?xml version="1.0" encoding="utf-8" ?>
+#! <WORKSPACE
+#    
+#    
+#    Command-line to run this workspace:
+#    
+#    
+#    "C:\Program Files\FME\fme.exe" C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm2ma_fme\RunOSM2MapAction.fmw
+#          --input_pbf "C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm2ma\testfiles\oxfordshire-latest.osm.pbf"
+#          --MapactionOSMDNCMapping "C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\OSM_to_MA_ascii_v6.xls"
+#          --GEOEXT_CLAUSE "scb"
+#          --SCALE_CLAUSE "s1"
+#          --ShapeDir_Root "C:\Temp\MA_OSM_Test\test_fme_full_cycle"
+#    
+#    
+#! LEGAL_TERMS_CONDITIONS=""
+#! BEGIN_PYTHON=""
+#! FME_IMPLICIT_CSMAP_REPROJECTION_MODE="Auto"
+#! FME_GEOMETRY_HANDLING="Enhanced"
+#! LOG_MAX_RECORDED_FEATURES="200"
+#! FME_REPROJECTION_ENGINE="FME"
+#! DOC_EXTENTS="3404.99 909.502"
+#! BEGIN_TCL=""
+#! ATTR_TYPE_ENCODING="SDF"
+#! FME_SERVER_SERVICES=""
+#! LAST_SAVE_DATE="2016-04-08T17:38:30"
+#! MULTI_WRITER_DATASET_ORDER="BY_ID"
+#! DOC_TOP_LEFT="645.006 -1107.5"
+#! FME_DOCUMENT_GUID="04d1da27-251b-43ec-a2d9-2c2c2dc066f2"
+#! LAST_SAVE_BUILD="FME(R) 2015.1.3.0 (20151105 - Build 15570 - WIN64)"
+#! USAGE=""
+#! SOURCE_ROUTING_FILE=""
+#! END_PYTHON=""
+#! PASSWORD=""
+#! CATEGORY=""
+#! FME_BUILD_NUM="15570"
+#! SOURCE="NONE"
+#! END_TCL=""
+#! WARN_INVALID_XFORM_PARAM="Yes"
+#! IGNORE_READER_FAILURE="No"
+#! VIEW_POSITION="0 0"
+#! DESTINATION="NONE"
+#! FME_DOCUMENT_PRIORGUID=""
+#! DESCRIPTION=""
+#! MAX_LOG_FEATURES="200"
+#! DESTINATION_ROUTING_FILE=""
+#! LOG_MAX_PRECISION="Yes"
+#! HISTORY=""
+#! REQUIREMENTS=""
+#! WORKSPACE_VERSION="1"
+#! SHOW_ANNOTATIONS="true"
+#! TITLE=""
+#! REQUIREMENTS_KEYWORD=""
+#! LOG_FILE=""
+#! ZOOM_SCALE="100"
+#! FME_STROKE_MAX_DEVIATION="0"
+#! SHOW_INFO_NODES="true"
+#! REDIRECT_TERMINATORS="NONE"
+#! >
+#! <DATASETS>
+#! </DATASETS>
+#! <DATA_TYPES>
+#! </DATA_TYPES>
+#! <GEOM_TYPES>
+#! </GEOM_TYPES>
+#! <FEATURE_TYPES>
+#! </FEATURE_TYPES>
+#! <FMESERVER>
+#! </FMESERVER>
+#! <GLOBAL_PARAMETERS>
+#! <GLOBAL_PARAMETER
+#! GUI_LINE="GUI OPTIONAL FILENAME_MUSTEXIST input_pbf .PBF_files|*.pbf OSM PBF file to translate:"
+#! DEFAULT_VALUE="C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm2ma\testfiles\oxfordshire-latest.osm.pbf"
+#! IS_STAND_ALONE="false"
+#! />
+#! <GLOBAL_PARAMETER
+#! GUI_LINE="GUI MULTIFILE_OR_ATTR MapactionOSMDNCMapping Excel_Files(*.xlsx;*.xlsm;*.xls)|*.xlsx;*.xlsm;*.xls|Excel_Workbook_2007(*.xlsx)|*.xlsx|Excel_Macro_Workbook(*.xlsm)|*.xlsm|Excel_Workbook_Pre_2007(*.xls)|*.xls|All_files(*)|* Excel file mapping OSM tags to Mapaction DNC:"
+#! DEFAULT_VALUE="C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\OSM_to_MA_ascii_v6.xls"
+#! IS_STAND_ALONE="false"
+#! />
+#! <GLOBAL_PARAMETER
+#! GUI_LINE="GUI TEXT_OR_ATTR GEOEXT_CLAUSE GeoExtent Clause (for shp name):"
+#! DEFAULT_VALUE="scb"
+#! IS_STAND_ALONE="false"
+#! />
+#! <GLOBAL_PARAMETER
+#! GUI_LINE="GUI TEXT_OR_ATTR SCALE_CLAUSE Scale Clause (for shp name):"
+#! DEFAULT_VALUE="s1"
+#! IS_STAND_ALONE="false"
+#! />
+#! <GLOBAL_PARAMETER
+#! GUI_LINE="GUI DIRNAME_OR_ATTR ShapeDir_Root Top directory within which to create shapefiles:"
+#! DEFAULT_VALUE="C:\Temp\MA_OSM_Test\test_fme_full_cycle"
+#! IS_STAND_ALONE="false"
+#! />
+#! </GLOBAL_PARAMETERS>
+#! <COMMENTS>
+#! <COMMENT
+#! IDENTIFIER="24"
+#! COMMENT_VALUE="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&#10;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;&#10;p, li { white-space: pre-wrap; }&#10;&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;&#10;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This workbench is the main runner for the OSM to MapAction conversion. &lt;/p&gt;&#10;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;FME can&apos;t natively read the OSM .PBF format so this workbench uses a system call to translate the .pbf into a temporary SQLite database. It then calls the actual OSM2Mapaction workspace, which reads from the SQLite file. The SQLite file is then deleted after it&apos;s done.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+#! POSITION="645.006 -528.005"
+#! TOP_LEFT="645.006 -528.005"
+#! BOTTOM_RIGHT="1395.01 -578.005"
+#! BOUNDING_RECT="645.006 -528.005 750 50"
+#! ORDER="5e+014"
+#! FOLLOW_ANCHOR="true"
+#! INFO_NODE="false"
+#! COLOUR="1,1,0.784314,0.196078"
+#! SIZE_POLICY="10"
+#! COMMENT_TYPE="REGULAR"
+#! ANCHORED_NODE="0"
+#! />
+#! <COMMENT
+#! IDENTIFIER="25"
+#! COMMENT_VALUE="&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;&#10;&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;&#10;p, li { white-space: pre-wrap; }&#10;&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;&#10;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;TODO:&lt;/p&gt;&#10;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Generate a unique name for the SQLite each time to avoid conflicts, and put it in the system temp dir&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+#! POSITION="951.01 -999.01"
+#! TOP_LEFT="951.01 -999.01"
+#! BOTTOM_RIGHT="1701.01 -1049.01"
+#! BOUNDING_RECT="951.01 -999.01 750 50"
+#! ORDER="5e+014"
+#! FOLLOW_ANCHOR="true"
+#! INFO_NODE="false"
+#! COLOUR="1,0,0,0.196078"
+#! SIZE_POLICY="10"
+#! COMMENT_TYPE="REGULAR"
+#! ANCHORED_NODE="0"
+#! />
+#! </COMMENTS>
+#! <CONSTANTS>
+#! </CONSTANTS>
+#! <BOOKMARKS>
+#! </BOOKMARKS>
+#! <TRANSFORMERS>
+#! <TRANSFORMER
+#! IDENTIFIER="1"
+#! TYPE="Creator"
+#! VERSION="5"
+#! POSITION="677.506 -201.502"
+#! BOUNDING_RECT="677.506 -201.502 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="false"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="CREATED"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_PARM PARM_NAME="CRE_ATTR" PARM_VALUE="_creation_instance"/>
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="Creator"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="GEOMTYPE" PARM_VALUE="Geometry Object"/>
+#! <XFORM_PARM PARM_NAME="ATEND" PARM_VALUE="no"/>
+#! <XFORM_PARM PARM_NAME="PARAMETERS_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="COORDSYS" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="GEOM" PARM_VALUE="&lt;lt&gt;?xml&lt;space&gt;version=&lt;quote&gt;1.0&lt;quote&gt;&lt;space&gt;encoding=&lt;quote&gt;US_ASCII&lt;quote&gt;&lt;space&gt;standalone=&lt;quote&gt;no&lt;quote&gt;&lt;space&gt;?&lt;gt&gt;&lt;lt&gt;geometry&lt;space&gt;dimension=&lt;quote&gt;2&lt;quote&gt;&lt;gt&gt;&lt;lt&gt;null&lt;solidus&gt;&lt;gt&gt;&lt;lt&gt;&lt;solidus&gt;geometry&lt;gt&gt;"/>
+#! <XFORM_PARM PARM_NAME="NUM" PARM_VALUE="1"/>
+#! <XFORM_PARM PARM_NAME="COORDS" PARM_VALUE="&lt;Unused&gt;"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="2"
+#! TYPE="AttributeCreator"
+#! VERSION="7"
+#! POSITION="1200 -207.002"
+#! BOUNDING_RECT="1200 -207.002 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="OUTPUT"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_PARM PARM_NAME="NUM_PRIOR_FEATURES" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="AttributeCreator"/>
+#! <XFORM_PARM PARM_NAME="ATTRIBUTE_HANDLING" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="NULL_ATTR_VALUE" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="ATTR_LIST" PARM_VALUE="_transCommand,ogr2ogr&lt;space&gt;-overwrite&lt;space&gt;--config&lt;space&gt;OSM_CONFIG_FILE&lt;space&gt;$(FME_MF_DIR_USERTYPED)&lt;backslash&gt;osmconf_mapaction.ini&lt;space&gt;-f&lt;space&gt;SQLite&lt;space&gt;&lt;at&gt;Value&lt;openparen&gt;_sqliteFile&lt;closeparen&gt;&lt;space&gt;$(input_pbf)&lt;lf&gt;"/>
+#! <XFORM_PARM PARM_NAME="NUM_SUBSEQUENT_FEATURES" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="NULL_ATTR_MODE_DISPLAY" PARM_VALUE="No Substitution"/>
+#! <XFORM_PARM PARM_NAME="MULTI_FEATURE_MODE" PARM_VALUE="NO"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="4"
+#! TYPE="SystemCaller"
+#! VERSION="3"
+#! POSITION="1707.51 -198.002"
+#! BOUNDING_RECT="1707.51 -198.002 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="OUTPUT"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="SystemCaller"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="PARAMETERS_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="ATTR" PARM_VALUE="_res"/>
+#! <XFORM_PARM PARM_NAME="CMD" PARM_VALUE="&lt;at&gt;Value&lt;openparen&gt;_transCommand&lt;closeparen&gt;"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="8"
+#! TYPE="AttributeCreator"
+#! VERSION="7"
+#! POSITION="703.995 -365.003"
+#! BOUNDING_RECT="703.995 -365.003 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="OUTPUT"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_PARM PARM_NAME="NUM_PRIOR_FEATURES" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="AttributeCreator_2"/>
+#! <XFORM_PARM PARM_NAME="ATTRIBUTE_HANDLING" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="NULL_ATTR_VALUE" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="ATTR_LIST" PARM_VALUE="_sqliteFile,$(FME_MF_DIR_USERTYPED)&lt;backslash&gt;tempSQLite.sl3"/>
+#! <XFORM_PARM PARM_NAME="NUM_SUBSEQUENT_FEATURES" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="NULL_ATTR_MODE_DISPLAY" PARM_VALUE="No Substitution"/>
+#! <XFORM_PARM PARM_NAME="MULTI_FEATURE_MODE" PARM_VALUE="NO"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="10"
+#! TYPE="Tester"
+#! VERSION="2"
+#! POSITION="1697.5 -657.001"
+#! BOUNDING_RECT="1697.5 -657.001 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="PASSED"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <OUTPUT_FEAT NAME="FAILED"/>
+#! <FEAT_COLLAPSED COLLAPSED="1"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="Tester"/>
+#! <XFORM_PARM PARM_NAME="TEST_CLAUSE" PARM_VALUE="TEST &lt;at&gt;Value&lt;openparen&gt;_res&lt;closeparen&gt; = 0"/>
+#! <XFORM_PARM PARM_NAME="TEST_LIST" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="BOOL_OP" PARM_VALUE="OR"/>
+#! <XFORM_PARM PARM_NAME="COMPOSITE_TEST" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="TEST_DESCRIPTION" PARM_VALUE="&quot;&quot;"/>
+#! <XFORM_PARM PARM_NAME="TEST_MODE" PARM_VALUE="Automatic"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="12"
+#! TYPE="WorkspaceRunner"
+#! VERSION="2"
+#! POSITION="2275.5 -618.5"
+#! BOUNDING_RECT="2275.5 -618.5 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="SUCCEEDED"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <OUTPUT_FEAT NAME="FAILED"/>
+#! <FEAT_COLLAPSED COLLAPSED="1"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_failure_message" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <OUTPUT_FEAT NAME="SUMMARY"/>
+#! <FEAT_COLLAPSED COLLAPSED="2"/>
+#! <XFORM_ATTR ATTR_NAME="_proc_count" IS_USER_CREATED="false" FEAT_INDEX="2" />
+#! <XFORM_ATTR ATTR_NAME="_processes{}" IS_USER_CREATED="false" FEAT_INDEX="2" />
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="WorkspaceRunner"/>
+#! <XFORM_PARM PARM_NAME="WORKSPACE_FILE" PARM_VALUE="$(FME_MF_DIR)OSM2MapAction.fmw"/>
+#! <XFORM_PARM PARM_NAME="PARAMETER_TYPES" PARM_VALUE="MULTIFILE,TEXT,TEXT,DIRNAME,FILE_OR_URL,CHOICE"/>
+#! <XFORM_PARM PARM_NAME="BLOCKING" PARM_VALUE="Yes"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="PARAMETERS_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="MAX_PROC" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="WORKSPACE_PARAMETERS" PARM_VALUE="MapactionOSMDNCMapping,$(MapactionOSMDNCMapping),GEOEXT_CLAUSE,$(GEOEXT_CLAUSE),SCALE_CLAUSE,$(SCALE_CLAUSE),ShapeDir_Root,$(ShapeDir_Root),SourceDataset_Spatialite,&lt;at&gt;Value&lt;openparen&gt;_sqliteFile&lt;closeparen&gt;,SHAPE_OUT_COMPRESSED_SHAPE_FILE_SHAPE,No"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="14"
+#! TYPE="SystemCaller"
+#! VERSION="3"
+#! POSITION="2871.5 -600"
+#! BOUNDING_RECT="2871.5 -600 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="OUTPUT"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="SystemCaller_2"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="PARAMETERS_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="ATTR" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="CMD" PARM_VALUE="del&lt;space&gt;&lt;at&gt;Value&lt;openparen&gt;_sqliteFile&lt;closeparen&gt;"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="16"
+#! TYPE="Tester"
+#! VERSION="2"
+#! POSITION="3425.5 -600"
+#! BOUNDING_RECT="3425.5 -600 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="true"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <OUTPUT_FEAT NAME="PASSED"/>
+#! <FEAT_COLLAPSED COLLAPSED="0"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="0" />
+#! <OUTPUT_FEAT NAME="FAILED"/>
+#! <FEAT_COLLAPSED COLLAPSED="1"/>
+#! <XFORM_ATTR ATTR_NAME="_creation_instance" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_sqliteFile" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_transCommand" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_ATTR ATTR_NAME="_res" IS_USER_CREATED="false" FEAT_INDEX="1" />
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="Tester_2"/>
+#! <XFORM_PARM PARM_NAME="TEST_CLAUSE" PARM_VALUE="TEST &lt;at&gt;Value&lt;openparen&gt;_res&lt;closeparen&gt; = 0"/>
+#! <XFORM_PARM PARM_NAME="TEST_LIST" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="BOOL_OP" PARM_VALUE="OR"/>
+#! <XFORM_PARM PARM_NAME="COMPOSITE_TEST" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="TEST_DESCRIPTION" PARM_VALUE="&quot;&quot;"/>
+#! <XFORM_PARM PARM_NAME="TEST_MODE" PARM_VALUE="Automatic"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="18"
+#! TYPE="Inspector"
+#! VERSION="3"
+#! POSITION="3979.5 -618.5"
+#! BOUNDING_RECT="3979.5 -618.5 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="false"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <XFORM_PARM PARM_NAME="POINTCLOUD_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="Success"/>
+#! <XFORM_PARM PARM_NAME="VECTOR_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_NUM_ROWS" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="RASTER_VISUALIZATION_OPTION" PARM_VALUE="No Reduction"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_START_ROW" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="THINNER_TYPE_DISPLAY" PARM_VALUE="No Thinning"/>
+#! <XFORM_PARM PARM_NAME="TACKATTRS" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="THINNER_INTERVAL" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="PEN_COLOR" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="AREA_COLOR" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_START_COL" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="RASTER_NUM_COLS" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="THINNER_MAX_NUM_POINTS" PARM_VALUE="&lt;Unused&gt;"/>
+#! </TRANSFORMER>
+#! <TRANSFORMER
+#! IDENTIFIER="20"
+#! TYPE="Inspector"
+#! VERSION="3"
+#! POSITION="4050 -1107.5"
+#! BOUNDING_RECT="4050 -1107.5 -1 -1"
+#! ORDER="5e+014"
+#! PARMS_EDITED="false"
+#! ENABLED="true"
+#! LAST_PARM_EDIT="15570"
+#! >
+#! <XFORM_PARM PARM_NAME="POINTCLOUD_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="XFORMER_NAME" PARM_VALUE="Failure"/>
+#! <XFORM_PARM PARM_NAME="VECTOR_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_NUM_ROWS" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="RASTER_VISUALIZATION_OPTION" PARM_VALUE="No Reduction"/>
+#! <XFORM_PARM PARM_NAME="TRANSFORMER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_GROUP" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_START_ROW" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="THINNER_TYPE_DISPLAY" PARM_VALUE="No Thinning"/>
+#! <XFORM_PARM PARM_NAME="TACKATTRS" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="THINNER_INTERVAL" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="PEN_COLOR" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="AREA_COLOR" PARM_VALUE=""/>
+#! <XFORM_PARM PARM_NAME="RASTER_START_COL" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="RASTER_NUM_COLS" PARM_VALUE="&lt;Unused&gt;"/>
+#! <XFORM_PARM PARM_NAME="THINNER_MAX_NUM_POINTS" PARM_VALUE="&lt;Unused&gt;"/>
+#! </TRANSFORMER>
+#! </TRANSFORMERS>
+#! <FEAT_LINKS>
+#! <FEAT_LINK
+#! IDENTIFIER="3"
+#! SOURCE_NODE="1"
+#! TARGET_NODE="8"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="5"
+#! SOURCE_NODE="2"
+#! TARGET_NODE="4"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="9"
+#! SOURCE_NODE="8"
+#! TARGET_NODE="2"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="11"
+#! SOURCE_NODE="4"
+#! TARGET_NODE="10"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="13"
+#! SOURCE_NODE="10"
+#! TARGET_NODE="12"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="15"
+#! SOURCE_NODE="12"
+#! TARGET_NODE="14"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="17"
+#! SOURCE_NODE="14"
+#! TARGET_NODE="16"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="19"
+#! SOURCE_NODE="16"
+#! TARGET_NODE="18"
+#! SOURCE_PORT_DESC="fo 0"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="21"
+#! SOURCE_NODE="16"
+#! TARGET_NODE="20"
+#! SOURCE_PORT_DESC="fo 1"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="22"
+#! SOURCE_NODE="12"
+#! TARGET_NODE="20"
+#! SOURCE_PORT_DESC="fo 1"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! <FEAT_LINK
+#! IDENTIFIER="23"
+#! SOURCE_NODE="10"
+#! TARGET_NODE="20"
+#! SOURCE_PORT_DESC="fo 1"
+#! TARGET_PORT_DESC="fi 0"
+#! ENABLED="true"
+#! EXTRA_POINTS=""
+#! />
+#! </FEAT_LINKS>
+#! <BREAKPOINTS>
+#! </BREAKPOINTS>
+#! <ATTR_LINKS>
+#! </ATTR_LINKS>
+#! <SUBDOCUMENTS>
+#! </SUBDOCUMENTS>
+#! <LOOKUP_TABLES>
+#! </LOOKUP_TABLES>
+#! </WORKSPACE>
+#! 
+DEFAULT_MACRO input_pbf C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm2ma\testfiles\oxfordshire-latest.osm.pbf
+GUI OPTIONAL FILENAME_EXISTING input_pbf .PBF_files|*.pbf OSM PBF file to translate:
+DEFAULT_MACRO MapactionOSMDNCMapping C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\OSM_to_MA_ascii_v6.xls
+GUI MULTIFILE MapactionOSMDNCMapping Excel_Files(*.xlsx;*.xlsm;*.xls)|*.xlsx;*.xlsm;*.xls|Excel_Workbook_2007(*.xlsx)|*.xlsx|Excel_Macro_Workbook(*.xlsm)|*.xlsm|Excel_Workbook_Pre_2007(*.xls)|*.xls|All_files(*)|* Excel file mapping OSM tags to Mapaction DNC:
+DEFAULT_MACRO GEOEXT_CLAUSE scb
+GUI TEXT GEOEXT_CLAUSE GeoExtent Clause (for shp name):
+DEFAULT_MACRO SCALE_CLAUSE s1
+GUI TEXT SCALE_CLAUSE Scale Clause (for shp name):
+DEFAULT_MACRO ShapeDir_Root C:\Temp\MA_OSM_Test\test_fme_full_cycle
+GUI DIRNAME ShapeDir_Root Top directory within which to create shapefiles:
+INCLUDE [ if {{$(MapactionOSMDNCMapping)} == {}} { puts_real {Parameter 'MapactionOSMDNCMapping' must be given a value.}; exit 1; }; ]
+INCLUDE [ if {{$(GEOEXT_CLAUSE)} == {}} { puts_real {Parameter 'GEOEXT_CLAUSE' must be given a value.}; exit 1; }; ]
+INCLUDE [ if {{$(SCALE_CLAUSE)} == {}} { puts_real {Parameter 'SCALE_CLAUSE' must be given a value.}; exit 1; }; ]
+INCLUDE [ if {{$(ShapeDir_Root)} == {}} { puts_real {Parameter 'ShapeDir_Root' must be given a value.}; exit 1; }; ]
+#! START_HEADER
+#! START_WB_HEADER
+READER_TYPE NULL
+READER_KEYWORD NULL_SOURCE
+NULL_SOURCE_DATASET null
+WRITER_TYPE NULL
+WRITER_KEYWORD NULL_DEST
+NULL_DEST_DATASET null
+#! END_WB_HEADER
+#! END_HEADER
+
+LOG_FILENAME "$(FME_MF_DIR)RunOSM2MapAction.log"
+LOG_APPEND NO
+LOG_MAX_FEATURES 200
+LOG_MAX_RECORDED_FEATURES 200
+LOG_MAX_PRECISION Yes
+FME_REPROJECTION_ENGINE FME
+FME_IMPLICIT_CSMAP_REPROJECTION_MODE Auto
+FME_GEOMETRY_HANDLING Enhanced
+FME_STROKE_MAX_DEVIATION 0
+LOG_FILTER_MASK -1
+# -------------------------------------------------------------------------
+
+MULTI_READER_CONTINUE_ON_READER_FAILURE No
+
+# -------------------------------------------------------------------------
+
+MACRO WORKSPACE_NAME RunOSM2MapAction
+MACRO FME_VIEWER_APP fmedatainspector
+# -------------------------------------------------------------------------
+
+INCLUDE [ if {[info exists env(FME_TEMP)] && [file isdirectory $env(FME_TEMP)]} {set gVisualizerTemp $env(FME_TEMP)}  elseif {[info exists env(TEMP)] && [file isdirectory $env(TEMP)]}  {set gVisualizerTemp $env(TEMP)}  elseif { $tcl_platform(platform) == "unix" } {set gVisualizerTemp "/tmp"} else {set gVisualizerTemp c:};  regsub -all {[ ,&]} {$(WORKSPACE_NAME)} {_} wsname; set gVisualizerTemp $gVisualizerTemp/${wsname}_[clock format [clock seconds] -format %H%M%S];  puts "MACRO WORKSPACE_TEMP_DIR $gVisualizerTemp"; 
+MACRO VISUALIZER_FEATURE_FILE $(WORKSPACE_TEMP_DIR)/inspector.ffs
+MACRO VISUALIZER_SCHEMA_FILE $(WORKSPACE_TEMP_DIR)/inspector.fsc
+MACRO VISUALIZER_CREATE_SPATIAL_INDEX YES
+DEFAULT_MACRO WB_CURRENT_CONTEXT
+# -------------------------------------------------------------------------
+
+Tcl2 proc Creator_CoordSysRemover {} {   global FME_CoordSys;   set FME_CoordSys {}; }
+MACRO Creator_XML     NOT_ACTIVATED
+MACRO Creator_CLASSIC NOT_ACTIVATED
+MACRO Creator_2D3D    2D_GEOMETRY
+MACRO Creator_COORDS  <Unused>
+INCLUDE [ if { {Geometry Object} == {Geometry Object} } {            puts {MACRO Creator_XML *} } ]
+INCLUDE [ if { {Geometry Object} == {2D Coordinate List} } {            puts {MACRO Creator_2D3D 2D_GEOMETRY};            puts {MACRO Creator_CLASSIC *} } ]
+INCLUDE [ if { {Geometry Object} == {3D Coordinate List} } {            puts {MACRO Creator_2D3D 3D_GEOMETRY};            puts {MACRO Creator_CLASSIC *} } ]
+INCLUDE [ if { {Geometry Object} == {2D Min/Max Box} } {            set comment {                We need to turn the COORDS which are                    minX minY maxX maxY                into a full polygon list of coordinates            };            set splitCoords [split [string trim {<Unused>}]];            if { [llength $splitCoords] > 4} {               set trimmedCoords {};               foreach item $splitCoords { if { $item != {} } {lappend trimmedCoords $item} };               set splitCoords $trimmedCoords;            };            if { [llength $splitCoords] != 4 } {                error {Creator: Coordinate list is expected to be a space delimited list of four numbers as 'minx miny maxx maxy' - `<Unused>' is invalid};            };            set minX [lindex $splitCoords 0];            set minY [lindex $splitCoords 1];            set maxX [lindex $splitCoords 2];            set maxY [lindex $splitCoords 3];            puts "MACRO Creator_COORDS $minX $minY $minX $maxY $maxX $maxY $maxX $minY $minX $minY";            puts {MACRO Creator_2D3D 2D_GEOMETRY};            puts {MACRO Creator_CLASSIC *} } ]
+FACTORY_DEF $(Creator_XML) CreationFactory    FACTORY_NAME Creator_XML_Creator    CREATE_AT_END no    OUTPUT FEATURE_TYPE _____CREATED______        @Geometry(FROM_ENCODED_STRING,<lt>?xml<space>version=<quote>1.0<quote><space>encoding=<quote>US_ASCII<quote><space>standalone=<quote>no<quote><space>?<gt><lt>geometry<space>dimension=<quote>2<quote><gt><lt>null<solidus><gt><lt><solidus>geometry<gt>)
+FACTORY_DEF $(Creator_CLASSIC) CreationFactory    FACTORY_NAME Creator_CLASSIC_Creator    $(Creator_2D3D) $(Creator_COORDS)    CREATE_AT_END no    OUTPUT FEATURE_TYPE _____CREATED______
+FACTORY_DEF * TeeFactory    FACTORY_NAME Creator_Cloner    INPUT FEATURE_TYPE _____CREATED______    NUMBER_OF_COPIES 1    COPY_NUMBER_ATTRIBUTE "_creation_instance"    OUTPUT FEATURE_TYPE Creator_CREATED        @Tcl2(Creator_CoordSysRemover)        @CoordSys()        fme_feature_type Creator
+
+# -------------------------------------------------------------------------
+FACTORY_DEF * AttrSetFactory FACTORY_NAME AttributeCreator_2 ATTRSET_CREATE_DIRECTIVES _PROPAGATE_MISSING_FDIV INPUT  FEATURE_TYPE Creator_CREATED ATTR _sqliteFile $(FME_MF_DIR_USERTYPED$encode)<backslash>tempSQLite.sl3    OUTPUT OUTPUT FEATURE_TYPE AttributeCreator_2_OUTPUT 
+# -------------------------------------------------------------------------
+FACTORY_DEF * AttrSetFactory FACTORY_NAME AttributeCreator ATTRSET_CREATE_DIRECTIVES _PROPAGATE_MISSING_FDIV INPUT  FEATURE_TYPE AttributeCreator_2_OUTPUT ATTR _transCommand ogr2ogr<space>-overwrite<space>--config<space>OSM_CONFIG_FILE<space>$(FME_MF_DIR_USERTYPED$encode)<backslash>osmconf_mapaction.ini<space>-f<space>SQLite<space><at>Value<openparen>_sqliteFile<closeparen><space>$(input_pbf$encode)<lf>    OUTPUT OUTPUT FEATURE_TYPE AttributeCreator_OUTPUT 
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TeeFactory    FACTORY_NAME SystemCaller    INPUT  FEATURE_TYPE AttributeCreator_OUTPUT    OUTPUT FEATURE_TYPE SystemCaller_OUTPUT         "_res"         @System(LOG_PREFIX,SystemCaller,ENCODED,"@EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>_transCommand<closeparen>,SystemCaller)")
+
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TestFactory    FACTORY_NAME Tester    INPUT  FEATURE_TYPE SystemCaller_OUTPUT    TEST @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>_res<closeparen>,Tester) = 0 ENCODED    BOOLEAN_OPERATOR OR    OUTPUT PASSED FEATURE_TYPE Tester_PASSED    OUTPUT FAILED FEATURE_TYPE Tester_FAILED
+# -------------------------------------------------------------------------
+
+# Convert the workspace name to one containing only / -- Tcl likes this better
+# (and so do I)
+
+# And determine the "NULL" device so we can ensure we don't get stray output
+# messing up our stdout if we are running workspaces in the background
+# See http://wiki.tcl.tk/1649 for a description of the tcl_platform
+# variable, the "platform" part seems to have valid values windows, unix, and
+# macintosh (the latter of which is actually pre-OS X)
+
+Tcl2 if { $tcl_platform(platform) == {windows} } {         set ::null_device {NUL:};         set ::__WR_ENV_HELPER__ {};      } else {         set ::null_device {/dev/null};         set ::__WR_ENV_HELPER__ {/usr/bin/env FME_SUBPROCESS_RUN_DETACHED=1}      };
+Tcl2 proc WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_runner { parmListString workspaceFile } {    set workspaceFileUnix [regsub -all {\\} $workspaceFile {/}];    set parmListString [string trim $parmListString {()}];    set comment {        Build up the command line in a list, which we'll "eval" to get        at its pieces when we actually execute the "exec".    };    lappend commandArguments {*}$::__WR_ENV_HELPER__ {$(FME_HOME_UNIX)/fme}                             $workspaceFileUnix;    set parmList [split $parmListString {,}];    foreach {parmName encodedValue} $parmList {       set comment {           Decode the parameter value which we now know is very encoded to guard           it from the parser and append them each to a new list which will be passed           as the arguments to the exec function.  Note that the           parameter names need to be turned into macro settings by           prepending them with --           Note also that the WorkspaceRunner sometimes encodes attribute           dereferences by placing <amp> at the beginning rather than using @Value.           Further note that string range forgives if the ending index is > the length of           the string, so we can just ask for the first 5 characters           when we're checking for <amp>.       };       lappend commandArguments \"--$parmName\";       set comment {           for backwards compatibility, replace first <amp>       };       if { [string range $encodedValue 0 4] == {<amp>} &&            [string length $encodedValue] > 5 } {           set encodedValue [string replace $encodedValue 0 4 {<at>Value<openparen>}]];           append encodedValue "<closeparen>";       };       set comment { We used to call FME_DecodeTextOrAttr here. After changes to                     the code that writes out the mapping file section, we don't                     need to do this any more because the value would be in the                     correct state of encoding as required by the child workspace       };       set comment { parameter values starting with '<' causes tcl exec to fail so                     we escape leading '<' with backslash and then do the reverse                     when parsing command line arguments       };       if { [string index $encodedValue 0] == {<} } {          set encodedValue "\\$encodedValue";       };       lappend commandArguments $encodedValue;    };    set comment {        Now optionally run this in a detached way if we were not supposed        to wait by adding & on the end to put it in the background.  And        at the same time, ensure that any stray stdout/stderr is routed to        null.    };    if { {Yes} == {No} } {        lappend commandArguments \">$::null_device\";        lappend commandArguments \"<$::null_device\";        FME_LogMessage fme_inform \"WorkspaceRunner: Initiating run of FME Workspace $workspaceFile with command line:\";    } else {        FME_LogMessage fme_inform \"WorkspaceRunner: Running FME Workspace $workspaceFile with command line:\";    };    set comment {        The below 2>@1 forces any standard error output to go into the msg variable        or to NULL if we're running in the background.    };    lappend commandArguments {2>@1};    if { {Yes} == {No} } {        lappend commandArguments {&};    };    FME_LogMessage fme_inform [concat WorkspaceRunner: $commandArguments];    if { {Yes} == {No} } {       after 1000;       while { [FME_CanSpawnFme <Unused>] == {0} } {             after 2000;       };    };    if {[catch {eval [concat exec $commandArguments] } msg ]} {       set msg [regsub {\015*\012child[^\012]*$} $msg {}];       FME_LogMessage fme_warn \"WorkspaceRunner: Failed to run workspace $workspaceFileUnix -- Trace was:\n\n$msg\n\";       FME_SetAttribute _failure_message $msg;       return FAILURE;    } else {       global WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_process_count;       incr WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_process_count;       if { {Yes} == {No} } {           FME_LogMessage fme_inform \"WorkspaceRunner: Successfully initiated run of workspace $workspaceFile\";           global WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_all_processes;           lappend WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_all_processes $msg;       } else {           FME_LogMessage fme_inform \"WorkspaceRunner: Successfully ran workspace $workspaceFile\";       };       return SUCCESS;    }; }
+FACTORY_DEF * TestFactory    FACTORY_NAME WorkspaceRunner_ExecutorAndRouter    INPUT  FEATURE_TYPE Tester_PASSED    TEST @Tcl2("WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_runner {(MapactionOSMDNCMapping,@EvaluateExpression(FDIV,STRING,$(MapactionOSMDNCMapping$encode),WorkspaceRunner),GEOEXT_CLAUSE,@EvaluateExpression(FDIV,STRING,$(GEOEXT_CLAUSE$encode),WorkspaceRunner),SCALE_CLAUSE,@EvaluateExpression(FDIV,STRING,$(SCALE_CLAUSE$encode),WorkspaceRunner),ShapeDir_Root,@EvaluateExpression(FDIV,STRING,$(ShapeDir_Root$encode),WorkspaceRunner),SourceDataset_Spatialite,@EvaluateExpression(FDIV,STRING,<at>Value<openparen>_sqliteFile<closeparen>,WorkspaceRunner),SHAPE_OUT_COMPRESSED_SHAPE_FILE_SHAPE,No)} {@EvaluateExpression(FDIV,STRING,$(FME_MF_DIR$encode)OSM2MapAction.fmw,WorkspaceRunner)}") == SUCCESS    OUTPUT PASSED FEATURE_TYPE WorkspaceRunner_SUCCEEDED    OUTPUT FAILED FEATURE_TYPE WorkspaceRunner_FAILED
+Tcl2 proc WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_summarizer { } {     global WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_process_count;     set comment { incr 0 creates the variable if it wasn't present };     incr WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_process_count 0;     FME_SetAttribute _proc_count [set WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_process_count];     global WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_all_processes;     if {[info exists WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_all_processes]} {         set index 0;         foreach pid [set WorkspaceRunner_919df529_f0ce_4181_b9a6_8a95f2bddc133_all_processes] {             FME_SetAttribute \"_processes{$index}\" $pid;             incr index;         }     } }
+FACTORY_DEF * CreationFactory    FACTORY_NAME WorkspaceRunner_SummaryMaker    CREATE_AT_END yes
+
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TeeFactory    FACTORY_NAME SystemCaller_2    INPUT  FEATURE_TYPE WorkspaceRunner_SUCCEEDED    OUTPUT FEATURE_TYPE SystemCaller_2_OUTPUT         @System(LOG_PREFIX,SystemCaller_2,ENCODED,"@EvaluateExpression(FDIV,STRING_ENCODED,del<space><at>Value<openparen>_sqliteFile<closeparen>,SystemCaller_2)")
+
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TestFactory    FACTORY_NAME Tester_2    INPUT  FEATURE_TYPE SystemCaller_2_OUTPUT    TEST @EvaluateExpression(FDIV,STRING_ENCODED,<at>Value<openparen>_res<closeparen>,Tester_2) = 0 ENCODED    BOOLEAN_OPERATOR OR    OUTPUT PASSED FEATURE_TYPE Tester_2_PASSED    OUTPUT FAILED FEATURE_TYPE Tester_2_FAILED
+# -------------------------------------------------------------------------
+
+# Set the directive to add all the meta-attributes to the features.
+# We do this so users see all possible information in the viewed
+# features.
+
+READER_META_ATTRIBUTES fme_feature_type fme_dataset fme_basename
+# Assumption is that the workspace temp dir has been already set and created.  See controldefs.cpp - ControlDefs::writeVisualizerTempDir
+DEFAULT_MACRO WORKSPACE_TEMP_DIR
+INCLUDE [         set grpByAttrs {};         if { [string length $grpByAttrs] > 0 } {             if { [string first "@EvaluateExpression" $grpByAttrs] == 0 } {                 puts "MACRO CATMAC _$grpByAttrs" ;             } else {                set catter "" ;                set comma "" ;                foreach attr $grpByAttrs {                    set catter "$catter$comma@Value(\"$attr\")" ;                    set comma ",_," ;                } ;                puts "MACRO CATMAC _@Concatenate($catter)" ;             }         }         else {             puts "MACRO CATMAC " ;         };         set safeName "[regsub -all {[^a-zA-Z0-9]} {Failure} _]_[expr round(rand() * 1000000)]_[clock clicks  -milliseconds]";         puts "MACRO SAFE_FFS_NAME $safeName";         ]
+# Make the temporary directory that the FFS files will live in.
+FACTORY_DEF * CreationFactory      FACTORY_NAME Failure_DirCreator      OUTPUT FEATURE_TYPE __nukeme__          @Tcl2("catch {file mkdir {$(WORKSPACE_TEMP_DIR)}}")
+FACTORY_DEF * TeeFactory    FACTORY_NAME Failure_DirCreatorCleanerUpper    INPUT FEATURE_TYPE __nukeme__
+# Send raster, point cloud and vector features down different paths to prepare
+# them for viewing
+
+FACTORY_DEF * TestFactory    FACTORY_NAME Failure_FeatureDirector    INPUT  FEATURE_TYPE Tester_FAILED    INPUT  FEATURE_TYPE Tester_2_FAILED    INPUT  FEATURE_TYPE WorkspaceRunner_FAILED    TEST &fme_type == "fme_raster"    OUTPUT FAILED FEATURE_TYPE Failure___NotRasterFeatures___    OUTPUT PASSED FEATURE_TYPE Failure___RasterFeatures___
+FACTORY_DEF * TestFactory    FACTORY_NAME Failure___FeatureDirector1    INPUT FEATURE_TYPE Failure___NotRasterFeatures___    TEST &fme_type == "fme_point_cloud"    OUTPUT FAILED FEATURE_TYPE Failure___VectorFeatures___    OUTPUT PASSED FEATURE_TYPE Failure___PointCloudFeatures___
+# Vector features simply may get their colors overridden
+
+FACTORY_DEF * TeeFactory    FACTORY_NAME Failure_VectorSetterUpper    INPUT FEATURE_TYPE Failure___VectorFeatures___    OUTPUT FEATURE_TYPE __viewme__
+# Point Cloud Features Might Need to be thinned
+
+# Note that we don't call the ThinPointCloud function directly, but rather
+# do it through TCL. This should allow this transformer to be used with a
+# Desktop license, even though ThinPointCloud requires Professional.
+
+Tcl2 proc Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_thinPointCloud {} {    if {[string equal {NO_THINNING} {KEEPNPOINT}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {MAXNUMPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {FIRSTNPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {LASTNPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }; }
+FACTORY_DEF * TeeFactory    FACTORY_NAME Failure___PointCloudThinner    INPUT FEATURE_TYPE Failure___PointCloudFeatures___    OUTPUT FEATURE_TYPE __viewme__       @Tcl2("Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_thinPointCloud")
+Tcl2 proc Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_prepareRaster {subsetStartRow subsetNumRows subsetStartCol subsetNumCols} {    set useDI [string equal -nocase {$(FME_VIEWER_APP)} {fmedatainspector}];    if {!$useDI} {       FME_Execute ApplyRasterRotation BILINEAR;    };    set doResample [string equal {NoReduction} {Resample}];    set doSubset [string equal {NoReduction} {Subset}];    set doBounds [string equal {NoReduction} {BoundingBoxOnly}];    if {$doBounds}  {       FME_Execute GeometryType fme_polygon;    }    elseif {$doResample || $doSubset} {       set comment {          First, we need to prefix all the attributes. This is done because          we are going to call @RasterProperties, and we want to make sure          it doesn't overwrite any existing attributes.       };       set kAttrPrefix ".";       set allNames [FME_AttributeNames];       foreach oldName $allNames {          set newName $kAttrPrefix;          append newName $oldName;          FME_RenameAttribute $newName $oldName;       };       FME_Execute RasterProperties RASTER;       if {$doResample} {          set oldNumCols [FME_GetAttribute _num_columns];          set oldNumRows [FME_GetAttribute _num_rows];          set oldSpacingX [FME_GetAttribute _spacing_x];          set oldSpacingY [FME_GetAttribute _spacing_y];          set kMinNumCells 32;          set kMaxNumCells 512;          set comment {             We will only resample if both dimensions are greater than the             minimum num cells, and at least one is greater than the maximum.          };          if {$oldNumRows > $kMinNumCells && $oldNumCols > $kMinNumCells && ($oldNumRows > $kMaxNumCells || $oldNumCols > $kMaxNumCells)} {             set newSpacingX 1.0;             set newSpacingY 1.0;             if {$oldNumRows > $oldNumCols} {                set comment {                   If we have more rows than columns, we need to choose a spacing                   that reduces the number of rows to the maximum we've chosen.                };                set newSpacingY [expr 1.0 * $oldNumRows * $oldSpacingY / $kMaxNumCells];                set newSpacingX [expr 1.0 * $newSpacingY / $oldSpacingY * $oldSpacingX];                set comment {                   Now we need to check if doing this will result in the columns                   going below the minimum. If so, choose the spacing such that                   we only go down to the minimum (and not past).                };                set newNumCols [expr $oldNumCols * $oldSpacingX / $newSpacingX];                if {$newNumCols < $kMinNumCells}                {                   set newSpacingX [expr 1.0 * $oldNumCols * $oldSpacingX / $kMinNumCells];                   set newSpacingY [expr 1.0 * $newSpacingX / $oldSpacingX * $oldSpacingY];                };             }             else {                set comment {                   This is identical to the above case, except the roles of                   rows and cols are reversed.                };                set newSpacingX [expr 1.0 * $oldNumCols * $oldSpacingX / $kMaxNumCells];                set newSpacingY [expr 1.0 * $newSpacingX / $oldSpacingX * $oldSpacingY];                set newNumRows [expr $oldNumRows * $oldSpacingY / $newSpacingY];                if {$newNumRows < $kMinNumCells}                {                   set newSpacingY [expr 1.0 * $oldNumRows * $oldSpacingY / $kMinNumCells];                   set newSpacingX [expr 1.0 * $newSpacingY / $oldSpacingY * $oldSpacingX];                };             };             FME_Execute ResampleRaster CELL_SIZE $newSpacingX $newSpacingY NearestNeighbor;          };       }       elseif {$doSubset} {          set comment {             Get the value of some strings that may be attributes or constants.             Note that we pass in the attribute prefix we're using, because if             one does turn out to be an attribute, it won't actually be the exact             name in the string (since we renamed all our attributes above).          };          set rasterNumRows [FME_GetAttribute _num_rows];          set rasterNumCols [FME_GetAttribute _num_columns];          set comment {             Only do subsetting if the specified start position is actually             within the raster.          };          if {$subsetStartRow < $rasterNumRows && $subsetStartCol < $rasterNumCols}          {             set comment {                Now bound the subset to the size of the raster, so that                we don't create padding.             };             if {[expr $subsetStartRow + $subsetNumRows] > $rasterNumRows}             {                set subsetNumRows [expr $rasterNumRows - $subsetStartRow];             };             if {[expr $subsetStartCol + $subsetNumCols] > $rasterNumCols}             {                set subsetNumCols [expr $rasterNumCols - $subsetStartCol];             };             FME_Execute SubsetRaster $subsetStartRow $subsetNumRows $subsetStartCol $subsetNumCols;          };       };       set comment {          Remove all the attributes added by @RasterProperties and remove the          prefix from the real attributes. We assume they all start with an          underscore.       };       FME_Execute RemoveAttributes fme_regexp_match {^_};       foreach oldName $allNames {          set newName $kAttrPrefix;          append newName $oldName;          FME_RenameAttribute $oldName $newName;       };    }; }
+FACTORY_DEF * TeeFactory    FACTORY_NAME Failure_RasterSetterUpper    INPUT FEATURE_TYPE Failure___RasterFeatures___    OUTPUT FEATURE_TYPE __viewme__       @Tcl2("Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_prepareRaster {<Unused>} {<Unused>} {<Unused>} {<Unused>}")
+# Now route all the features into the recorder, changing their
+# feature type to the transformer name so that they view nicely
+# Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_VIS_FEAT_TYPE changes the feature types
+# of the features being visualized.
+
+DEFAULT_MACRO Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_VIS_FEAT_TYPE Failure$(CATMAC)
+DEFAULT_MACRO VISUALIZER_FEATURE_FILE $(WORKSPACE_TEMP_DIR)/$(SAFE_FFS_NAME).ffs
+DEFAULT_MACRO VISUALIZER_CREATE_SPATIAL_INDEX NO
+# [PR#45549] The Data Inspector will limit the maximum number of features
+# it reads on WIN32, so we will correspondingly limit the number of
+# features we record here using the MAX_FEATURES_TO_RECORD directive.
+
+FACTORY_DEF * RecorderFactory    FACTORY_NAME Failure_Recorder    INPUT FEATURE_TYPE __viewme__  _wb_termination_feature Yes @FeatureType(TERMINATOR_@Value(_wb_termination_xformer))    INPUT FEATURE_TYPE __viewme__  @FeatureType($(Failure_d3bc8e4d_f90b_4582_a587_8a6414583e683_VIS_FEAT_TYPE))    FEATURE_FILE "$(VISUALIZER_FEATURE_FILE)"    CREATE_SPATIAL_INDEX "$(VISUALIZER_CREATE_SPATIAL_INDEX)"    INSPECTOR "$(VISUALIZER_CREATE_SPATIAL_INDEX)"    FSC_SCHEMA _creation_instance,varchar<openparen>255<closeparen>,_sqliteFile,varchar<openparen>255<closeparen>,_transCommand,varchar<openparen>255<closeparen>,_res,varchar<openparen>255<closeparen>,_failure_message,varchar<openparen>255<closeparen>    MODE RECORD    RECORD_DIRECTLY_TO_DISK YES    MAX_FEATURES_TO_RECORD WIN32 2000000
+
+# -------------------------------------------------------------------------
+
+# Set the directive to add all the meta-attributes to the features.
+# We do this so users see all possible information in the viewed
+# features.
+
+READER_META_ATTRIBUTES fme_feature_type fme_dataset fme_basename
+# Assumption is that the workspace temp dir has been already set and created.  See controldefs.cpp - ControlDefs::writeVisualizerTempDir
+DEFAULT_MACRO WORKSPACE_TEMP_DIR
+INCLUDE [         set grpByAttrs {};         if { [string length $grpByAttrs] > 0 } {             if { [string first "@EvaluateExpression" $grpByAttrs] == 0 } {                 puts "MACRO CATMAC _$grpByAttrs" ;             } else {                set catter "" ;                set comma "" ;                foreach attr $grpByAttrs {                    set catter "$catter$comma@Value(\"$attr\")" ;                    set comma ",_," ;                } ;                puts "MACRO CATMAC _@Concatenate($catter)" ;             }         }         else {             puts "MACRO CATMAC " ;         };         set safeName "[regsub -all {[^a-zA-Z0-9]} {Success} _]_[expr round(rand() * 1000000)]_[clock clicks  -milliseconds]";         puts "MACRO SAFE_FFS_NAME $safeName";         ]
+# Make the temporary directory that the FFS files will live in.
+FACTORY_DEF * CreationFactory      FACTORY_NAME Success_DirCreator      OUTPUT FEATURE_TYPE __nukeme__          @Tcl2("catch {file mkdir {$(WORKSPACE_TEMP_DIR)}}")
+FACTORY_DEF * TeeFactory    FACTORY_NAME Success_DirCreatorCleanerUpper    INPUT FEATURE_TYPE __nukeme__
+# Send raster, point cloud and vector features down different paths to prepare
+# them for viewing
+
+FACTORY_DEF * TestFactory    FACTORY_NAME Success_FeatureDirector    INPUT  FEATURE_TYPE Tester_2_PASSED    TEST &fme_type == "fme_raster"    OUTPUT FAILED FEATURE_TYPE Success___NotRasterFeatures___    OUTPUT PASSED FEATURE_TYPE Success___RasterFeatures___
+FACTORY_DEF * TestFactory    FACTORY_NAME Success___FeatureDirector1    INPUT FEATURE_TYPE Success___NotRasterFeatures___    TEST &fme_type == "fme_point_cloud"    OUTPUT FAILED FEATURE_TYPE Success___VectorFeatures___    OUTPUT PASSED FEATURE_TYPE Success___PointCloudFeatures___
+# Vector features simply may get their colors overridden
+
+FACTORY_DEF * TeeFactory    FACTORY_NAME Success_VectorSetterUpper    INPUT FEATURE_TYPE Success___VectorFeatures___    OUTPUT FEATURE_TYPE __viewme__
+# Point Cloud Features Might Need to be thinned
+
+# Note that we don't call the ThinPointCloud function directly, but rather
+# do it through TCL. This should allow this transformer to be used with a
+# Desktop license, even though ThinPointCloud requires Professional.
+
+Tcl2 proc Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_thinPointCloud {} {    if {[string equal {NO_THINNING} {KEEPNPOINT}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {MAXNUMPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {FIRSTNPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }    elseif {[string equal {NO_THINNING} {LASTNPOINTS}]}    {       FME_Execute ThinPointCloud NO_THINNING "\"<Unused>\"";    }; }
+FACTORY_DEF * TeeFactory    FACTORY_NAME Success___PointCloudThinner    INPUT FEATURE_TYPE Success___PointCloudFeatures___    OUTPUT FEATURE_TYPE __viewme__       @Tcl2("Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_thinPointCloud")
+Tcl2 proc Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_prepareRaster {subsetStartRow subsetNumRows subsetStartCol subsetNumCols} {    set useDI [string equal -nocase {$(FME_VIEWER_APP)} {fmedatainspector}];    if {!$useDI} {       FME_Execute ApplyRasterRotation BILINEAR;    };    set doResample [string equal {NoReduction} {Resample}];    set doSubset [string equal {NoReduction} {Subset}];    set doBounds [string equal {NoReduction} {BoundingBoxOnly}];    if {$doBounds}  {       FME_Execute GeometryType fme_polygon;    }    elseif {$doResample || $doSubset} {       set comment {          First, we need to prefix all the attributes. This is done because          we are going to call @RasterProperties, and we want to make sure          it doesn't overwrite any existing attributes.       };       set kAttrPrefix ".";       set allNames [FME_AttributeNames];       foreach oldName $allNames {          set newName $kAttrPrefix;          append newName $oldName;          FME_RenameAttribute $newName $oldName;       };       FME_Execute RasterProperties RASTER;       if {$doResample} {          set oldNumCols [FME_GetAttribute _num_columns];          set oldNumRows [FME_GetAttribute _num_rows];          set oldSpacingX [FME_GetAttribute _spacing_x];          set oldSpacingY [FME_GetAttribute _spacing_y];          set kMinNumCells 32;          set kMaxNumCells 512;          set comment {             We will only resample if both dimensions are greater than the             minimum num cells, and at least one is greater than the maximum.          };          if {$oldNumRows > $kMinNumCells && $oldNumCols > $kMinNumCells && ($oldNumRows > $kMaxNumCells || $oldNumCols > $kMaxNumCells)} {             set newSpacingX 1.0;             set newSpacingY 1.0;             if {$oldNumRows > $oldNumCols} {                set comment {                   If we have more rows than columns, we need to choose a spacing                   that reduces the number of rows to the maximum we've chosen.                };                set newSpacingY [expr 1.0 * $oldNumRows * $oldSpacingY / $kMaxNumCells];                set newSpacingX [expr 1.0 * $newSpacingY / $oldSpacingY * $oldSpacingX];                set comment {                   Now we need to check if doing this will result in the columns                   going below the minimum. If so, choose the spacing such that                   we only go down to the minimum (and not past).                };                set newNumCols [expr $oldNumCols * $oldSpacingX / $newSpacingX];                if {$newNumCols < $kMinNumCells}                {                   set newSpacingX [expr 1.0 * $oldNumCols * $oldSpacingX / $kMinNumCells];                   set newSpacingY [expr 1.0 * $newSpacingX / $oldSpacingX * $oldSpacingY];                };             }             else {                set comment {                   This is identical to the above case, except the roles of                   rows and cols are reversed.                };                set newSpacingX [expr 1.0 * $oldNumCols * $oldSpacingX / $kMaxNumCells];                set newSpacingY [expr 1.0 * $newSpacingX / $oldSpacingX * $oldSpacingY];                set newNumRows [expr $oldNumRows * $oldSpacingY / $newSpacingY];                if {$newNumRows < $kMinNumCells}                {                   set newSpacingY [expr 1.0 * $oldNumRows * $oldSpacingY / $kMinNumCells];                   set newSpacingX [expr 1.0 * $newSpacingY / $oldSpacingY * $oldSpacingX];                };             };             FME_Execute ResampleRaster CELL_SIZE $newSpacingX $newSpacingY NearestNeighbor;          };       }       elseif {$doSubset} {          set comment {             Get the value of some strings that may be attributes or constants.             Note that we pass in the attribute prefix we're using, because if             one does turn out to be an attribute, it won't actually be the exact             name in the string (since we renamed all our attributes above).          };          set rasterNumRows [FME_GetAttribute _num_rows];          set rasterNumCols [FME_GetAttribute _num_columns];          set comment {             Only do subsetting if the specified start position is actually             within the raster.          };          if {$subsetStartRow < $rasterNumRows && $subsetStartCol < $rasterNumCols}          {             set comment {                Now bound the subset to the size of the raster, so that                we don't create padding.             };             if {[expr $subsetStartRow + $subsetNumRows] > $rasterNumRows}             {                set subsetNumRows [expr $rasterNumRows - $subsetStartRow];             };             if {[expr $subsetStartCol + $subsetNumCols] > $rasterNumCols}             {                set subsetNumCols [expr $rasterNumCols - $subsetStartCol];             };             FME_Execute SubsetRaster $subsetStartRow $subsetNumRows $subsetStartCol $subsetNumCols;          };       };       set comment {          Remove all the attributes added by @RasterProperties and remove the          prefix from the real attributes. We assume they all start with an          underscore.       };       FME_Execute RemoveAttributes fme_regexp_match {^_};       foreach oldName $allNames {          set newName $kAttrPrefix;          append newName $oldName;          FME_RenameAttribute $oldName $newName;       };    }; }
+FACTORY_DEF * TeeFactory    FACTORY_NAME Success_RasterSetterUpper    INPUT FEATURE_TYPE Success___RasterFeatures___    OUTPUT FEATURE_TYPE __viewme__       @Tcl2("Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_prepareRaster {<Unused>} {<Unused>} {<Unused>} {<Unused>}")
+# Now route all the features into the recorder, changing their
+# feature type to the transformer name so that they view nicely
+# Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_VIS_FEAT_TYPE changes the feature types
+# of the features being visualized.
+
+DEFAULT_MACRO Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_VIS_FEAT_TYPE Success$(CATMAC)
+DEFAULT_MACRO VISUALIZER_FEATURE_FILE $(WORKSPACE_TEMP_DIR)/$(SAFE_FFS_NAME).ffs
+DEFAULT_MACRO VISUALIZER_CREATE_SPATIAL_INDEX NO
+# [PR#45549] The Data Inspector will limit the maximum number of features
+# it reads on WIN32, so we will correspondingly limit the number of
+# features we record here using the MAX_FEATURES_TO_RECORD directive.
+
+FACTORY_DEF * RecorderFactory    FACTORY_NAME Success_Recorder    INPUT FEATURE_TYPE __viewme__  _wb_termination_feature Yes @FeatureType(TERMINATOR_@Value(_wb_termination_xformer))    INPUT FEATURE_TYPE __viewme__  @FeatureType($(Success_60118cf5_468e_4b73_a39d_82d2a261f2b93_VIS_FEAT_TYPE))    FEATURE_FILE "$(VISUALIZER_FEATURE_FILE)"    CREATE_SPATIAL_INDEX "$(VISUALIZER_CREATE_SPATIAL_INDEX)"    INSPECTOR "$(VISUALIZER_CREATE_SPATIAL_INDEX)"    FSC_SCHEMA _creation_instance,varchar<openparen>255<closeparen>,_sqliteFile,varchar<openparen>255<closeparen>,_transCommand,varchar<openparen>255<closeparen>,_res,varchar<openparen>255<closeparen>    MODE RECORD    RECORD_DIRECTLY_TO_DISK YES    MAX_FEATURES_TO_RECORD WIN32 2000000
+
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * RoutingFactory FACTORY_NAME "Destination Feature Type Routing Correlator"   INPUT FEATURE_TYPE *   OUTPUT ROUTED FEATURE_TYPE * @FeatureType(ENCODED,@Value(__wb_out_feat_type__)) @RemoveAttributes(__wb_out_feat_type__)   OUTPUT NOT_ROUTED FEATURE_TYPE __nuke_me__ @Tcl2("FME_StatMessage 818059 [FME_GetAttribute fme_template_feature_type] 818060 818061 fme_warn")
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * TeeFactory   FACTORY_NAME "Final Output Nuker"   INPUT FEATURE_TYPE __nuke_me__
+
+# -------------------------------------------------------------------------
+
+FACTORY_DEF * CreationFactory   CREATE_AT_END   OUTPUT FEATURE_TYPE __NUKEME__   @TCL("if [file exists {$(WORKSPACE_TEMP_DIR)}] {set files [glob -nocomplain -directory  {$(WORKSPACE_TEMP_DIR)} -tails *.ffs];   if {[llength $files] == 1} {    set theFile {$(WORKSPACE_TEMP_DIR)/};   append theFile [lindex $files 0];   eval FME_Execute System \173\042$(FME_HOME_UNIX)/fmedatainspector\042 --visualizer --single-application --delete-on-close --no-source-prompt -f FFS $theFile & \175;  } elseif { [llength $files] == 0 } {  catch { file delete -force {$(WORKSPACE_TEMP_DIR)} };  } else {  set filesNoExt {}; set lastfile {}; foreach {fileName} [lsort $files] { set fileNoExt [string trimright $fileName {.ffs}]; if [regexp {(.*)_[0-9]*$} $fileNoExt wholething fileNoExtBase] {  if { $fileNoExtBase == $lastfile } { continue } }; set lastfile $fileNoExt; lappend filesNoExt $fileNoExt };  eval FME_Execute System \173\042$(FME_HOME_UNIX)/fmedatainspector\042 --visualizer --single-application --delete-on-close --no-source-prompt -d {$(WORKSPACE_TEMP_DIR)} -a ffs -f FFS $filesNoExt & \175; }; }; ")
+FACTORY_DEF * TeeFactory   INPUT FEATURE_TYPE __NUKEME__
