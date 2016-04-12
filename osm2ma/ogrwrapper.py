@@ -15,6 +15,13 @@ def _create_datacat_dir(output_dir, data_cat):
         if not os.path.isdir(cat_dir_path):
             os.mkdir(cat_dir_path)
         return cat_dir_path
+    else:
+        try:
+            os.makedirs(output_dir)
+            return _create_datacat_dir(output_dir, data_cat)
+        except OSError:
+            logging.error("Cannot create output directory!")
+            raise
     # TODO raise error if invalid input
 
 
@@ -22,6 +29,7 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
     """Creates an output shapefile (but does add any attributes)"""
     logging.info('Creating shapefile: {}'.format(shpf_name))
     # Create the output Layer
+    # shpf_name is filename WITH .shp extension
     shpf_path = os.path.join(shpf_dir, shpf_name)
     shpf_driver = ogr.GetDriverByName("ESRI Shapefile")
 
@@ -36,9 +44,13 @@ def _create_new_shpfile(shpf_name, shpf_dir, dest_geom_type, dest_srs):
     out_layer = None
 
     shpf_name = shpf_name.encode('utf-8')
+    fnamebase = os.path.splitext(shpf_name)[0]
     out_layer = shp_data_source.CreateLayer(
-        os.path.splitext(shpf_name)[1], srs=dest_srs, geom_type=dest_geom_type
+        fnamebase, srs=dest_srs, geom_type=dest_geom_type
     )
+    cpgFile = os.path.splitext(shpf_path)[0] + ".cpg"
+    with open(cpgFile, 'w') as f:
+        f.write(u'UTF-8')
     # out_layer = shpDataSource.CreateLayer(name=u'wrl_util_bdg_py_su_osm_pp')
     return shp_data_source, out_layer
 
@@ -385,6 +397,7 @@ def do_ogr2ogr_process(shp_defn, pbf_data_source, output_dir,
         logging.info("Copied {0} features!".format(nCopied))
 
 
+
 def batch_convert(xwalk, pbf_file, osmconf_path, output_dir, schema_scan_strategy):
     '''Generate each output shapefile that is specified in xwalk in turn, from pbf_file.
     '''
@@ -399,7 +412,6 @@ def batch_convert(xwalk, pbf_file, osmconf_path, output_dir, schema_scan_strateg
 
     # Tell OGR where to find the custom osmconf ini file
     gdal.SetConfigOption("OSM_CONFIG_FILE", osmconf_path)
-
     # Open input PBF driver
     pbf_driver = ogr.GetDriverByName("OSM")
 
