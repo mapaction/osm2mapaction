@@ -1,0 +1,1 @@
+robocopy %~dp0 Y:\testing\installers\GIS\osm2mapaction /xd demo-config /xd .git /xf .gitignore /xf .gitattributes /xf %~nx0 /mir 
