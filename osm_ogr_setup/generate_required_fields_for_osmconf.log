@@ -1,0 +1,176 @@
+2015-11-26 16:04:42|   0.1|  0.1|INFORM|FME 2015.1.3.0 (20151105 - Build 15570 - WIN64)
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|FME_HOME is 'C:\Program Files\FME\'
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|FME Desktop Oracle Edition (floating)
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|Temporary License: 93 days left.
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|Machine host name is: zoo-hgibson
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|START - ProcessID: 12596, peak process memory usage: 47568 kB, current process memory usage: 47568 kB
+2015-11-26 16:04:42|   0.1|  0.0|INFORM|FME Configuration: Command line arguments are `C:\Program Files\FME\fme.exe' `C:/Users/zool1301/Documents/MapAction/Code/osm2mapaction/osm_ogr_setup\wb-xlate-1448553879568_17836' `LOG_STANDARDOUT' `YES' `LogCountServerName' `{f7646271-3db6-4738-a2da-2c984a645abf}'
+2015-11-26 16:04:42|   0.2|  0.1|INFORM|Shared folders for formats are : C:\Program Files\FME\datasources;\\zoo-booty\home$\zool1301\My Documents\FME\Formats
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for transformers are : C:\Program Files\FME\transformers;\\zoo-booty\home$\zool1301\AppData\Safe Software\FME\FME Store\Transformers;\\zoo-booty\home$\zool1301\My Documents\FME\Transformers
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for coordinate systems are : \\zoo-booty\home$\zool1301\My Documents\FME\CoordinateSystems
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for coordinate system exceptions are : \\zoo-booty\home$\zool1301\My Documents\FME\CoordinateSystemExceptions
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for coordinate system grid overrides are : \\zoo-booty\home$\zool1301\My Documents\FME\CoordinateSystemGridOverrides
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for CS-MAP transformation exceptions are : \\zoo-booty\home$\zool1301\My Documents\FME\CsmapTransformationExceptions
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Shared folders for transformer categories are : \\zoo-booty\home$\zool1301\My Documents\FME\TransformerCategories
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Reader Keyword is `MULTI_READER'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Writer Keyword is `NULL_DEST'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Writer Group Definition Keyword is `NULL_DEST_DEF'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Reader type is `MULTI_READER'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Writer type is `NULL'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: No destination coordinate system set
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Current working folder is `C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm_ogr_setup'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Temporary folder is `C:\Users\zool1301\AppData\Local\Temp'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: FME_HOME is `C:\Program Files\FME\'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: FME_BASE is 'no'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: FME_MF_DIR is 'C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\osm_ogr_setup/'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: FME_MF_NAME is 'generate_required_fields_for_osmconf.fmw'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: FME_PRODUCT_NAME is 'FME(R) 2015.1.3.0'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|System Status: 312.34 GB of disk space available in the FME temporary folder (C:\Users\zool1301\AppData\Local\Temp)
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|System Status: 8.00 TB of virtual memory available
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Operating System: Microsoft Windows 7 64-bit Service Pack 1 (Build 7601)
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Platform: WIN64
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Locale: en_GB
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Code Page: 1252  (ANSI - Latin I)
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Process limits are 63.95 GB of physical memory and 8.00 TB of address space
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Start freeing memory when process usage exceeds 12.00 GB of memory or 8.00 TB of address space
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME Configuration: Stop freeing memory when process usage is below 9.00 GB of memory and 6.00 TB of address space
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Creating writer for format: NULL (Nothing)
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Trying to find a DYNAMIC plugin for writer named `NULL'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Loaded module 'NULL' from file 'C:\Program Files\FME\plugins/NULL.dll'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|FME API version of module 'NULL' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Creating reader for format: 
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|MULTI_READER(MULTI_READER): Will fail with first member reader failure
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|MULTI_READER(MULTI_READER): Adding XLSXR Reader with keyword XLSXR_1
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|MULTI_READER(MULTI_READER): Adding TEXTLINE Reader with keyword TEXTLINE_1
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Using Multi Reader $Revision$ ( $Date$ ) with keyword `MULTI_READER' to read multiple datasets
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Creating reader for format: Microsoft Excel
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Trying to find a DYNAMIC plugin for reader named `XLSXR'
+2015-11-26 16:04:42|   0.2|  0.0|INFORM|Loaded module 'XLSXR' from file 'C:\Program Files\FME\plugins/xlsx2.dll'
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|FME API version of module 'XLSXR' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Loaded module 'LogCount_func' from file 'C:\Program Files\FME\plugins/LogCount_func.dll'
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|FME API version of module 'LogCount_func' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Creating writer for format: FME Feature Store (FFS)
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|FME Configuration: No destination coordinate system set
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|FME API version of module 'NULL' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|FME API version of module 'NULL' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Excel Reader: Output cell formulas: 'false'
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Excel Reader: Output cell comments: 'false'
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Excel Reader: Force full datetime values: 'false'
+2015-11-26 16:04:42|   0.3|  0.0|INFORM|Excel Reader: Opening dataset 'C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\OSM_to_MA_ascii_v6.xls'...
+2015-11-26 16:04:42|   0.4|  0.1|INFORM|Excel Reader: Reading feature type 'osm_ma_xwalk'...
+2015-11-26 16:04:42|   0.4|  0.0|INFORM|Excel Reader: Feature Type 'osm_ma_xwalk' range: Start Row '2', Start Column '1', End Row '967', End Column '16'
+2015-11-26 16:04:42|   0.4|  0.0|INFORM|ListExploder(ElementFactory): No MODE specified.  Using default processing mode (CLASSIC)
+2015-11-26 16:04:42|   0.7|  0.2|INFORM|Excel Reader: Closing dataset 'C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\OSM_to_MA_ascii_v6.xls'...
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Creating reader for format: Text File
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Trying to find a DYNAMIC plugin for reader named `TEXTLINE'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Loaded module 'TEXTLINE' from file 'C:\Program Files\FME\plugins/TEXTLINE.dll'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|FME API version of module 'TEXTLINE' matches current internal version (3.7 20150407)
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Text File Reader: Opening the file 'C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\osmconf.template.txt'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Text File Reader: Will read the entire contents of each file into a single attribute
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Text File Reader: Closing the file 'C:\Users\zool1301\Documents\MapAction\Code\osm2mapaction\config_files\osmconf.template.txt'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|MULTI_READER(MULTI_READER): Done reading 967 features from 2 readers
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Emptying factory pipeline
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Router and Unexpected Input Remover(RoutingFactory): Tested 967 input feature(s), wrote 967 output feature(s): 967 matched merge filters, 967 were routed to output, 0 could not be routed.
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Unexpected Input Remover Nuker(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |text_line Feature Counter -1 38(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |osm_ma_xwalk Feature Counter -1 9(TeeFactory): Cloned 966 input feature(s) into 966 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper(TeeFactory): Cloned 966 input feature(s) into 966 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper_OUTPUT Feature Counter -1 5(TeeFactory): Cloned 966 input feature(s) into 966 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Tester(TestFactory): Tested 966 input feature(s) -- 690 feature(s) passed and 276 feature(s) failed
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Tester_PASSED Feature Counter -1 11(TeeFactory): Cloned 690 input feature(s) into 690 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeSplitter(TeeFactory): Cloned 690 input feature(s) into 690 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeSplitter_OUTPUT Feature Counter -1 14(TeeFactory): Cloned 690 input feature(s) into 690 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListExploder(ElementFactory): Split out 1888 list elements from 690 input features, using mode CLASSIC
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListExploder_LIST_FOUND Feature Counter -1 19(TeeFactory): Cloned 1888 input feature(s) into 1888 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper_2(TeeFactory): Cloned 1888 input feature(s) into 1888 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper_2_OUTPUT Feature Counter -1 20(TeeFactory): Cloned 1888 input feature(s) into 1888 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Tester_2(TestFactory): Tested 1888 input feature(s) -- 1166 feature(s) passed and 722 feature(s) failed
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Tester_2_PASSED Feature Counter -1 29(TeeFactory): Cloned 1166 input feature(s) into 1166 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |DuplicateRemover(TestFactory): Tested 1166 input feature(s) -- 830 feature(s) passed and 336 feature(s) failed
+2015-11-26 16:04:42|   0.7|  0.0|STATS |DuplicateRemover_UNIQUE Feature Counter -1 57(TeeFactory): Cloned 336 input feature(s) into 336 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeTrimmer(TeeFactory): Cloned 336 input feature(s) into 336 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeTrimmer_OUTPUT Feature Counter -1 30(TeeFactory): Cloned 336 input feature(s) into 336 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListBuilder_fme_type_remover(TeeFactory): Cloned 336 input feature(s) into 336 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListBuilder(ListFactory): Combined 336 input feature(s) into 3 output feature(s), including 0 singleton(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListBuilder_OUTPUT Feature Counter -1 25(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListConcatenator(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |ListConcatenator_OUTPUT Feature Counter -1 32(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeValueMapper(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeValueMapper_OUTPUT Feature Counter -1 41(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper_3(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeKeeper_3_OUTPUT Feature Counter -1 47(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |BulkAttributeRenamer(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |BulkAttributeRenamer_OUTPUT Feature Counter -1 44(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeExposer(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeExposer_OUTPUT Feature Counter -1 45(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger Requestor Input Collector(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger Supplier Input Collector(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Supplier1448553881 Input Splitter(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Supplier Feature Counter 0 11(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Requestor1448553881 Input Splitter(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Requestor Feature Counter 0 9(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Storing feature(s) to FME feature store file `C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.ffs'
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Storing feature(s) to FME feature store file `C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.fsc'
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_FeatureMerger(ReferenceFactory): Total Results: 1 Complete Feature(s), 0 Incomplete Feature(s), 3 Referenced Feature(s), 0 Unreferenced Feature(s), 0 Referencer Feature(s) (NO REFERENCES), 0 Referencee Feature(s) (NO Referencee fields defined), and 0 Duplicate Referencee Feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_FeatureMerger_MERGED Feature Counter 0 7(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_FeatureMerger_REFERENCED Feature Counter 0 8(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_FeatureMerger_DUPLICATE_SUPPLIER Feature Counter 0 10(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_DuplicateSupplier1448553881 Output Collector(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Referenced1448553881 Output Collector(TeeFactory): Cloned 3 input feature(s) into 3 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Merged1448553881 Output Collector(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger Merged Output Renamer/Nuker(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger Referenced Output Renamer/Nuker(TeeFactory): Cloned 3 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger DuplicateSupplier Output Renamer/Nuker(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |UnconditionalFeatureMerger_Merged Feature Counter -1 49(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_OUTPUT Feature Counter -1 52(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_2(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_2_OUTPUT Feature Counter -1 53(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_OUTPUT Feature Counter -1 64(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeCreator OUTPUT Splitter(TeeFactory): Cloned 1 input feature(s) into 2 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeCreator_OUTPUT_0_olPiq+C1D00= Feature Counter -1 55(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeCreator_OUTPUT_1_olPiq+C1D00= Feature Counter -1 65(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeFileWriter(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |AttributeFileWriter OUTPUT Output Nuker(TeeFactory): Cloned 1 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output_DirCreator(CreationFactory): Created 1 features
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output_DirCreatorCleanerUpper(TeeFactory): Cloned 1 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output_FeatureDirector(TestFactory): Tested 1 input feature(s) -- 0 feature(s) passed and 1 feature(s) failed
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output___FeatureDirector1(TestFactory): Tested 1 input feature(s) -- 0 feature(s) passed and 1 feature(s) failed
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output_VectorSetterUpper(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output___PointCloudThinner(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |StringReplacer_3_Output_RasterSetterUpper(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Stored 1 feature(s) to FME feature store file `C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.ffs'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Saving spatial index into file 'C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.fsi'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Finished saving spatial index into file 'C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.fsi'
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Stored 1 feature(s) to FME feature store file `C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.fsc'
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|StringReplacer_3_Output_Recorder(RecorderFactory): Recorded 1 feature(s) to file `C:\Users\zool1301\AppData\Local\Temp\generate_required_fields_for_osmconf_160442\inspector.ffs'
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Destination Feature Type Routing Correlator(RoutingFactory): Tested 0 input feature(s), wrote 0 output feature(s): 0 matched merge filters, 0 were routed to output, 0 could not be routed.
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Final Output Nuker(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|STATS |f_72(CreationFactory): Created 1 features
+2015-11-26 16:04:42|   0.7|  0.0|STATS |f_73(TeeFactory): Cloned 1 input feature(s) into 0 output feature(s)
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Feature output statistics for `FFS' writer using keyword `W_1':
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |                               Features Written
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |==============================================================================
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Total Features Written                                                       0
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |                            Features Read Summary
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |osm_ma_xwalk                                                               966
+2015-11-26 16:04:42|   0.7|  0.0|STATS |text_line                                                                    1
+2015-11-26 16:04:42|   0.7|  0.0|STATS |==============================================================================
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Total Features Read                                                        967
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |                           Features Written Summary
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|STATS |==============================================================================
+2015-11-26 16:04:42|   0.7|  0.0|STATS |Total Features Written                                                       0
+2015-11-26 16:04:42|   0.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|Translation was SUCCESSFUL with 0 warning(s) (0 feature(s) output)
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|FME Session Duration: 0.8 seconds. (CPU: 0.4s user, 0.2s system)
+2015-11-26 16:04:42|   0.7|  0.0|INFORM|END - ProcessID: 12596, peak process memory usage: 102192 kB, current process memory usage: 102164 kB

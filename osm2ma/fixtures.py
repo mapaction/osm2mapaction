@@ -85,7 +85,9 @@ shpf_list_table_good = [
 A list of which are unsorted, contain duplicates and contains blank strings.
 """
 attrib_list_args = ['f', 'a', 'b', 'c', 'd', '', 'e', 'a', 'a']
-attrib_list_result = 'a, b, c, d, e, f'
+# Fixture changed to reflect the fact that attriblist is now parsed to a set
+# then returned as a list
+attrib_list_result = ['a', 'b', 'c', 'd', 'e', 'f']
 
 """
 A list of tuples.
@@ -98,7 +100,7 @@ select_clause_args_and_result_pairs = [
         [
             (u"border_type",    u"*")
         ],
-        u"'border_type' IS NOT null"
+        u"(border_type IS NOT null AND border_type NOT IN ('', 'None'))"
     ),
     (
         [
@@ -108,7 +110,9 @@ select_clause_args_and_result_pairs = [
             (u"boundary",	    u"user defined"),
             (u"border_type",    u"*")
         ],
-        u"'border_type' IS NOT null or 'boundary' IS NOT null"
+        #u"'border_type' IS NOT null or 'boundary' IS NOT null"
+        u"(border_type IS NOT null AND border_type NOT IN ('', 'None')) OR "+
+        u"(boundary IS NOT null AND boundary NOT IN ('', 'None'))"
     ),
     (
         [
@@ -116,13 +120,13 @@ select_clause_args_and_result_pairs = [
             (u"boundary",	    u"maritime"),
             (u"boundary",	    u"political")
         ],
-        u"'boundary'='administrative' or 'boundary'='maritime' or 'boundary'='political'"
+        u"boundary='administrative' OR boundary='maritime' OR boundary='political'"
     ),
     (
         [
             (u"admin_level",	    u"Number"),
         ],
-        u"'admin_level' IS NOT null"
+        u"(admin_level IS NOT null AND admin_level NOT IN ('', 'None'))"
     ),
     (
         [],
