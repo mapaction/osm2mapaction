@@ -18,16 +18,16 @@ The scripts (and corresponding ArcToolbox tools to run them) in this repository 
 
 * Tool **0 - Get OSM files for country**. 
  This tool simply enables the MapAction support base to download OSM data from the geofabrik server
-   (as a master PBF file). The script called by this tool is for doing this are `0_get_OSM_files.py`.
+   (as a master PBF file). The script called by this tool is for doing this is `0_get_OSM_files.py`.
    This doesn't really do anything that you can't do by downloading the file yourself with a web browser.
    
-* Tool **1 - Create Difference File**. This tool is intended to be run by Support Base when a field team is deployed and they have limited internet bandwidth. It takes as input two OSM .PBF format files, one of which should be the OSM data that the field team deployed with and the other should be the latest version of the OSM data. The tool will create a file that represents only the difference between those two input files, which should hopefully be much smaller than either of the actual input files themselves and which can therefore be more easily transferred to the Field Team.
+* Tool **1 - Create Difference File**. This tool is intended to be run by Support Base when a field team is deployed and they have limited internet bandwidth. It takes as input two OSM .PBF format files, one of which should be the OSM data that the field team deployed with and the other should be the latest version of the OSM data. The tool will create a file that represents only the difference between those two input files, which should hopefully be much smaller than either of the actual input files themselves and which can therefore be more easily transferred to the Field Team. The Python script called by this tool is 1_create_difference_SB.py.
 
-* Tool **2 - Append Difference File**. This is effectively the reverse of Tool 1 and is intended to be run by the Field Team. It will take the original OSM .PBF file from the start of the deployment, and the difference file provided by Support Base. It will output a new .PBF file that reflects all the changes and is therefore up-to-date.
+* Tool **2 - Append Difference File**. This is effectively the reverse of Tool 1 and is intended to be run by the Field Team. It will take the original OSM .PBF file from the start of the deployment, and the difference file provided by Support Base. It will output a new .PBF file that reflects all the changes and is therefore up-to-date. The python script called by this tool is 2_append_differnce_FT.py.
 
 ### OSM to MA DNC Toolset
 
-* **OSM2MapActionRunner**. This tool runs the OSM2MA data conversion script. This program reads an OSM .PBF file and converts it into a *new set* of ESRI Shapefile in the MapAction DNC. (Note - it doest not update existing shapefiles!). The mapping between OSM tags / values and MapAction DNC shapefile names is derived from an Excel file which is stored in the installation directory of the tools - keeping this file up to date to reflect changes in OSM over time will of course be required. 
+* **OSM2MapActionRunner**. This tool runs the main OSM2MA data conversion script (which is osm2ma/osm2mapaction.py). This program reads an OSM .PBF file and converts it into a *new set* of ESRI Shapefile in the MapAction DNC. (Note - it doest not update existing shapefiles!). The mapping between OSM tags / values and MapAction DNC shapefile names is derived from an Excel file which is stored in the installation directory of the tools - keeping this file up to date to reflect changes in OSM over time will of course be required. 
 
 The conversion process can be quite lengthy, but you will see progress in a window that opens when you run the tool.
 
