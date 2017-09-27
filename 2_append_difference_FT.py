@@ -92,7 +92,7 @@ if __name__ == '__main__':
         cumulative_pbf_name = arcpy.GetParameterAsText(3)
         main(
             workspace, master_pbf_name, change_osc_name, cumulative_pbf_name,
-            r"c:\osmosis\bin\osmosis"
+            r"c:\Progra~2\osmosis\bin\osmosis"
         )
     else:
         args = parser.parse_args()

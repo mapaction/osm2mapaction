@@ -93,7 +93,7 @@ if __name__ == '__main__':
         change_osc_name = arcpy.GetParameterAsText(3)
         main(
             workspace, master_pbf_name, latest_pbf_name, change_osc_name,
-            r"c:\osmosis\bin\osmosis"
+            r"'C:\Progra~2\osmosis\bin\osmosis'"
         )
     else:
         args = parser.parse_args()
