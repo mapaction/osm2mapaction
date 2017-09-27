@@ -357,7 +357,7 @@ class _SelectClauseDict:
                 # example.
                 # FIXME: Use params to execute?
                 if keyNeedsQualifying:
-                    qualKey = '"{key}"'.format(key=osm_key)
+                    qualKey = "'{key}'".format(key=osm_key)
                 else:
                     qualKey = osm_key
 
@@ -380,7 +380,7 @@ class _SelectClauseDict:
                 keyNeedsQualifying = True
 
             if keyNeedsQualifying:
-                qualKey = '"{key}"'.format(key=osm_key)
+                qualKey = "'{key}'".format(key=osm_key)
             else:
                 qualKey = osm_key
 
