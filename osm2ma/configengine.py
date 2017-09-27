@@ -356,8 +356,9 @@ class _SelectClauseDict:
                 # sure that the val or key won't contain a quote, for
                 # example.
                 # FIXME: Use params to execute?
+				# must be single quotes outside double quotes
                 if keyNeedsQualifying:
-                    qualKey = "'{key}'".format(key=osm_key)
+                    qualKey = '"{key}"'.format(key=osm_key)
                 else:
                     qualKey = osm_key
 
@@ -380,7 +381,8 @@ class _SelectClauseDict:
                 keyNeedsQualifying = True
 
             if keyNeedsQualifying:
-                qualKey = "'{key}'".format(key=osm_key)
+                # must be single quotes outside double quotes
+                qualKey = '"{key}"'.format(key=osm_key)
             else:
                 qualKey = osm_key
 
